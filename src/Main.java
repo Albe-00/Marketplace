@@ -1,5 +1,19 @@
+import Model.*;
+import View.*;
+import Controller.*;
+
+enum StatoOrdine {
+    IN_ATTESA,
+    ACCETTATO,
+    RIFIUTATO,
+    COMPLETATO
+}
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        Menu menu = new MenuFacade();
+        menu.display();
+
     }
 }
