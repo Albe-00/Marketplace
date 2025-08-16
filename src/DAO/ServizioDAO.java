@@ -158,5 +158,42 @@ public class ServizioDAO extends DAO {
         return false;
     }
 
+    public List<Servizio> cercaServizi(String ricerca) {
+        List<Servizio> risultati = new ArrayList<>();
+
+        String query = "SELECT * FROM servizio WHERE visibile = TRUE AND (titolo LIKE ? OR descrizione LIKE ?)";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            String searchPattern = "%" + ricerca + "%";
+
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Servizio servizio = new Servizio(
+                            rs.getInt("id_servizio"),
+                            rs.getInt("id_venditore"),
+                            rs.getString("titolo"),
+                            rs.getString("descrizione"),
+                            rs.getDouble("prezzo"),
+                            rs.getString("categoria"),
+                            rs.getDate("data_pubblicazione"),
+                            rs.getBoolean("visibile")
+                    );
+                    risultati.add(servizio);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return risultati;
+    }
+
+
 
 }

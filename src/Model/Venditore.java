@@ -5,9 +5,9 @@ public class Venditore extends Utente{
     float rating;
 
     public Venditore(int id, String nome, String cognome, String email, String password,
-                     String telefono,String descrizione, float rating) {
+                     String telefono,String descrizione) {
         super(id, nome, cognome, email, password, telefono,true);
-        this.descrizione = "Ciao sono " + nome + " " + cognome + ", sono un venditore.";
+        this.descrizione = descrizione;
         this.rating = 0.0f; // inizialmente il rating è 0
     }
     public String getDescrizione() {
@@ -27,9 +27,10 @@ public class Venditore extends Utente{
     }
 
     @Override
-    public void Stampa() {
-        super.Stampa();
+    public void stampa() {
+        super.stampa();
         System.out.println("Descrizione: " + descrizione);
         System.out.println("Rating: " + rating);
+        System.out.println("------------------------------------------");
     }
 }

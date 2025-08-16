@@ -1,14 +1,16 @@
 package View;
 
 import Controller.ControllerBase;
+import Controller.ControllerVenditore;
 
 import java.util.Scanner;
 
 public class MenuVenditore extends Menu {
-
+    ControllerVenditore controllerVenditore;
     public MenuVenditore() {
         super();
-        // this.controller = new ControllerVenditore();
+        controllerVenditore = new ControllerVenditore(ControllerBase.getInstance().getUtenteCorrente());
+
     }
 
     @Override
@@ -38,8 +40,7 @@ public class MenuVenditore extends Menu {
             int scelta = scanner.nextInt();
             switch (scelta) {
                 case 1:
-                    //this.controller.visualizzaProfilo();
-                    System.out.println("Visualizza profilo non implementato.");
+                    controllerVenditore.visualizzaProfilo();
                     break;
                 case 2:
                     //this.controller.modificaProfilo();

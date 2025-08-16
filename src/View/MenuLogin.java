@@ -19,9 +19,14 @@ public class MenuLogin extends Menu {
         System.out.println("Password : ");
         //String password = scanner.nextLine();
 
-        //fixme togliere dopo il test e sostituire con scanner scritti sopra
-        String email="mario.rossi@example.com";
-        String password="pwd123";
+        //fixme togliere l'assegnazione statica , dopo il test e sostituire con scanner scritti sopra
+
+        // UTENTE SEMPLICE
+        String email="paolo.neri@example.com";
+        String password="pwd654";
+        // VENDITORE
+        //String email="mario.rossi@example.com";
+        //String password="pwd123";
 
         ControllerBase controller = ControllerBase.getInstance();
         Utente user = controller.login(email, password);

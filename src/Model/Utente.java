@@ -19,23 +19,45 @@ public class Utente {
         this.telefono = telefono;
         this.venditore = venditore;
     }
+
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCognome() {
         return cognome;
     }
 
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getTelefono() {
@@ -49,10 +71,12 @@ public class Utente {
     public boolean isVenditore() {
         return venditore;
     }
+
     public void setVenditore(boolean venditore) {
         this.venditore = venditore;
     }
-    public void Stampa() {
+
+    public void stampa() {
         System.out.println("------------------------------------------");
         System.out.println("ID: " + id);
         System.out.println("Nome: " + nome);
@@ -60,5 +84,7 @@ public class Utente {
         System.out.println("Email: " + email);
         System.out.println("Telefono: " + telefono);
         System.out.println("Venditore: " + (venditore ? "Si" : "No"));
+        if (!venditore)
+            System.out.println("------------------------------------------");
     }
 }

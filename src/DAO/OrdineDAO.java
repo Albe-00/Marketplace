@@ -47,6 +47,7 @@ public class OrdineDAO extends DAO {
         return null;
     }
 
+
     @Override
     public List<Object> selectAll() {
         List<Object> ordini = new ArrayList<>();
@@ -72,6 +73,34 @@ public class OrdineDAO extends DAO {
             e.printStackTrace();
         }
         return ordini;
+    }
+
+    public List<Ordine> selectByCliente(int id_cliente) {
+        List<Ordine> risultati = new ArrayList<>();
+        String query = "SELECT * FROM ordine WHERE id_cliente = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);) {
+
+            stmt.setInt(1, id_cliente);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idOrdine = rs.getInt("id_ordine");
+                int idCliente = rs.getInt("id_cliente");
+                int idServizio = rs.getInt("id_servizio");
+                Date dataOrdine = rs.getDate("data_ordine");
+                Date dataConsegna = rs.getDate("data_consegna");
+                String statoOrdine = rs.getString("stato_ordine");
+
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero degli ordini!");
+            e.printStackTrace();
+        }
+        return risultati;
     }
 
     @Override

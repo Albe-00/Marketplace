@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Servizio;
 import Model.Utente;
 import Model.Venditore;
 
@@ -36,7 +37,7 @@ public class VenditoreDAO extends UtenteDAO {
                 String telefono = rs.getString("telefono");
                 String descrizione = rs.getString("descrizione");
                 float rating = rs.getFloat("rating");
-                return new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione, rating);
+                return new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione);
             } else {
                 System.out.println("Venditore con ID " + id + " non trovato.");
                 return null;
@@ -68,7 +69,7 @@ public class VenditoreDAO extends UtenteDAO {
                 String telefono = rs.getString("telefono");
                 String descrizione = rs.getString("descrizione");
                 float rating = rs.getFloat("rating");
-                venditori.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione, rating));
+                venditori.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione));
             }
 
         } catch (SQLException e) {
@@ -151,6 +152,40 @@ public class VenditoreDAO extends UtenteDAO {
         return false;
     }
 
+    public List<Venditore> cercaVenditori(String ricerca) {
+        List<Venditore> risultati = new ArrayList<>();
+        String query =  "SELECT * " +
+                "FROM Utente join Venditore on id_venditore = id_utente " +
+                "WHERE nome LIKE ? OR cognome LIKE ? OR descrizione LIKE ?";
 
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            String searchPattern = "%" + ricerca + "%";
+
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idVenditore = rs.getInt("id_venditore");
+                String nome = rs.getString("nome");
+                String cognome = rs.getString("cognome");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String telefono = rs.getString("telefono");
+                String descrizione = rs.getString("descrizione");
+                float rating = rs.getFloat("rating");
+                risultati.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return risultati;
+    }
 
 }
