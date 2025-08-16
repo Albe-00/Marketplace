@@ -27,6 +27,11 @@ public class ControllerBase {
     }
 
     public boolean isUtenteVenditore(){
+        if (utenteCorrente.isVenditore())
+            System.out.println("Utente corrente è un venditore." + utenteCorrente.isVenditore());
+        else
+            System.out.println("Utente corrente non è un venditore."+ utenteCorrente.isVenditore());
+
         return utenteCorrente.isVenditore();
     }
     public Utente register() {

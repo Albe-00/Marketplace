@@ -3,8 +3,8 @@ import java.util.Date;
 
 
 /* StatoOrdine può essere uno dei seguenti:{
-    IN_ATTESA,
-    ACCETTATO,
+    IN ATTESA,
+    IN PREPARAZIONE,
     RIFIUTATO,
     COMPLETATO
 }*/

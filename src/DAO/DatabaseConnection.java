@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private String URL = "jdbc:mysql://localhost:3306/prova"; // Nome database
+    private String URL = "jdbc:mysql://localhost:3306/marketplace_dev"; // Nome database
     private String USER = "root"; // Utente di default di XAMPP
     private String PASSWORD = ""; // Password vuota in XAMPP
 
