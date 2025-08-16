@@ -27,34 +27,36 @@ public class ControllerBase {
     }
 
     public boolean isUtenteVenditore(){
-        if (utenteCorrente.isVenditore())
-            System.out.println("Utente corrente è un venditore." + utenteCorrente.isVenditore());
-        else
-            System.out.println("Utente corrente non è un venditore."+ utenteCorrente.isVenditore());
-
         return utenteCorrente.isVenditore();
     }
-    public Utente register() {
-        // fixme implementare la logica di registrazione
+    public Utente register(Utente utente) {
+        UtenteDAO utenteDAO = new UtenteDAO();
+        List<Object> utenti = utenteDAO.selectAll();
+        for (Object obj : utenti) {
+            Utente userIterator = (Utente) obj;
+            if (userIterator.getEmail().equals(utente.getEmail())) {
+                return null;
+            }
+        }
+        if(utenteDAO.insert(utente)) {
+            this.utenteCorrente = utente;
+            return utente;
+        }
         return null;
     }
     public Utente login(String email, String password) {
-        // fixme implementare la logica di autenticazione
         UtenteDAO utenteDAO = new UtenteDAO();
         List<Object> utenti = utenteDAO.selectAll();
         for (Object obj : utenti) {
             Utente utente = (Utente) obj;
             if (utente.getEmail().equals(email) && utente.getPassword().equals(password)) {
                 this.utenteCorrente = utente;
-                System.out.println("🔑 Login effettuato con successo!");
                 return utente;
             }
         }
-        System.out.println("❌ Credenziali non valide. Riprova.");
         return null;
     }
     public void logout() {
         this.utenteCorrente = null;
-        System.out.println("🔒 Logout effettuato con successo!");
     }
 }

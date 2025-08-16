@@ -14,4 +14,5 @@ public class MenuUtente extends Menu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("-- Menu Utente --");
     }
+
 }

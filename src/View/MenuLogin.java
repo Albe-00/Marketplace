@@ -13,20 +13,18 @@ public class MenuLogin extends Menu {
     @Override
     public void display() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("-- Login Menu --");
+        System.out.println("-- Login Utente --");
         System.out.println("Email : ");
         String email = scanner.nextLine();
         System.out.println("Password : ");
         String password = scanner.nextLine();
         ControllerBase controller = ControllerBase.getInstance();
-        Utente u = controller.login(email, password);
-        System.out.println("Login successful for user: " + u.getNome() + " " + u.getCognome());
-        if (u.isVenditore()) {
-            System.out.println("Welcome to the Vendor Menu!");
-            scanner.nextLine();
-        } else {
-            System.out.println("Welcome to the Customer Menu!");
-            scanner.nextLine();
+        Utente user = controller.login(email, password);
+        if(user!=null) {
+
+            System.out.println("🔑 Login effettuato con successo! Benvenuto/a " + user.getNome() + " " + user.getCognome());
+        }else {
+            System.out.println("❌ Credenziali non valide. Riprova.");
         }
     }
 }

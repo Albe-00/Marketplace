@@ -10,14 +10,14 @@ public class Utente {
     private String telefono;
     private boolean venditore;
 
-    public Utente(int id, String nome, String cognome, String email, String password, String telefono) {
+    public Utente(int id, String nome, String cognome, String email, String password, String telefono, boolean venditore) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
         this.telefono = telefono;
-        this.venditore = false; // Default value, can be changed later
+        this.venditore = venditore;
     }
     public int getId() {
         return id;
@@ -59,5 +59,6 @@ public class Utente {
         System.out.println("Cognome: " + cognome);
         System.out.println("Email: " + email);
         System.out.println("Telefono: " + telefono);
+        System.out.println("Venditore: " + (venditore ? "Si" : "No"));
     }
 }

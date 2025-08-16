@@ -35,7 +35,8 @@ public class UtenteDAO extends DAO {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String telefono = rs.getString("telefono");
-                return new Utente(id_utente, nome, cognome, email, password, telefono);
+                boolean venditore = rs.getBoolean("venditore");
+                return new Utente(id_utente, nome, cognome, email, password, telefono, venditore);
             }
             else {
                 System.out.println("Utente con ID " + id + " non trovato.");
@@ -65,7 +66,8 @@ public class UtenteDAO extends DAO {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String telefono = rs.getString("telefono");
-                utenti.add(new Utente(id_utente, nome, cognome, email, password, telefono));
+                boolean venditore = rs.getBoolean("venditore");
+                utenti.add(new Utente(id_utente, nome, cognome, email, password, telefono, venditore));
             }
 
         } catch (SQLException e) {
