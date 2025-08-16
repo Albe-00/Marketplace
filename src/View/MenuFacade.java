@@ -13,8 +13,8 @@ public class MenuFacade extends Menu {
     public void display() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Benvenuto nella nostra applicazione!");
             if( controller.getUtenteCorrente() == null ) {
+                System.out.println("Benvenuto nella nostra applicazione!");
                 System.out.println("1. Login");
                 System.out.println("2. Registrazione");
                 System.out.println("3. Chiudi applicazione");
@@ -37,12 +37,15 @@ public class MenuFacade extends Menu {
                         System.out.println("Scelta non valida. Riprova.");
                 }
 
-            } else if (controller.isUtenteVenditore()) {
-                menuAttuale = new MenuVenditore();
-                menuAttuale.display();
-            }else{
-                menuAttuale = new MenuUtente();
-                menuAttuale.display();
+            } else {
+                System.out.println("Ciao " + controller.getUtenteCorrente().getNome() + "!");
+                if (controller.isUtenteVenditore()){
+                    menuAttuale = new MenuVenditore();
+                    menuAttuale.display();
+                } else {
+                    menuAttuale = new MenuUtente();
+                    menuAttuale.display();
+                }
             }
         }
     }

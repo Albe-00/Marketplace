@@ -15,14 +15,18 @@ public class MenuLogin extends Menu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("-- Login Utente --");
         System.out.println("Email : ");
-        String email = scanner.nextLine();
+        //String email = scanner.nextLine();
         System.out.println("Password : ");
-        String password = scanner.nextLine();
+        //String password = scanner.nextLine();
+
+        //fixme togliere dopo il test e sostituire con scanner scritti sopra
+        String email="mario.rossi@example.com";
+        String password="pwd123";
+
         ControllerBase controller = ControllerBase.getInstance();
         Utente user = controller.login(email, password);
         if(user!=null) {
-
-            System.out.println("🔑 Login effettuato con successo! Benvenuto/a " + user.getNome() + " " + user.getCognome());
+            System.out.println("🔑 Login effettuato con successo!");
         }else {
             System.out.println("❌ Credenziali non valide. Riprova.");
         }
