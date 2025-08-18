@@ -47,7 +47,6 @@ public class OrdineDAO extends DAO {
         return null;
     }
 
-
     @Override
     public List<Object> selectAll() {
         List<Object> ordini = new ArrayList<>();
@@ -104,11 +103,12 @@ public class OrdineDAO extends DAO {
     }
 
     @Override
-    public boolean insert(Object obj) {
+    public int insert(Object obj) {
         String query = "INSERT INTO ordine (id_cliente, id_servizio, data_ordine, data_consegna, stato_ordine) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Ordine ordine = (Ordine) obj;
             stmt.setInt(1, ordine.getId_cliente());
@@ -120,14 +120,16 @@ public class OrdineDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("✅ Ordine inserito con successo.");
-                return true;
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                }
             }
 
         } catch (SQLException e) {
             System.out.println("❌ Errore durante l'inserimento dell'ordine!");
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override

@@ -100,11 +100,12 @@ public class UtenteDAO extends DAO {
         return false;
     }
     @Override
-    public boolean insert(Object obj){
+    public int insert(Object obj){
         String query = "INSERT INTO Utente (nome, cognome, email, password, telefono) VALUES (?, ?, ?, ?, ?);";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
             // Cast dell'oggetto a Cliente
             Utente nuovoUtente = (Utente) obj;
             // Imposta i parametri nella query
@@ -119,18 +120,21 @@ public class UtenteDAO extends DAO {
 
             if( righeInserite > 0){
                 System.out.println("✅ nuovo utente inserito con successo.");
-                return true;
+                // Recupera l'ID generato automaticamente
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                }
             }
 
         } catch (SQLException e) {
             System.out.println("❌ Errore durante il recupero dei utenti!");
             e.printStackTrace();
         }
-        return false;
+        return -1; // Nessun ID generato , restituisce -1 in caso di errore
     }
     @Override
     public boolean update(Object obj){
-        String query = "UPDATE cliente SET nome = ?, cognome = ?, email = ?, password = ?, telefono = ? WHERE id = ?;";
+        String query = "UPDATE Utente SET nome = ?, cognome = ?, email = ?, password = ?, telefono = ? WHERE id_utente = ?;";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {

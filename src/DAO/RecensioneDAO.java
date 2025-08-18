@@ -72,11 +72,12 @@ public class RecensioneDAO extends DAO {
     }
 
     @Override
-    public boolean insert(Object obj) {
+    public int insert(Object obj) {
         String query = "INSERT INTO recensione (id_autore, id_venditore, voto, testo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Recensione r = (Recensione) obj;
             stmt.setInt(1, r.getId_autore());
@@ -87,14 +88,16 @@ public class RecensioneDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("✅ Recensione inserita con successo.");
-                return true;
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                }
             }
 
         } catch (SQLException e) {
             System.out.println("❌ Errore durante l'inserimento della recensione!");
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override

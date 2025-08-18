@@ -5,14 +5,15 @@ import Model.Utente;
 import java.util.Scanner;
 
 public class MenuLogin extends Menu {
-
+    private ControllerBase controller;
     public MenuLogin() {
         super();
+        this.controller = ControllerBase.getInstance();
     }
 
     @Override
     public void display() {
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
         System.out.println("-- Login Utente --");
         System.out.println("Email : ");
         //String email = scanner.nextLine();
@@ -28,12 +29,11 @@ public class MenuLogin extends Menu {
         //String email="mario.rossi@example.com";
         //String password="pwd123";
 
-        ControllerBase controller = ControllerBase.getInstance();
-        Utente user = controller.login(email, password);
-        if(user!=null) {
+        if(controller.login(email, password)) {
             System.out.println("🔑 Login effettuato con successo!");
         }else {
             System.out.println("❌ Credenziali non valide. Riprova.");
         }
+        //scanner.close();
     }
 }

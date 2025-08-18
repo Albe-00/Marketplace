@@ -6,9 +6,10 @@ import Controller.ControllerBase;
 import Model.*;
 
 public class MenuRegistrazione extends Menu {
-
+    private ControllerBase controller;
     public MenuRegistrazione() {
         super();
+        this.controller = ControllerBase.getInstance();
     }
 
     @Override
@@ -33,28 +34,31 @@ public class MenuRegistrazione extends Menu {
 
         System.out.print("Sei un venditore? (si/no): ");
         String sceltaVenditore = scanner.nextLine();
-        boolean venditore;
+        boolean registazioneConSuccesso = false;
         switch (sceltaVenditore.toLowerCase()) {
             case "si":
             case "s":
             case "yes":
             case "y":
-                venditore = true;
+                // È un venditore
+                System.out.println("Inserisci una descrizione per il tuo profilo venditore:");
+                String descrizione = scanner.nextLine();
+
+                Venditore nuovoVenditore = new Venditore(0, nome, cognome, email, password, telefono, descrizione);
+
+                registazioneConSuccesso = controller.registerVenditore(nuovoVenditore);
                 break;
             default:
-                venditore = false;
+                // E' un utente semplice (cliente) , caso predefinito
+
+                Utente nuovoUtente = new Utente(0,nome, cognome, email, password, telefono, false);
+
+                registazioneConSuccesso = controller.registerUtente(nuovoUtente);
         }
-
-
-        Utente nuovoUtente = new Utente(0,nome, cognome, email, password, telefono, venditore);
-
-        ControllerBase controller = ControllerBase.getInstance();
-
-        if( controller.register(nuovoUtente)!= null){
+        if( registazioneConSuccesso )
             System.out.println("🔒 Registrazione effettuata con successo!");
-        }else{
+        else
             System.out.println("❌ Registrazione fallita! L'email già in uso.");
-        }
 
         scanner.close();
     }

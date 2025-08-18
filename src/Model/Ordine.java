@@ -16,13 +16,22 @@ public class Ordine {
     private Date dataConsegna;
     private String statoOrdine;
 
-    public Ordine(int id_ordine, int id_cliente, int id_servizio, Date dataOrdine,Date dataConsegna , String statoOrdine) {
+    public Ordine(int id_ordine, int id_cliente, int id_servizio, Date dataOrdine,Date dataConsegna, String statoOrdine) {
         this.id_ordine = id_ordine;
         this.id_cliente = id_cliente;
         this.id_servizio= id_servizio;
         this.dataOrdine = dataOrdine;
         this.dataConsegna = dataConsegna;
         this.statoOrdine = statoOrdine;
+
+    }
+    public Ordine(int id_ordine, int id_cliente, int id_servizio, Date dataOrdine,Date dataConsegna) {
+        this.id_ordine = id_ordine;
+        this.id_cliente = id_cliente;
+        this.id_servizio= id_servizio;
+        this.dataOrdine = dataOrdine;
+        this.dataConsegna = dataConsegna;
+        this.statoOrdine = "IN ATTESA";
 
     }
 
@@ -70,11 +79,34 @@ public class Ordine {
         return statoOrdine;
     }
 
-    public void setStatoOrdine(String statoOrdine) {
-        this.statoOrdine = statoOrdine;
+    public void setStatoOrdine(String nuovostatoOrdine) {
+        // Controlla se il nuovo stato è nullo o vuoto
+        if(statoOrdine == null || statoOrdine.isEmpty()) {
+            return; // Non accetta stati nulli o vuoti
+        }
+        // Controlla se il nuovo stato è uno dei valori validi
+        if(!statoOrdine.equals("IN ATTESA") &&
+           !statoOrdine.equals("IN PREPARAZIONE") &&
+           !statoOrdine.equals("RIFIUTATO") &&
+           !statoOrdine.equals("COMPLETATO")) {
+            return;
+        }
+        // Non può essere modificato se già completato
+        if(statoOrdine.equals("COMPLETATO") || statoOrdine.equals("RIFIUTATO")) {
+            return; // Lo stato dell'ordine NON può essere modificato se già completato o rifiutato
+        }
+        // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN PREPARAZIONE" o "RIFIUTATO"
+        if(statoOrdine.equals("IN ATTESA") && !nuovostatoOrdine.equals("IN PREPARAZIONE") && !nuovostatoOrdine.equals("RIFIUTATO")) {
+            return;
+        }
+        // Se lo stato è "IN PREPARAZIONE", può essere cambiato solo in "COMPLETATO"
+        if(statoOrdine.equals("IN PREPARAZIONE") && !nuovostatoOrdine.equals("COMPLETATO")) {
+            return;
+        }
+        this.statoOrdine = nuovostatoOrdine;
     }
 
-    public void Stampa() {
+    public void stampa() {
         System.out.println("------------------------------------------");
         System.out.println("ID: " + id_ordine);
         System.out.println("ID Cliente: " + id_cliente);

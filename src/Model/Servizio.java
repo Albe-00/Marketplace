@@ -87,15 +87,14 @@ public class Servizio {
         this.visibile = visibile;
     }
 
-    public void Stampa() {
+    public void stampa() {
         System.out.println("------------------------------------------");
         System.out.println("ID: " + id_servizio);
         System.out.println("Venditore: " + id_venditore);
         System.out.println("Titolo: " + titolo);
         System.out.println("Descrizione: " + descrizione);
-        System.out.println("Prezzo: " + prezzo);
+        System.out.println("Prezzo: " + prezzo+ "€");
         System.out.println("Categoria: " + categoria);
         System.out.println("Data di pubblicazione: " + dataPubblicazione);
-        System.out.println("Visibile: " + visibile);
     }
 }

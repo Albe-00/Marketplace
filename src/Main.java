@@ -7,6 +7,5 @@ public class Main {
 
         Menu menu = new MenuFacade();
         menu.display();
-
     }
 }

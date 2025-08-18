@@ -3,15 +3,17 @@ import Controller.*;
 import java.util.Scanner;
 
 public class MenuFacade extends Menu {
-    Menu menuAttuale;
+    private Menu menuAttuale;
+    private ControllerBase controller;
     public MenuFacade() {
         // fixme controllare se nell'esetendere una classe astratta devo usare super() nel costruttore
         super();
-        super.controller = ControllerBase.getInstance();
+        this.controller = ControllerBase.getInstance();
         menuAttuale = this;
     }
     public void display() {
         Scanner scanner = new Scanner(System.in);
+        int scelta;
         while (true) {
             if( controller.getUtenteCorrente() == null ) {
                 System.out.println("Benvenuto nella nostra applicazione!");
@@ -19,7 +21,10 @@ public class MenuFacade extends Menu {
                 System.out.println("2. Registrazione");
                 System.out.println("3. Chiudi applicazione");
                 System.out.println("Inserisci la tua scelta: ");
-                int scelta = scanner.nextInt();
+
+                // Legge l'input dell'utente
+                scelta = inputScelta();
+
                 switch (scelta) {
                     case 1:
                         menuAttuale = new MenuLogin();
@@ -30,6 +35,7 @@ public class MenuFacade extends Menu {
                         menuAttuale.display();
                         break;
                     case 3:
+                        scanner.close();
                         System.out.println("Uscita in corso...");
                         System.exit(0);
                         break;
@@ -48,5 +54,19 @@ public class MenuFacade extends Menu {
                 }
             }
         }
+    }
+
+    private int inputScelta() {
+        Scanner scanner = new Scanner(System.in);
+        String sceltaStringa;
+        int scelta;
+        sceltaStringa = scanner.nextLine();
+        try {
+            scelta = Integer.parseInt(sceltaStringa); // caso numerico
+        } catch (NumberFormatException e) {
+            scelta = -1; // così non corrispondera mai ad un id_venditore
+        }
+
+        return scelta;
     }
 }

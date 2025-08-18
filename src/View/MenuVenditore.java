@@ -2,6 +2,8 @@ package View;
 
 import Controller.ControllerBase;
 import Controller.ControllerVenditore;
+import Model.Utente;
+import Model.Venditore;
 
 import java.util.Scanner;
 
@@ -9,14 +11,15 @@ public class MenuVenditore extends Menu {
     ControllerVenditore controllerVenditore;
     public MenuVenditore() {
         super();
-        controllerVenditore = new ControllerVenditore(ControllerBase.getInstance().getUtenteCorrente());
-
+        Venditore venditore = (Venditore) ControllerBase.getInstance().getUtenteCorrente();
+        controllerVenditore = new ControllerVenditore(venditore);
     }
 
     @Override
     public void display() {
         Scanner scanner = new Scanner(System.in);
         boolean uscita = false;
+        int scelta;
         while(!uscita) {
             System.out.println("-- Menu Venditore --");
             System.out.println("1. Visualizza profilo");
@@ -37,13 +40,16 @@ public class MenuVenditore extends Menu {
             System.out.println("13. Visualizza le recensioni ricevute");
             System.out.println("14. Logout");
             System.out.print("Seleziona un'opzione: ");
-            int scelta = scanner.nextInt();
+
+            // Legge l'input dell'utente
+            scelta= inputScelta();
+
             switch (scelta) {
                 case 1:
                     controllerVenditore.visualizzaProfilo();
                     break;
                 case 2:
-                    //this.controller.modificaProfilo();
+                    modificaProfilo();
                     System.out.println("Modifica profilo non implementato.");
                     break;
                 case 3:
@@ -103,5 +109,75 @@ public class MenuVenditore extends Menu {
                 scanner.nextLine(); // Attende l'input dell'utente
             }
         }
+    }
+
+    private void modificaProfilo() {
+        Venditore venditoreModificato = controllerVenditore.getVenditore();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Modifica Profilo Venditore");
+        System.out.println("Cosa vuoi modificare?");
+        System.out.println("1. Nome");
+        System.out.println("2. Cognome");
+        System.out.println("3. Email");
+        System.out.println("4. Telefono");
+        System.out.println("5. Descrizione");
+        System.out.println("6. Annulla");
+
+        System.out.print("Inserisci la tua scelta: ");
+        int scelta = inputScelta();
+
+        switch (scelta) {
+            case 1:
+                System.out.println("Inserisci il nuovo nome:");
+                String nome = scanner.nextLine();
+                venditoreModificato.setNome(nome);
+                break;
+            case 2:
+                System.out.println("Inserisci il nuovo cognome:");
+                String cognome = scanner.nextLine();
+                venditoreModificato.setCognome(cognome);
+                break;
+            case 3:
+                System.out.println("Inserisci la nuova email:");
+                String email = scanner.nextLine();
+                //controllerVenditore.modificaEmail(email);
+                return;
+            case 4:
+                System.out.println("Inserisci il nuovo numero di telefono:");
+                String telefono = scanner.nextLine();
+                venditoreModificato.setTelefono(telefono);
+                break;
+            case 5:
+                System.out.println("Inserisci la nuova descrizione:");
+                String descrizione = scanner.nextLine();
+                if (descrizione.isEmpty()) {
+                    System.out.println("La descrizione non può essere vuota.");
+                    return;
+                }
+                venditoreModificato.setDescrizione(descrizione);
+                break;
+            case 6:
+                System.out.println("Modifica annullata.");
+                return;
+            default:
+                System.out.println("Opzione non valida. Riprova.");
+                return;
+
+        }
+        controllerVenditore.modificaProfilo(venditoreModificato);
+    }
+
+    private int inputScelta() {
+        Scanner scanner = new Scanner(System.in);
+        String sceltaStringa;
+        int scelta;
+        sceltaStringa = scanner.nextLine();
+        try {
+            scelta = Integer.parseInt(sceltaStringa); // caso numerico
+        } catch (NumberFormatException e) {
+            scelta = -1; // così non corrispondera mai ad un id_venditore
+        }
+
+        return scelta;
     }
 }

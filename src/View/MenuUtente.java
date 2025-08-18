@@ -21,6 +21,7 @@ public class MenuUtente extends Menu {
     public void display() {
         Scanner scanner = new Scanner(System.in);
         boolean uscita = false;
+        int scelta;
         while(!uscita) {
             System.out.println("-- Menu Utente --");
             System.out.println("1. Visualizza profilo");
@@ -28,11 +29,15 @@ public class MenuUtente extends Menu {
             System.out.println("3. Cerca servizi");
             System.out.println("4. Cerca Venditori");
             System.out.println("5. Visualizza ordini");
-            System.out.println("6. Effettua recensione");
-            System.out.println("7. Diventa venditore");
-            System.out.println("8. Logout");
+            System.out.println("6. Effettua ordine");
+            System.out.println("7. Effettua recensione");
+            System.out.println("8. Diventa venditore");
+            System.out.println("9. Logout");
             System.out.print("Seleziona un'opzione: ");
-            int scelta = scanner.nextInt();
+
+            // Legge l'input dell'utente
+            scelta = inputScelta();
+
             switch (scelta) {
                 case 1:
                     controllerUtente.visualizzaProfilo();
@@ -50,11 +55,17 @@ public class MenuUtente extends Menu {
                     visualizzaOrdini();
                     break;
                 case 6:
-                    effettuaRecensione();
+                    effettuaOrdine();
                     break;
                 case 7:
-                    diventaVenditore();
+                    effettuaRecensione();
+                    break;
                 case 8:
+                    if( diventaVenditore() )
+                        uscita = true; // Esce dal menu se l'utente diventa venditore
+                    break;
+                case 9:
+                    scanner.close();
                     ControllerBase controller = ControllerBase.getInstance();
                     controller.logout();
                     uscita = true;
@@ -68,40 +79,52 @@ public class MenuUtente extends Menu {
             }
         }
     }
-
     private void modificaProfilo() {
-        Utente utenteModificato = ControllerBase.getInstance().getUtenteCorrente();
         Scanner scanner = new Scanner(System.in);
+        int scelta;
+        boolean modificaEffettuata = false;
         System.out.println("Modifica Profilo");
         System.out.println("Cosa vuoi modificare?");
         System.out.println("1. Nome");
         System.out.println("2. Cognome");
         System.out.println("3. Email");
-        System.out.println("4. Telefono");
-        System.out.println("5. Annulla");
-        int scelta = scanner.nextInt();
+        System.out.println("4. Password");
+        System.out.println("5. Telefono");
+        System.out.println("6. Annulla");
+
+        // Legge l'input dell'utente
+        scelta = inputScelta();
+
+        System.out.println("Inserisci la tua password per confermare:");
+        String password = scanner.nextLine();
+
         switch (scelta) {
             case 1:
                 System.out.println("Inserisci il nuovo nome:");
-                String nome = scanner.nextLine();
-                utenteModificato.setNome(nome);
+                String nuovoNome = scanner.nextLine();
+                modificaEffettuata = controllerUtente.modificaNome(nuovoNome, password);
                 break;
             case 2:
                 System.out.println("Inserisci il nuovo cognome:");
-                String cognome = scanner.nextLine();
-                utenteModificato.setCognome(cognome);
+                String nuovoCognome = scanner.nextLine();
+                modificaEffettuata = controllerUtente.modificaCognome(nuovoCognome, password);
                 break;
             case 3:
                 System.out.println("Inserisci la nuova email:");
-                String email = scanner.nextLine();
-                controllerUtente.modificaEmail(email);
-                return;
+                String nuovaEmail = scanner.nextLine();
+                modificaEffettuata = controllerUtente.modificaEmail(nuovaEmail, password);
+                break;
             case 4:
-                System.out.println("Inserisci il nuovo numero di telefono:");
-                String telefono = scanner.nextLine();
-                utenteModificato.setTelefono(telefono);
+                System.out.println("Inserisci la nuova password:");
+                String nuovaPassword = scanner.nextLine();
+                modificaEffettuata = controllerUtente.modificaPassword(nuovaPassword, password);
                 break;
             case 5:
+                System.out.println("Inserisci il nuovo numero di telefono:");
+                String nuovoTelefono = scanner.nextLine();
+                modificaEffettuata = controllerUtente.modificaTelefono(nuovoTelefono, password);
+                break;
+            case 6:
                 System.out.println("Modifica annullata.");
                 return;
             default:
@@ -109,7 +132,12 @@ public class MenuUtente extends Menu {
                 return;
 
         }
-        controllerUtente.modificaProfilo(utenteModificato);
+        if (modificaEffettuata) {
+            System.out.println("Profilo modificato con successo.");
+            controllerUtente.visualizzaProfilo();
+        } else {
+            System.out.println("Errore durante la modifica del profilo. Verifica la password e riprova.");
+        }
     }
     private void cercaServizi(){
         Scanner scanner = new Scanner(System.in);
@@ -121,11 +149,10 @@ public class MenuUtente extends Menu {
         } else {
             System.out.println("Servizi trovati:");
             for (Servizio servizio : serviziTrovati) {
-                System.out.println(servizio);
+                servizio.stampa();
             }
         }
     }
-
     private void cercaVenditori() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Quale venditore cerchi ?");
@@ -140,7 +167,6 @@ public class MenuUtente extends Menu {
             }
         }
     }
-
     private void visualizzaOrdini() {
         List<Ordine> ordiniTrovati = controllerUtente.visualizzaOrdini();
         if (ordiniTrovati.isEmpty()) {
@@ -148,11 +174,18 @@ public class MenuUtente extends Menu {
         } else {
             System.out.println("Ordini trovati:");
             for (Ordine ordine : ordiniTrovati) {
-                System.out.println(ordine);
+                ordine.stampa();
             }
         }
     }
-
+    private void effettuaOrdine() {
+        cercaServizi();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Inserisci l'ID del servizio da ordinare:");
+        int idServizio = scanner.nextInt();
+        scanner.nextLine(); // Consuma il newline rimasto dopo nextInt()
+        controllerUtente.effettuaOrdine(idServizio);
+    }
     private void effettuaRecensione() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci ID del venditore da recensire:");
@@ -168,16 +201,30 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante l'effettuazione della recensione.");
         }
     }
-
-    private void diventaVenditore() {
+    private boolean diventaVenditore() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci una descrizione per il tuo profilo venditore:");
         String descrizione = scanner.nextLine();
 
         if(controllerUtente.diventaVenditore(descrizione)) {
             System.out.println("Sei diventato un venditore con successo!");
+            return true;
         } else {
             System.out.println("Errore durante la registrazione come venditore.");
+            return false;
         }
+    }
+    private int inputScelta() {
+        Scanner scanner = new Scanner(System.in);
+        String sceltaStringa;
+        int scelta;
+        sceltaStringa = scanner.nextLine();
+        try {
+            scelta = Integer.parseInt(sceltaStringa); // caso numerico
+        } catch (NumberFormatException e) {
+            scelta = -1; // così non corrispondera mai ad un id_venditore
+        }
+
+        return scelta;
     }
 }

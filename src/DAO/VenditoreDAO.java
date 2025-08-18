@@ -102,28 +102,33 @@ public class VenditoreDAO extends UtenteDAO {
     }
 
     @Override
-    public boolean insert(Object obj) {
-        String query = "INSERT INTO Venditore (descrizione, rating) VALUES (?, ?)";
+    public int insert(Object obj) {
+        String query = "INSERT INTO Venditore (id_venditore,descrizione, rating) VALUES (?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Venditore nuovoVenditore = (Venditore) obj;
-            stmt.setString(1, nuovoVenditore.getDescrizione());
-            stmt.setFloat(2, nuovoVenditore.getRating());
+            stmt.setInt(1, nuovoVenditore.getId());
+            stmt.setString(2, nuovoVenditore.getDescrizione());
+            stmt.setFloat(3, nuovoVenditore.getRating());
 
             int righeInserite = stmt.executeUpdate();
 
             if (righeInserite > 0) {
+
                 System.out.println("✅ Nuovo venditore inserito con successo.");
-                return true;
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                }
             }
 
         } catch (SQLException e) {
             System.out.println("❌ Errore durante l'inserimento del venditore!");
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -156,16 +161,26 @@ public class VenditoreDAO extends UtenteDAO {
         List<Venditore> risultati = new ArrayList<>();
         String query =  "SELECT * " +
                 "FROM Utente join Venditore on id_venditore = id_utente " +
-                "WHERE nome LIKE ? OR cognome LIKE ? OR descrizione LIKE ?";
+                "WHERE id_venditore LIKE ? OR nome LIKE ? OR cognome LIKE ? OR descrizione LIKE ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             String searchPattern = "%" + ricerca + "%";
 
-            stmt.setString(1, searchPattern);
+            // Prova a capire se 'ricerca' è un numero
+            int idValue;
+            try {
+                idValue = Integer.parseInt(ricerca); // caso numerico
+            } catch (NumberFormatException e) {
+                idValue = -1; // così non corrispondera mai ad un id_venditore
+            }
+
+            // Imposta i parametri nella query
+            stmt.setInt(1, idValue);
             stmt.setString(2, searchPattern);
             stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
 
             ResultSet rs = stmt.executeQuery();
 

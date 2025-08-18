@@ -79,11 +79,12 @@ public class ServizioDAO extends DAO {
     }
 
     @Override
-    public boolean insert(Object obj) {
+    public int insert(Object obj) {
         String query = "INSERT INTO servizio (id_venditore, titolo, descrizione, prezzo, categoria, data_pubblicazione, visibile) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Servizio s = (Servizio) obj;
             stmt.setInt(1, s.getId_venditore());
@@ -97,14 +98,16 @@ public class ServizioDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("✅ Servizio inserito con successo.");
-                return true;
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                }
             }
 
         } catch (SQLException e) {
             System.out.println("❌ Errore durante l'inserimento del servizio!");
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -161,15 +164,25 @@ public class ServizioDAO extends DAO {
     public List<Servizio> cercaServizi(String ricerca) {
         List<Servizio> risultati = new ArrayList<>();
 
-        String query = "SELECT * FROM servizio WHERE visibile = TRUE AND (titolo LIKE ? OR descrizione LIKE ?)";
+        String query = "SELECT * FROM servizio WHERE visibile = TRUE AND (id_servizio LIKE ? OR titolo LIKE ? OR descrizione LIKE ? OR categoria LIKE ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             String searchPattern = "%" + ricerca + "%";
 
-            stmt.setString(1, searchPattern);
+            // Prova a capire se 'ricerca' è un numero
+            int idValue;
+            try {
+                idValue = Integer.parseInt(ricerca); // caso numerico
+            } catch (NumberFormatException e) {
+                idValue = -1; // così non corrispondera mai ad un id_servizio
+            }
+
+            stmt.setInt(1, idValue);
             stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
