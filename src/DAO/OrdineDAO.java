@@ -74,34 +74,6 @@ public class OrdineDAO extends DAO {
         return ordini;
     }
 
-    public List<Ordine> selectByCliente(int id_cliente) {
-        List<Ordine> risultati = new ArrayList<>();
-        String query = "SELECT * FROM ordine WHERE id_cliente = ?";
-
-        try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
-
-            stmt.setInt(1, id_cliente);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                int idOrdine = rs.getInt("id_ordine");
-                int idCliente = rs.getInt("id_cliente");
-                int idServizio = rs.getInt("id_servizio");
-                Date dataOrdine = rs.getDate("data_ordine");
-                Date dataConsegna = rs.getDate("data_consegna");
-                String statoOrdine = rs.getString("stato_ordine");
-
-                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
-            }
-
-        } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli ordini!");
-            e.printStackTrace();
-        }
-        return risultati;
-    }
-
     @Override
     public int insert(Object obj) {
         String query = "INSERT INTO ordine (id_cliente, id_servizio, data_ordine, data_consegna, stato_ordine) VALUES (?, ?, ?, ?, ?)";
@@ -179,6 +151,117 @@ public class OrdineDAO extends DAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public List<Ordine> selectByCliente(int id_cliente) {
+        List<Ordine> risultati = new ArrayList<>();
+        String query = "SELECT * FROM ordine WHERE id_cliente = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);) {
+
+            stmt.setInt(1, id_cliente);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idOrdine = rs.getInt("id_ordine");
+                int idCliente = rs.getInt("id_cliente");
+                int idServizio = rs.getInt("id_servizio");
+                Date dataOrdine = rs.getDate("data_ordine");
+                Date dataConsegna = rs.getDate("data_consegna");
+                String statoOrdine = rs.getString("stato_ordine");
+
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero degli ordini!");
+            e.printStackTrace();
+        }
+        return risultati;
+    }
+
+    public List<Ordine> selectByVenditore(int id_Venditore) {
+        List<Ordine> risultati = new ArrayList<>();
+        String query = "SELECT * FROM ordine WHERE id_Venditore = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);) {
+
+            stmt.setInt(1, id_Venditore);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idOrdine = rs.getInt("id_ordine");
+                int idCliente = rs.getInt("id_cliente");
+                int idServizio = rs.getInt("id_servizio");
+                Date dataOrdine = rs.getDate("data_ordine");
+                Date dataConsegna = rs.getDate("data_consegna");
+                String statoOrdine = rs.getString("stato_ordine");
+
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero degli ordini!");
+            e.printStackTrace();
+        }
+        return risultati;
+    }
+    // recupera gli ordini di un venditore in base allo stato dell'ordine
+    public List<Ordine> selectByVenditoreAndStato(int id_Venditore, String statoOrdine) {
+        List<Ordine> risultati = new ArrayList<>();
+        String query = "SELECT * " +
+                "FROM ordine JOIN servizio ON id_servizio WHERE id_Venditore = ? AND stato_ordine = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);) {
+
+            stmt.setInt(1, id_Venditore);
+            stmt.setString(2, statoOrdine);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idOrdine = rs.getInt("id_ordine");
+                int idCliente = rs.getInt("id_cliente");
+                int idServizio = rs.getInt("id_servizio");
+                Date dataOrdine = rs.getDate("data_ordine");
+                Date dataConsegna = rs.getDate("data_consegna");
+
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero degli ordini!");
+            e.printStackTrace();
+        }
+        return risultati;
+    }
+
+    //recupera l'id del venditore associato all'ordine tramite un join con la tabella servizio
+    public int getIdVenditore (int idOrdine) {
+        String query = "SELECT id_venditore " +
+                "FROM ordine JOIN servizio on id_servizio" +
+                "WHERE id_ordine = ?";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, idOrdine);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_venditore");
+            } else {
+                System.out.println("Ordine con ID " + idOrdine + " non trovato.");
+                return -1; // Ordine non trovato
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero dell'ID venditore dell'ordine!");
+            e.printStackTrace();
+        }
+        return -1; // Errore durante l'esecuzione della query
     }
 
 

@@ -2,7 +2,6 @@ package View;
 
 import Controller.ControllerBase;
 
-import java.awt.desktop.SystemEventListener;
 import java.util.List;
 import java.util.Scanner;
 import Controller.ControllerUtente;
@@ -10,11 +9,14 @@ import DAO.RecensioneDAO;
 import Model.*;
 
 public class MenuUtente extends Menu {
+
+    ControllerBase controllerBase;
     private ControllerUtente controllerUtente;
 
     public MenuUtente() {
         super();
-        this.controllerUtente = new ControllerUtente(ControllerBase.getInstance().getUtenteCorrente());
+        controllerBase = ControllerBase.getInstance();
+        this.controllerUtente = new ControllerUtente( ControllerBase.getInstance().getUtenteCorrente() );
     }
 
     @Override
@@ -52,7 +54,7 @@ public class MenuUtente extends Menu {
                     cercaVenditori();
                     break;
                 case 5:
-                    visualizzaOrdini();
+                    visualizzaOrdiniEffettuati();
                     break;
                 case 6:
                     effettuaOrdine();
@@ -61,13 +63,15 @@ public class MenuUtente extends Menu {
                     effettuaRecensione();
                     break;
                 case 8:
-                    if( diventaVenditore() )
+                    if( diventaVenditore() ) {
                         uscita = true; // Esce dal menu se l'utente diventa venditore
+                        controllerBase.logout();
+                        //fixme ad ora fa logout , e richiede il login per accedere al menu venditore
+                    }
                     break;
                 case 9:
                     scanner.close();
-                    ControllerBase controller = ControllerBase.getInstance();
-                    controller.logout();
+                    controllerBase.logout();
                     uscita = true;
                     break;
                 default:
@@ -167,8 +171,8 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    private void visualizzaOrdini() {
-        List<Ordine> ordiniTrovati = controllerUtente.visualizzaOrdini();
+    private void visualizzaOrdiniEffettuati() {
+        List<Ordine> ordiniTrovati = controllerUtente.recuperaOrdiniEffettuati();
         if (ordiniTrovati.isEmpty()) {
             System.out.println("Nessun ordine trovato.");
         } else {

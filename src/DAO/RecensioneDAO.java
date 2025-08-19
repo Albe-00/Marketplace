@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Ordine;
 import Model.Recensione;
 
 import java.sql.Connection;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecensioneDAO extends DAO {
@@ -146,6 +148,56 @@ public class RecensioneDAO extends DAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public int countByVenditore(int id_venditore) {
+        String query = "SELECT COUNT(*) AS numRecensioni FROM recensione WHERE id_venditore = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id_venditore);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("numRecensioni"); // prende il valore del COUNT
+            }
+            else
+                return 0; // se non trova nulla ritorna 0
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il conteggio delle recensioni!");
+            e.printStackTrace();
+        }
+
+        return -1; // se c'e in errore ritorna -1
+    }
+
+    public List<Recensione> selectByVenditore(int id_Venditore) {
+        List<Recensione> risultati = new ArrayList<>();
+        String query = "SELECT * FROM re WHERE id_Venditore = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);) {
+
+            stmt.setInt(1, id_Venditore);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idRecensione = rs.getInt("id_recensione");
+                int idAutore = rs.getInt("id_autore");
+                int idVenditore = rs.getInt("id_venditore");
+                int voto = rs.getInt("voto");
+                String testo = rs.getString("testo");
+
+                risultati.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero delle recensioni!");
+            e.printStackTrace();
+        }
+        return risultati;
     }
 
 }

@@ -78,7 +78,7 @@ public class ControllerUtente {
     }
 
     // Funzioni per la gestione degli ordini e delle recensioni
-    public List<Ordine> visualizzaOrdini() {
+    public List<Ordine> recuperaOrdiniEffettuati() {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByCliente(utenteCorrente.getId());
     }
@@ -90,34 +90,36 @@ public class ControllerUtente {
         Servizio servizio = (Servizio) servizioDAO.select(idServizio);
         if (servizio != null && servizio.isVisibile()) {
             // Creo un nuovo ordine
-            Ordine nuovoOrdine = new Ordine(0, utenteCorrente.getId(), idServizio, new java.util.Date(), null);
+            Ordine nuovoOrdine = new Ordine(utenteCorrente.getId(), idServizio, new java.util.Date());
             // Salvo l'ordine nel database
             return ordineDAO.insert(nuovoOrdine) != -1; // Ordine effettuato con successo il metodo insert restituisce un ID positivo
         }
         return false; // Servizio non trovato o non visibile
     }
     public boolean effettuaRecensione(int idVenditore, int voto, String testo) {
-        RecensioneDAO recensioneDAO = new RecensioneDAO();
-        VenditoreDAO venditoreDAO = new VenditoreDAO();
-
         // Controllo che il voto sia compreso tra 1 e 5
         if (voto < 1 || voto > 5)
             return false;
+
+        RecensioneDAO recensioneDAO = new RecensioneDAO();
+        VenditoreDAO venditoreDAO = new VenditoreDAO();
 
         //Controllo la presenza del venditore
         Venditore venditore = (Venditore) venditoreDAO.select(idVenditore);
         if (venditore != null) {
             // Creo la recensione
-            Recensione recensione = new Recensione(0, utenteCorrente.getId(), idVenditore, voto, testo);
+            Recensione nuovaRecensione = new Recensione(utenteCorrente.getId(), idVenditore, voto, testo);
             // Salvo la recensione nel database
-            recensioneDAO.insert(recensione);
-            // Aggiorno il rating del venditore
-            venditore.setRating(venditore.getRating() + voto); // Aggiorno il rating
-            venditoreDAO.update(venditore); // Salvo le modifiche al venditore
-            return true; // Recensione effettuata con successo
-        } else {
-            return false; // Venditore non trovato
+            if( recensioneDAO.insert(nuovaRecensione) > 0){
+                // Aggiorno il rating del venditore
+                int numeroRecensioni = recensioneDAO.countByVenditore(idVenditore);
+                float ratingAggiornato = (venditore.getRating() * numeroRecensioni + voto) / (numeroRecensioni + 1);
+                venditore.setRating(ratingAggiornato); // Aggiorno il rating
+                venditoreDAO.update(venditore); // Salvo le modifiche al venditore
+                return true; // Recensione effettuata con successo
+            }
         }
+        return false; // Venditore non trovato o errore nell'inserimento della recensione
     }
 
     // Funzione per diventare venditore
@@ -125,7 +127,7 @@ public class ControllerUtente {
         VenditoreDAO venditoreDAO = new VenditoreDAO();
         // Controllo se l'utente corrente è già un venditore
         if (utenteCorrente.isVenditore()) {
-            System.out.println("L'utente è già un venditore.");
+            System.out.println("Sei già un venditore.");
             return false; // L'utente è già un venditore
         }
         utenteCorrente.setVenditore(true); // Imposto l'utente come venditore
@@ -134,9 +136,7 @@ public class ControllerUtente {
         utenteDAO.update(utenteCorrente);
 
         // Creo un nuovo oggetto Venditore con i dati dell'utente corrente e la descrizione
-        Venditore nuovoVenditore = new Venditore(utenteCorrente.getId(), utenteCorrente.getNome(),
-                utenteCorrente.getCognome(), utenteCorrente.getEmail(), utenteCorrente.getPassword(),
-                utenteCorrente.getTelefono(), descrizione);
+        Venditore nuovoVenditore = new Venditore(utenteCorrente, descrizione);
 
         // Salvo il nuovo venditore nel database
         return venditoreDAO.insert(nuovoVenditore) != -1; // Se l'inserimento ha successo, restituisce un ID positivo

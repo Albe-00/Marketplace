@@ -44,8 +44,9 @@ public class MenuFacade extends Menu {
                 }
 
             } else {
+                //fixme valutare la rimozione dell'accesso all'oggetto utenteCorrente
                 System.out.println("Ciao " + controller.getUtenteCorrente().getNome() + "!");
-                if (controller.isUtenteVenditore()){
+                if (controller.isUtenteCorrenteVenditore()){
                     menuAttuale = new MenuVenditore();
                     menuAttuale.display();
                 } else {

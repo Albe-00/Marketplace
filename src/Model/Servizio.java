@@ -7,12 +7,12 @@ public class Servizio {
     int id_venditore;
     String titolo;
     String descrizione;
-    double prezzo;
+    float prezzo;
     String categoria;
     Date dataPubblicazione;
     boolean visibile;
 
-    public Servizio(int id_servizio, int id_venditore, String titolo, String descrizione, double prezzo, String categoria, Date dataPubblicazione, boolean visibile) {
+    public Servizio(int id_servizio, int id_venditore, String titolo, String descrizione, float prezzo, String categoria, Date dataPubblicazione, boolean visibile) {
         this.id_servizio = id_servizio;
         this.id_venditore = id_venditore;
         this.titolo = titolo;
@@ -20,6 +20,16 @@ public class Servizio {
         this.prezzo = prezzo;
         this.categoria = categoria;
         this.dataPubblicazione = dataPubblicazione;
+        this.visibile = visibile;
+    }
+    public Servizio(int id_servizio, int id_venditore, String titolo, String descrizione, float prezzo, String categoria, boolean visibile) {
+        this.id_servizio = id_servizio;
+        this.id_venditore = id_venditore;
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.prezzo = prezzo;
+        this.categoria = categoria;
+        this.dataPubblicazione = new Date(System.currentTimeMillis());
         this.visibile = visibile;
     }
 
@@ -59,7 +69,7 @@ public class Servizio {
         return prezzo;
     }
 
-    public void setPrezzo(double prezzo) {
+    public void setPrezzo(float prezzo) {
         this.prezzo = prezzo;
     }
 

@@ -27,7 +27,7 @@ public class ControllerBase {
     public Utente getUtenteCorrente() {
         return utenteCorrente;
     }
-    public boolean isUtenteVenditore(){
+    public boolean isUtenteCorrenteVenditore(){
         return utenteCorrente.isVenditore();
     }
     public boolean registerUtente(Utente nuovoUtente) {

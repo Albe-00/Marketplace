@@ -14,6 +14,13 @@ public class Recensione {
         this.voto = voto;
         this.testo = testo;
     }
+    public Recensione(int id_autore, int id_venditore,int voto, String testo ) {
+        this.id_recensione = 0;
+        this.id_autore = id_autore;
+        this.id_venditore = id_venditore;
+        this.voto = voto;
+        this.testo = testo;
+    }
 
     public int getId_recensione() {
         return id_recensione;
@@ -55,7 +62,7 @@ public class Recensione {
         this.testo = testo;
     }
 
-    public void Stampa() {
+    public void stampa() {
         System.out.println("------------------------------------------");
         System.out.println("ID: " + id_recensione);
         System.out.println("ID Autore: " + id_autore);

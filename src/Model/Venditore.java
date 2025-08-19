@@ -5,8 +5,19 @@ public class Venditore extends Utente{
     float rating;
 
     public Venditore(int id, String nome, String cognome, String email, String password,
+                     String telefono,String descrizione,float rating) {
+        super(id, nome, cognome, email, password, telefono,true);
+        this.descrizione = descrizione;
+        this.rating = rating;
+    }
+    public Venditore(int id, String nome, String cognome, String email, String password,
                      String telefono,String descrizione) {
         super(id, nome, cognome, email, password, telefono,true);
+        this.descrizione = descrizione;
+        this.rating = 0.0f; // inizialmente il rating è 0
+    }
+    public Venditore(Utente utente,String descrizione) {
+        super(utente.getId(), utente.getNome(), utente.getCognome(), utente.getEmail(), utente.getPassword(), utente.getTelefono(),true);
         this.descrizione = descrizione;
         this.rating = 0.0f; // inizialmente il rating è 0
     }

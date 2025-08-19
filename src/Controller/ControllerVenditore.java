@@ -1,26 +1,187 @@
 package Controller;
 
-import DAO.UtenteDAO;
 import DAO.VenditoreDAO;
-import Model.Utente;
+import DAO.ServizioDAO;
+import DAO.OrdineDAO;
+import DAO.RecensioneDAO;
 import Model.Venditore;
+import Model.Servizio;
+import Model.Ordine;
+import Model.Recensione;
+
 import java.util.List;
 
 
 public class ControllerVenditore extends ControllerUtente {
-    private Venditore venditore;
+    private Venditore venditore;        //fixme rimuovere venditore, usare utenteCorrente eredita da ControllerUtente
 
     public ControllerVenditore(Venditore venditore) {
         super(venditore);
         VenditoreDAO venditoreDAO = new VenditoreDAO();
         this.venditore = venditore;
     }
+    // metodi per la visualizzazione del profilo del venditore e dei suoi servizi
     @Override
     public void visualizzaProfilo() {
         venditore.stampa();
+        visualizzaServiziVenditore();
+    }
+    public void visualizzaServiziVenditore() {
+        ServizioDAO servizioDAO = new ServizioDAO();
+        System.out.println("Servizi offerti da " + venditore.getNome() + ":");
+        for (Servizio servizio : servizioDAO.selectByVenditore(venditore.getId())) {
+            servizio.stampa();
+        }
     }
 
+    // Modifica il profilo del venditore
+    public boolean modificaDescrizione(String nuovaDescrizione, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        venditore.setDescrizione(nuovaDescrizione);
+        return true; // Descrizione modificato con successo
+    }
 
+    // crea un nuovo servizio
+    public boolean creaServizio(String titolo, String descrizione, float prezzo, String categoria,boolean visibile) {
+        if (titolo.isEmpty() || descrizione.isEmpty() || prezzo <= 0 || categoria.isEmpty()) {
+            return false; // Dati non validi
+        }
+        Servizio nuovoServizio = new Servizio(0, venditore.getId(), titolo, descrizione, prezzo, categoria,visibile);
+        ServizioDAO servizioDAO = new ServizioDAO();
+
+        int idNuovoServizio = servizioDAO.insert(nuovoServizio);
+
+        return idNuovoServizio > 0 ? true : false; // Restituisce true se il servizio è stato creato con successo, altrimenti false
+
+    }
+
+    // Modifica un servizio esistente
+    public boolean modificaNomeServizio(int idServizio, String nuovoTitolo, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            servizio.setTitolo(nuovoTitolo);
+            return servizioDAO.update(servizio); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+    public boolean modificaDescrizioneServizio(int idServizio, String nuovaDescrizione, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            servizio.setDescrizione(nuovaDescrizione);
+            return servizioDAO.update(servizio); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+    public boolean modificaPrezzoServizio(int idServizio, float nuovoPrezzo, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            servizio.setPrezzo(nuovoPrezzo);
+            return servizioDAO.update(servizio); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+    public boolean modificaCategoriaServizio(int idServizio, String nuovaCategoria, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            servizio.setCategoria(nuovaCategoria);
+            return servizioDAO.update(servizio); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+    public boolean modificaVisibilitaServizio(int idServizio, boolean nuovaVisibilita, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            servizio.setVisibile(nuovaVisibilita);
+            return servizioDAO.update(servizio); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+
+    // Elimina un servizio esistente
+    public boolean eliminaServizio(int idServizio, String password) {
+        if (!venditore.getPassword().equals(password)) {
+            return false; // La password non corrisponde
+        }
+        ServizioDAO servizioDAO = new ServizioDAO();
+        Servizio servizio = (Servizio) servizioDAO.select(idServizio);
+        if (servizio != null && servizio.getId_venditore() == venditore.getId()) {
+            return servizioDAO.delete(idServizio); // Restituisce true se l'eliminazione è riuscita
+        }
+        return false; // Servizio non trovato o non appartiene al venditore
+    }
+
+    // metodi per la gestione degli ordini
+    public List<Ordine> recuperaOrdiniRicevuti() {
+        OrdineDAO ordineDAO = new OrdineDAO();
+        return ordineDAO.selectByVenditore(utenteCorrente.getId());
+    }
+    public List<Ordine> recuperaOrdiniInAttesa() {
+        OrdineDAO ordineDAO = new OrdineDAO();
+        return ordineDAO.selectByVenditoreAndStato(venditore.getId(), "IN ATTESA");
+    }public List<Ordine> recuperaOrdiniInLavorazione() {
+        OrdineDAO ordineDAO = new OrdineDAO();
+        return ordineDAO.selectByVenditoreAndStato(venditore.getId(), "IN LAVORAZIONE");
+    }
+    // fixme valutare una funzione modificaStatoOrdine(int idOrdine, String nuovoStato)
+    public boolean iniziaOrdine(int idOrdine){
+        OrdineDAO ordineDAO = new OrdineDAO();
+        Ordine ordine = (Ordine) ordineDAO.select(idOrdine);
+        int idVenditore = ordineDAO.getIdVenditore(idOrdine);
+        if (ordine != null && idVenditore == venditore.getId() && ordine.getStatoOrdine().equals("IN ATTESA")) {
+            ordine.setStatoOrdine("IN LAVORAZIONE");
+            return ordineDAO.update(ordine); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Ordine non trovato o non appartiene al venditore o stato non valido
+    }
+    public boolean rifiutaOrdine(int idOrdine){
+        OrdineDAO ordineDAO = new OrdineDAO();
+
+        Ordine ordine = (Ordine) ordineDAO.select(idOrdine);
+        int idVenditore = ordineDAO.getIdVenditore(idOrdine);
+
+        if (ordine != null && idVenditore == venditore.getId() && ordine.getStatoOrdine().equals("IN ATTESA")) {
+            ordine.setStatoOrdine("RIFIUTATO");
+            return ordineDAO.update(ordine); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Ordine non trovato o non appartiene al venditore o stato non valido
+    }
+    public boolean completaOrdine(int idOrdine){
+        OrdineDAO ordineDAO = new OrdineDAO();
+        Ordine ordine = (Ordine) ordineDAO.select(idOrdine);
+        int idVenditore = ordineDAO.getIdVenditore(idOrdine);
+        if (ordine != null && idVenditore == venditore.getId() && ordine.getStatoOrdine().equals("IN LAVORAZIONE")) {
+            ordine.setStatoOrdine("COMPLETATO");
+            return ordineDAO.update(ordine); // Restituisce true se l'aggiornamento è riuscito
+        }
+        return false; // Ordine non trovato o non appartiene al venditore o stato non valido
+    }
+
+    public List<Recensione> recuperaRecensioniRicevute(){
+        RecensioneDAO recensioneDAO = new RecensioneDAO();
+        return recensioneDAO.selectByVenditore(venditore.getId());
+    }
 
 }
 

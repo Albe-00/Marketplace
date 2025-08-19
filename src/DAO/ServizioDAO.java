@@ -31,7 +31,7 @@ public class ServizioDAO extends DAO {
                 int idVenditore = rs.getInt("id_venditore");
                 String titolo = rs.getString("titolo");
                 String descrizione = rs.getString("descrizione");
-                double prezzo = rs.getDouble("prezzo");
+                float prezzo = rs.getFloat("prezzo");
                 String categoria = rs.getString("categoria");
                 Date dataPubblicazione = rs.getDate("data_pubblicazione");
                 boolean visibile = rs.getBoolean("visibile");
@@ -63,7 +63,7 @@ public class ServizioDAO extends DAO {
                 int idVenditore = rs.getInt("id_venditore");
                 String titolo = rs.getString("titolo");
                 String descrizione = rs.getString("descrizione");
-                double prezzo = rs.getDouble("prezzo");
+                float prezzo = rs.getFloat("prezzo");
                 String categoria = rs.getString("categoria");
                 Date dataPubblicazione = rs.getDate("data_pubblicazione");
                 boolean visibile = rs.getBoolean("visibile");
@@ -161,6 +161,36 @@ public class ServizioDAO extends DAO {
         return false;
     }
 
+    public List<Servizio> selectByVenditore(int idVenditore) {
+        List<Servizio> servizi = new ArrayList<>();
+        String query = "SELECT * FROM servizio WHERE id_venditore = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, idVenditore);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idServizio = rs.getInt("id_servizio");
+                String titolo = rs.getString("titolo");
+                String descrizione = rs.getString("descrizione");
+                float prezzo = rs.getFloat("prezzo");
+                String categoria = rs.getString("categoria");
+                Date dataPubblicazione = rs.getDate("data_pubblicazione");
+                boolean visibile = rs.getBoolean("visibile");
+
+                Servizio servizio = new Servizio(idServizio, idVenditore, titolo, descrizione, prezzo, categoria, dataPubblicazione, visibile);
+                servizi.add(servizio);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            e.printStackTrace();
+        }
+        return servizi;
+    }
+
     public List<Servizio> cercaServizi(String ricerca) {
         List<Servizio> risultati = new ArrayList<>();
 
@@ -191,7 +221,7 @@ public class ServizioDAO extends DAO {
                             rs.getInt("id_venditore"),
                             rs.getString("titolo"),
                             rs.getString("descrizione"),
-                            rs.getDouble("prezzo"),
+                            rs.getFloat("prezzo"),
                             rs.getString("categoria"),
                             rs.getDate("data_pubblicazione"),
                             rs.getBoolean("visibile")

@@ -4,7 +4,7 @@ import java.util.Date;
 
 /* StatoOrdine può essere uno dei seguenti:{
     IN ATTESA,
-    IN PREPARAZIONE,
+    IN LAVORAZIONE,
     RIFIUTATO,
     COMPLETATO
 }*/
@@ -12,6 +12,7 @@ public class Ordine {
     private int id_ordine;
     int id_cliente;
     int id_servizio;
+    //fixme aggiungi prezzo dell'ordine
     private Date dataOrdine;
     private Date dataConsegna;
     private String statoOrdine;
@@ -25,12 +26,12 @@ public class Ordine {
         this.statoOrdine = statoOrdine;
 
     }
-    public Ordine(int id_ordine, int id_cliente, int id_servizio, Date dataOrdine,Date dataConsegna) {
-        this.id_ordine = id_ordine;
+    public Ordine(int id_cliente, int id_servizio, Date dataOrdine) {
+        this.id_ordine = 0;
         this.id_cliente = id_cliente;
         this.id_servizio= id_servizio;
         this.dataOrdine = dataOrdine;
-        this.dataConsegna = dataConsegna;
+        this.dataConsegna = null;
         this.statoOrdine = "IN ATTESA";
 
     }
@@ -86,7 +87,7 @@ public class Ordine {
         }
         // Controlla se il nuovo stato è uno dei valori validi
         if(!statoOrdine.equals("IN ATTESA") &&
-           !statoOrdine.equals("IN PREPARAZIONE") &&
+           !statoOrdine.equals("IN LAVORAZIONE") &&
            !statoOrdine.equals("RIFIUTATO") &&
            !statoOrdine.equals("COMPLETATO")) {
             return;
@@ -95,12 +96,12 @@ public class Ordine {
         if(statoOrdine.equals("COMPLETATO") || statoOrdine.equals("RIFIUTATO")) {
             return; // Lo stato dell'ordine NON può essere modificato se già completato o rifiutato
         }
-        // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN PREPARAZIONE" o "RIFIUTATO"
-        if(statoOrdine.equals("IN ATTESA") && !nuovostatoOrdine.equals("IN PREPARAZIONE") && !nuovostatoOrdine.equals("RIFIUTATO")) {
+        // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN LAVORAZIONE" o "RIFIUTATO"
+        if(statoOrdine.equals("IN ATTESA") && !nuovostatoOrdine.equals("IN LAVORAZIONE") && !nuovostatoOrdine.equals("RIFIUTATO")) {
             return;
         }
-        // Se lo stato è "IN PREPARAZIONE", può essere cambiato solo in "COMPLETATO"
-        if(statoOrdine.equals("IN PREPARAZIONE") && !nuovostatoOrdine.equals("COMPLETATO")) {
+        // Se lo stato è "IN LAVORAZIONE", può essere cambiato solo in "COMPLETATO"
+        if(statoOrdine.equals("IN LAVORAZIONE") && !nuovostatoOrdine.equals("COMPLETATO")) {
             return;
         }
         this.statoOrdine = nuovostatoOrdine;
@@ -111,6 +112,7 @@ public class Ordine {
         System.out.println("ID: " + id_ordine);
         System.out.println("ID Cliente: " + id_cliente);
         System.out.println("ID Servizio: " + id_servizio);
+
         System.out.println("Data Ordine : " + dataOrdine);
         System.out.println("Data Consegna : " + dataConsegna);
         System.out.println("Stato: " + statoOrdine);
