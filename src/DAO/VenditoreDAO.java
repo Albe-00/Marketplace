@@ -5,9 +5,11 @@ import Model.Utente;
 import Model.Venditore;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +108,7 @@ public class VenditoreDAO extends UtenteDAO {
         String query = "INSERT INTO Venditore (id_venditore,descrizione, rating) VALUES (?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
              ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Venditore nuovoVenditore = (Venditore) obj;

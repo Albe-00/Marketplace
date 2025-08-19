@@ -9,19 +9,20 @@ import java.util.Scanner;
 
 public class MenuVenditore extends Menu {
     ControllerVenditore controllerVenditore;
-    public MenuVenditore() {
+    public MenuVenditore(Scanner scanner) {
         super();
+        this.scanner = scanner;
         Venditore venditore = (Venditore) ControllerBase.getInstance().getUtenteCorrente();
         controllerVenditore = new ControllerVenditore(venditore);
     }
 
     @Override
     public void display() {
-        Scanner scanner = new Scanner(System.in);
         boolean uscita = false;
         int scelta;
         while(!uscita) {
-            System.out.println("-- Menu Venditore --");
+            System.out.println("Ciao " + controllerVenditore.getNome() + "!");
+            System.out.println("Cosa vuoi fare?");
             System.out.println("1. Visualizza profilo");
             System.out.println("2. Modifica profilo");
             System.out.println("3. Cerca servizi");
@@ -107,7 +108,6 @@ public class MenuVenditore extends Menu {
     }
 
     private void modificaProfilo() {
-        Scanner scanner = new Scanner(System.in);
         int scelta;
         boolean modificaEffettuata = false;
         System.out.println("Modifica Profilo");
@@ -173,7 +173,6 @@ public class MenuVenditore extends Menu {
         }
     }
     private void cercaServizi(){
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Che servizio cerchi ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerVenditore.cercaServizi(query);
@@ -187,7 +186,6 @@ public class MenuVenditore extends Menu {
         }
     }
     private void cercaVenditori() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Quale venditore cerchi ?");
         String query = scanner.nextLine();
         List<Venditore> venditoriTrovati = controllerVenditore.cercaVenditori(query);
@@ -213,14 +211,12 @@ public class MenuVenditore extends Menu {
     }
     private void effettuaOrdine() {
         cercaServizi();
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci l'ID del servizio da ordinare:");
         int idServizio = scanner.nextInt();
         scanner.nextLine(); // Consuma il newline rimasto dopo nextInt()
         controllerVenditore.effettuaOrdine(idServizio);
     }
     private void effettuaRecensione() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci ID del venditore da recensire:");
         int idVenditore = scanner.nextInt();
         System.out.println("Inserisci il voto (1-5):");
@@ -237,7 +233,6 @@ public class MenuVenditore extends Menu {
 
     // gestione dei servizi del venditore
     private void creaServizio() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci il titolo del servizio:");
         String titolo = scanner.nextLine();
         System.out.println("Inserisci la descrizione del servizio:");
@@ -268,7 +263,6 @@ public class MenuVenditore extends Menu {
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
         int scelta;
         boolean modificaEffettuata = false;
         System.out.println("Modifica Servizio");
@@ -344,7 +338,6 @@ public class MenuVenditore extends Menu {
         }
 
         System.out.println("Inserisci la tua password per confermare:");
-        Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine();
 
         if (controllerVenditore.eliminaServizio(idServizio, password)) {
@@ -428,7 +421,6 @@ public class MenuVenditore extends Menu {
 
     // funzione per leggere l'input dell'utente e convertirlo in un intero , restituisce -1 se l'input non è un numero
     private int inputScelta() {
-        Scanner scanner = new Scanner(System.in);
         String sceltaStringa;
         int scelta;
         sceltaStringa = scanner.nextLine();
@@ -442,7 +434,6 @@ public class MenuVenditore extends Menu {
     }
     // funzione per leggere l'input dell'utente come stringa e convertirlo in un booleano
     private boolean inputBoolean() {
-        Scanner scanner = new Scanner(System.in);
         // trim (metodo della classe String) rimuove gli spazi all'inizio e alla fine della stringa
         String input = scanner.nextLine().trim().toLowerCase();
         return input.equals("si") || input.equals("s") || input.equals("yes") || input.equals("y");

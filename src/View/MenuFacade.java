@@ -8,11 +8,12 @@ public class MenuFacade extends Menu {
     public MenuFacade() {
         // fixme controllare se nell'esetendere una classe astratta devo usare super() nel costruttore
         super();
+        // istanzia lo scanner che verrà passato ai vari menu per evitare conflitti sullo stream di input
+        this.scanner = new Scanner(System.in);
         this.controller = ControllerBase.getInstance();
         menuAttuale = this;
     }
     public void display() {
-        Scanner scanner = new Scanner(System.in);
         int scelta;
         while (true) {
             if( controller.getUtenteCorrente() == null ) {
@@ -27,11 +28,11 @@ public class MenuFacade extends Menu {
 
                 switch (scelta) {
                     case 1:
-                        menuAttuale = new MenuLogin();
+                        menuAttuale = new MenuLogin(scanner);
                         menuAttuale.display();
                         break;
                     case 2:
-                        menuAttuale = new MenuRegistrazione();
+                        menuAttuale = new MenuRegistrazione(scanner);
                         menuAttuale.display();
                         break;
                     case 3:
@@ -45,12 +46,11 @@ public class MenuFacade extends Menu {
 
             } else {
                 //fixme valutare la rimozione dell'accesso all'oggetto utenteCorrente
-                System.out.println("Ciao " + controller.getUtenteCorrente().getNome() + "!");
                 if (controller.isUtenteCorrenteVenditore()){
-                    menuAttuale = new MenuVenditore();
+                    menuAttuale = new MenuVenditore(scanner);
                     menuAttuale.display();
                 } else {
-                    menuAttuale = new MenuUtente();
+                    menuAttuale = new MenuUtente(scanner);
                     menuAttuale.display();
                 }
             }
@@ -58,7 +58,6 @@ public class MenuFacade extends Menu {
     }
 
     private int inputScelta() {
-        Scanner scanner = new Scanner(System.in);
         String sceltaStringa;
         int scelta;
         sceltaStringa = scanner.nextLine();

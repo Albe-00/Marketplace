@@ -7,14 +7,14 @@ import Model.*;
 
 public class MenuRegistrazione extends Menu {
     private ControllerBase controller;
-    public MenuRegistrazione() {
+    public MenuRegistrazione(Scanner scanner) {
         super();
+        this.scanner = scanner;
         this.controller = ControllerBase.getInstance();
     }
 
     @Override
     public void display() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("--- Registrazione Utente ---");
 
         System.out.print("Inserisci Nome: ");

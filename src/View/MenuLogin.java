@@ -6,14 +6,14 @@ import java.util.Scanner;
 
 public class MenuLogin extends Menu {
     private ControllerBase controller;
-    public MenuLogin() {
+    public MenuLogin(Scanner scanner) {
         super();
+        this.scanner = scanner;
         this.controller = ControllerBase.getInstance();
     }
 
     @Override
     public void display() {
-        //Scanner scanner = new Scanner(System.in);
         System.out.println("-- Login Utente --");
         System.out.println("Email : ");
         //String email = scanner.nextLine();
@@ -34,6 +34,5 @@ public class MenuLogin extends Menu {
         }else {
             System.out.println("❌ Credenziali non valide. Riprova.");
         }
-        //scanner.close();
     }
 }

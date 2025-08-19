@@ -17,7 +17,6 @@ public class ControllerVenditore extends ControllerUtente {
 
     public ControllerVenditore(Venditore venditore) {
         super(venditore);
-        VenditoreDAO venditoreDAO = new VenditoreDAO();
         this.venditore = venditore;
     }
     // metodi per la visualizzazione del profilo del venditore e dei suoi servizi

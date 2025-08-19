@@ -3,12 +3,15 @@ package DAO;
 import Model.Ordine;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 public class OrdineDAO extends DAO {
 
@@ -79,8 +82,7 @@ public class OrdineDAO extends DAO {
         String query = "INSERT INTO ordine (id_cliente, id_servizio, data_ordine, data_consegna, stato_ordine) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             Ordine ordine = (Ordine) obj;
             stmt.setInt(1, ordine.getId_cliente());
@@ -92,6 +94,7 @@ public class OrdineDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 System.out.println("✅ Ordine inserito con successo.");
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
                 }

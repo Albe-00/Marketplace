@@ -13,19 +13,20 @@ public class MenuUtente extends Menu {
     ControllerBase controllerBase;
     private ControllerUtente controllerUtente;
 
-    public MenuUtente() {
+    public MenuUtente(Scanner scanner) {
         super();
+        this.scanner = scanner;
         controllerBase = ControllerBase.getInstance();
         this.controllerUtente = new ControllerUtente( ControllerBase.getInstance().getUtenteCorrente() );
     }
 
     @Override
     public void display() {
-        Scanner scanner = new Scanner(System.in);
         boolean uscita = false;
         int scelta;
         while(!uscita) {
-            System.out.println("-- Menu Utente --");
+            System.out.println("Ciao " + controllerUtente.getNome() + "!");
+            System.out.println("Cosa vuoi fare?");
             System.out.println("1. Visualizza profilo");
             System.out.println("2. Modifica profilo");
             System.out.println("3. Cerca servizi");
@@ -84,7 +85,6 @@ public class MenuUtente extends Menu {
         }
     }
     private void modificaProfilo() {
-        Scanner scanner = new Scanner(System.in);
         int scelta;
         boolean modificaEffettuata = false;
         System.out.println("Modifica Profilo");
@@ -144,7 +144,6 @@ public class MenuUtente extends Menu {
         }
     }
     private void cercaServizi(){
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Che servizio cerchi ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
@@ -158,7 +157,6 @@ public class MenuUtente extends Menu {
         }
     }
     private void cercaVenditori() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Quale venditore cerchi ?");
         String query = scanner.nextLine();
         List<Venditore> venditoriTrovati = controllerUtente.cercaVenditori(query);
@@ -184,14 +182,12 @@ public class MenuUtente extends Menu {
     }
     private void effettuaOrdine() {
         cercaServizi();
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("------------------------------------------");
         System.out.println("Inserisci l'ID del servizio da ordinare:");
-        int idServizio = scanner.nextInt();
-        scanner.nextLine(); // Consuma il newline rimasto dopo nextInt()
+        int idServizio = inputScelta();
         controllerUtente.effettuaOrdine(idServizio);
     }
     private void effettuaRecensione() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci ID del venditore da recensire:");
         int idVenditore = scanner.nextInt();
         System.out.println("Inserisci il voto (1-5):");
@@ -206,7 +202,6 @@ public class MenuUtente extends Menu {
         }
     }
     private boolean diventaVenditore() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Inserisci una descrizione per il tuo profilo venditore:");
         String descrizione = scanner.nextLine();
 
@@ -219,7 +214,6 @@ public class MenuUtente extends Menu {
         }
     }
     private int inputScelta() {
-        Scanner scanner = new Scanner(System.in);
         String sceltaStringa;
         int scelta;
         sceltaStringa = scanner.nextLine();

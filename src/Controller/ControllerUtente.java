@@ -13,9 +13,14 @@ public class ControllerUtente {
         this.utenteCorrente = utente;
     }
 
+    // visualizza le informazioni dell'utente corrente
     public void visualizzaProfilo() {
         utenteCorrente.stampa();
     }
+    public String getNome() {
+        return utenteCorrente.getNome();
+    }
+
 
     // Modifica le informazioni dell'utente corrente
     public boolean modificaNome(String nuovoNome , String password) {

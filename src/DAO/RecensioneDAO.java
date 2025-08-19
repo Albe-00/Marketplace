@@ -4,11 +4,12 @@ import Model.Ordine;
 import Model.Recensione;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RecensioneDAO extends DAO {
@@ -78,7 +79,7 @@ public class RecensioneDAO extends DAO {
         String query = "INSERT INTO recensione (id_autore, id_venditore, voto, testo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
              ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Recensione r = (Recensione) obj;

@@ -3,12 +3,15 @@ package DAO;
 import Model.Servizio;
 
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 
 
 public class ServizioDAO extends DAO {
@@ -83,7 +86,7 @@ public class ServizioDAO extends DAO {
         String query = "INSERT INTO servizio (id_venditore, titolo, descrizione, prezzo, categoria, data_pubblicazione, visibile) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
              ResultSet generatedKeys = stmt.getGeneratedKeys()) {
 
             Servizio s = (Servizio) obj;
