@@ -15,7 +15,7 @@ public class MenuRegistrazione extends Menu {
 
     @Override
     public void display() {
-        System.out.println("--- Registrazione Utente ---");
+        System.out.println("--- REGISTRAZIONE ---");
 
         System.out.print("Inserisci Nome: ");
         String nome = scanner.nextLine();

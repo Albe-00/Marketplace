@@ -7,15 +7,15 @@ import Model.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class MenuVenditore extends Menu {
-    ControllerVenditore controllerVenditore;
+public class MenuVenditore extends MenuUtente {
+    private ControllerVenditore controllerVenditore;
     public MenuVenditore(Scanner scanner) {
-        super();
-        this.scanner = scanner;
+        super(scanner);
         Venditore venditore = (Venditore) ControllerBase.getInstance().getUtenteCorrente();
         controllerVenditore = new ControllerVenditore(venditore);
     }
 
+    @Override
     public void display() {
         boolean uscita = false;
         int scelta;
@@ -25,96 +25,8 @@ public class MenuVenditore extends Menu {
             System.out.println("1. Visualizza profilo");
             System.out.println("2. Modifica profilo");
             System.out.println("3. Cerca servizi e venditori");
-            System.out.println("4. Visualizza ordini");
-            System.out.println("5. Effettua ordine");
-            System.out.println("6. Effettua recensione");
-
-            // Opzioni specifiche per il venditore
-            System.out.println("7. Crea un nuovo servizio");
-            System.out.println("8. Modifica un servizio esistente");
-            System.out.println("9. Elimina un servizio");
-            System.out.println("10. Visualizza gli ordini ricevuti");
-            System.out.println("11. Inizia un ordine");
-            System.out.println("12. Rifiuta un ordine");
-            System.out.println("13. Concludi un ordine");
-            System.out.println("14. Visualizza le recensioni ricevute");
-            System.out.println("15. Logout");
-            System.out.print("Seleziona un'opzione: ");
-
-            // Legge l'input dell'utente
-            scelta= inputInt();
-
-            switch (scelta) {
-                case 1:
-                    controllerVenditore.visualizzaProfilo();
-                    break;
-                case 2:
-                    modificaProfilo();
-                    break;
-                case 3:
-                    cerca();
-                    break;
-                case 4:
-                    visualizzaOrdiniEffettuati();
-                    break;
-                case 5:
-                    effettuaOrdine();
-                    break;
-                case 6:
-                    effettuaRecensione();
-                    break;
-                case 7:
-                    creaServizio();
-                    break;
-                case 8:
-                    modificaServizio();
-                    break;
-                case 9:
-                    eliminaServizio();
-                    break;
-                case 10:
-                    visualizzaOrdiniRicevuti();
-                    break;
-                case 11:
-                    iniziaOrdine();
-                    break;
-                case 12:
-                    rifiutaOrdine();
-                    break;
-                case 13:
-                    completaOrdine();
-                    break;
-                case 14:
-                    visualizzaRecensioniRicevute();
-                    break;
-                case 15:
-                    ControllerBase controller = ControllerBase.getInstance();
-                    controller.logout();
-                    uscita = true;
-                    break;
-                default:
-                    System.out.println("Opzione non valida. Riprova.");
-            }
-            if (!uscita) {
-                System.out.println("Premi invio per continuare...");
-                scanner.nextLine(); // Attende l'input dell'utente
-            }
-        }
-    }
-
-    //versione display con 2 ricerche
-    /*@Override
-    public void display() {
-        boolean uscita = false;
-        int scelta;
-        while(!uscita) {
-            System.out.println("Ciao " + controllerVenditore.getNome() + "!");
-            System.out.println("Cosa vuoi fare?");
-            System.out.println("1. Visualizza profilo");
-            System.out.println("2. Modifica profilo");
-            System.out.println("3. Cerca servizi");
-            System.out.println("4. Cerca Venditori");
-            System.out.println("5. Visualizza ordini");
+            System.out.println("4. Visualizza il profilo di un altro utente");
+            System.out.println("5. Visualizza i tuoi ordini");
             System.out.println("6. Effettua ordine");
             System.out.println("7. Effettua recensione");
 
@@ -141,10 +53,10 @@ public class MenuVenditore extends Menu {
                     modificaProfilo();
                     break;
                 case 3:
-                    cercaServizi();
+                    cerca();
                     break;
                 case 4:
-                    cercaVenditori();
+                    visualizzaProfiloUtenteSpecifico();
                     break;
                 case 5:
                     visualizzaOrdiniEffettuati();
@@ -192,12 +104,12 @@ public class MenuVenditore extends Menu {
                 scanner.nextLine(); // Attende l'input dell'utente
             }
         }
-    }*/
-
-    private void modificaProfilo() {
+    }
+    @Override
+    protected void modificaProfilo() {
         int scelta;
-        boolean modificaEffettuata = false;
-        System.out.println("Modifica Profilo");
+        boolean modificaEffettuata;
+        System.out.println("MODIFICA PROFILO");
         System.out.println("Cosa vuoi modificare?");
         System.out.println("1. Nome");
         System.out.println("2. Cognome");
@@ -206,6 +118,7 @@ public class MenuVenditore extends Menu {
         System.out.println("5. Telefono");
         System.out.println("6. Descrizione");
         System.out.println("7. Annulla");
+        System.out.print("Seleziona un'opzione: ");
 
         // Legge l'input dell'utente
         scelta = inputInt();
@@ -262,91 +175,6 @@ public class MenuVenditore extends Menu {
             System.out.println("Errore durante la modifica del profilo. Verifica la password e riprova.");
         }
     }
-    private void cerca(){
-        System.out.println("Cosa stai cercando ?");
-        String query = scanner.nextLine();
-        List<Servizio> serviziTrovati = controllerVenditore.cercaServizi(query);
-        List<Venditore> venditoriTrovati = controllerVenditore.cercaVenditori(query);
-
-        // Stampa i servizi trovati
-        if (serviziTrovati.isEmpty()) {
-            System.out.println("Nessun servizio trovato.");
-        } else {
-            System.out.println("SERVIZI TROVATI:");
-            for (Servizio servizio : serviziTrovati) {
-                servizio.stampa();
-            }
-        }
-        System.out.println(); // Aggiunge una riga vuota per separare i risultati
-
-        // Stampa i venditori trovati
-        if (venditoriTrovati.isEmpty()) {
-            System.out.println("Nessun venditore trovato.");
-        } else {
-            System.out.println("VENDITORI TROVATI:");
-            for (Venditore venditore : venditoriTrovati) {
-                venditore.stampa();
-            }
-        }
-    }
-    private void cercaServizi(){
-        System.out.println("Che servizio cerchi ?");
-        String query = scanner.nextLine();
-        List<Servizio> serviziTrovati = controllerVenditore.cercaServizi(query);
-        if (serviziTrovati.isEmpty()) {
-            System.out.println("Nessun servizio trovato.");
-        } else {
-            System.out.println("SERVIZI TROVATI:");
-            for (Servizio servizio : serviziTrovati) {
-                servizio.stampa();
-            }
-        }
-    }
-    private void cercaVenditori() {
-        System.out.println("Quale venditore cerchi ?");
-        String query = scanner.nextLine();
-        List<Venditore> venditoriTrovati = controllerVenditore.cercaVenditori(query);
-        if (venditoriTrovati.isEmpty()) {
-            System.out.println("Nessun venditore trovato.");
-        } else {
-            System.out.println("Venditori trovati:");
-            for (Venditore venditore : venditoriTrovati) {
-                venditore.stampa();
-            }
-        }
-    }
-    private void visualizzaOrdiniEffettuati() {
-        List<Ordine> ordiniTrovati = controllerVenditore.recuperaOrdiniEffettuati();
-        if (ordiniTrovati.isEmpty()) {
-            System.out.println("Nessun ordine trovato.");
-        } else {
-            System.out.println("Ordini trovati:");
-            for (Ordine ordine : ordiniTrovati) {
-                //fixme Servizio servizio = controllerVenditore.getServizioById(ordine.getIdServizio());
-                ordine.stampa();
-            }
-        }
-    }
-    private void effettuaOrdine() {
-        cercaServizi();
-        System.out.println("Inserisci l'ID del servizio da ordinare:");
-        int idServizio = inputInt();
-        controllerVenditore.effettuaOrdine(idServizio);
-    }
-    private void effettuaRecensione() {
-        System.out.println("Inserisci ID del venditore da recensire:");
-        int idVenditore = inputInt();
-        System.out.println("Inserisci il voto (1-5):");
-        int voto = inputInt();
-        System.out.println("Inserisci il testo della recensione:");
-        String testo = scanner.nextLine();
-
-        if (controllerVenditore.effettuaRecensione(idVenditore, voto, testo)) {
-            System.out.println("Recensione effettuata con successo.");
-        } else {
-            System.out.println("Errore durante l'effettuazione della recensione.");
-        }
-    }
 
     // gestione dei servizi del venditore
     private void creaServizio() {
@@ -386,8 +214,8 @@ public class MenuVenditore extends Menu {
         }
 
         int scelta;
-        boolean modificaEffettuata = false;
-        System.out.println("Modifica Servizio");
+        boolean modificaEffettuata;
+        System.out.println("MODIFICA SERVIZIO");
         System.out.println("Cosa vuoi modificare?");
         System.out.println("1. titolo");
         System.out.println("2. descrizione");
@@ -457,6 +285,7 @@ public class MenuVenditore extends Menu {
             System.out.println("Nessun servizio da eliminare.");
             return;
         }
+        System.out.println("ELIMINA SERVIZIO");
         System.out.println("Servizi disponibili per l'eliminazione:");
         controllerVenditore.visualizzaServiziVenditore();
         System.out.println("Inserisci l'ID del servizio da eliminare:");
@@ -482,13 +311,14 @@ public class MenuVenditore extends Menu {
         if (ordiniTrovati.isEmpty()) {
             System.out.println("Nessun ordine trovato.");
         } else {
-            System.out.println("Ordini trovati:");
+            System.out.println("ORDINI RICEVUTI :");
             for (Ordine ordine : ordiniTrovati) {
                 ordine.stampa();
             }
         }
     }
     private void iniziaOrdine() {
+        System.out.println("INIZIA ORDINE");
         List<Ordine> ordiniInAttesa = controllerVenditore.recuperaOrdiniInAttesa();
         if (ordiniInAttesa.isEmpty()) {
             System.out.println("Nessun ordine in attesa.");
@@ -512,6 +342,7 @@ public class MenuVenditore extends Menu {
         }
     }
     private void rifiutaOrdine() {
+        System.out.println("RIFIUTA ORDINE");
         List<Ordine> ordiniInAttesa = controllerVenditore.recuperaOrdiniInAttesa();
         if (ordiniInAttesa.isEmpty()) {
             System.out.println("Nessun ordine in attesa.");
@@ -538,7 +369,7 @@ public class MenuVenditore extends Menu {
 
     }
     private void completaOrdine() {
-
+        System.out.println("COMPLETA ORDINE");
         List<Ordine> ordiniInLavorazione = controllerVenditore.recuperaOrdiniInLavorazione();
         if (ordiniInLavorazione.isEmpty()) {
             System.out.println("Nessun ordine in lavorazione.");
@@ -567,6 +398,7 @@ public class MenuVenditore extends Menu {
 
     // // Visualizza le recensioni ricevute dal venditore
     private void visualizzaRecensioniRicevute() {
+
         List<Recensione> recensioniTrovate = controllerVenditore.recuperaRecensioniRicevute();
         if (recensioniTrovate.isEmpty()) {
             System.out.println("Nessuna recensione trovata.");
@@ -578,18 +410,6 @@ public class MenuVenditore extends Menu {
         }
     }
 
-    // funzione per leggere l'input dell'utente e convertirlo in un intero , restituisce -1 se l'input non è un numero
-    private int inputInt() {
-        String numeroStringa;
-        int numero;
-        numeroStringa = scanner.nextLine();
-        try {
-            numero = Integer.parseInt(numeroStringa); // caso numerico
-        } catch (NumberFormatException e) {
-            numero = -1;
-        }
-        return numero;
-    }
     // funzione per leggere l'input dell'utente come stringa e convertirlo in un booleano
     private boolean inputBoolean() {
         // trim (metodo della classe String) rimuove gli spazi all'inizio e alla fine della stringa

@@ -161,6 +161,31 @@ public class UtenteDAO extends DAO {
         } catch (SQLException e) {
             System.out.println("❌ Errore durante l'aggiornamento del utente!");
             e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    public boolean updatePassword(int id_utente , String password){
+        String query = "UPDATE Utente SET password = ? WHERE id_utente = ?;";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, password);
+            stmt.setInt(2, id_utente); // WHERE id = ?
+
+            int righeAggiornate = stmt.executeUpdate();
+
+            if (righeAggiornate > 0) {
+                System.out.println("✅ Utente aggiornato con successo.");
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante l'aggiornamento del utente!");
+            e.printStackTrace();
+            return false;
         }
         return false;
     }

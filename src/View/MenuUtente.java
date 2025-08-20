@@ -9,14 +9,11 @@ import DAO.RecensioneDAO;
 import Model.*;
 
 public class MenuUtente extends Menu {
-
-    ControllerBase controllerBase;
     private ControllerUtente controllerUtente;
 
     public MenuUtente(Scanner scanner) {
         super();
         this.scanner = scanner;
-        controllerBase = ControllerBase.getInstance();
         this.controllerUtente = new ControllerUtente( ControllerBase.getInstance().getUtenteCorrente() );
     }
 
@@ -29,68 +26,8 @@ public class MenuUtente extends Menu {
             System.out.println("1. Visualizza profilo");
             System.out.println("2. Modifica profilo");
             System.out.println("3. Cerca servizi e venditori");
-            System.out.println("4. Visualizza ordini");
-            System.out.println("5. Effettua ordine");
-            System.out.println("6. Effettua recensione");
-            System.out.println("7. Diventa venditore");
-            System.out.println("8. Logout");
-            System.out.print("Seleziona un'opzione: ");
-
-            // Legge l'input dell'utente
-            scelta = inputInt();
-
-            switch (scelta) {
-                case 1:
-                    controllerUtente.visualizzaProfilo();
-                    break;
-                case 2:
-                    modificaProfilo();
-                    break;
-                case 3:
-                    cerca();
-                    break;
-                case 4:
-                    visualizzaOrdiniEffettuati();
-                    break;
-                case 5:
-                    effettuaOrdine();
-                    break;
-                case 6:
-                    effettuaRecensione();
-                    break;
-                case 7:
-                    if( diventaVenditore() ) {
-                        uscita = true; // Esce dal menu se l'utente diventa venditore
-                        controllerBase.logout();
-                        //fixme ad ora fa logout , e richiede il login per accedere al menu venditore
-                    }
-                    break;
-                case 8:
-                    controllerBase.logout();
-                    uscita = true;
-                    break;
-                default:
-                    System.out.println("Opzione non valida. Riprova.");
-            }
-            if (!uscita) {
-                System.out.println("Premi invio per continuare...");
-                scanner.nextLine(); // Attende l'input dell'utente
-            }
-        }
-    }
-    //versione display con 2 ricerche
-    /*@Override
-    public void display() {
-        boolean uscita = false;
-        int scelta;
-        while(!uscita) {
-            System.out.println("Ciao " + controllerUtente.getNome() + "!");
-            System.out.println("Cosa vuoi fare?");
-            System.out.println("1. Visualizza profilo");
-            System.out.println("2. Modifica profilo");
-            System.out.println("3. Cerca servizi");
-            System.out.println("4. Cerca Venditori");
-            System.out.println("5. Visualizza ordini");
+            System.out.println("4. Visualizza il profilo di un altro utente"); //fixme da aggiustare
+            System.out.println("5. Visualizza i tuoi ordini");
             System.out.println("6. Effettua ordine");
             System.out.println("7. Effettua recensione");
             System.out.println("8. Diventa venditore");
@@ -108,10 +45,10 @@ public class MenuUtente extends Menu {
                     modificaProfilo();
                     break;
                 case 3:
-                    cercaServizi();
+                    cerca();
                     break;
                 case 4:
-                    cercaVenditori();
+                    visualizzaProfiloUtenteSpecifico();
                     break;
                 case 5:
                     visualizzaOrdiniEffettuati();
@@ -123,14 +60,12 @@ public class MenuUtente extends Menu {
                     effettuaRecensione();
                     break;
                 case 8:
-                    if( diventaVenditore() ) {
-                        uscita = true; // Esce dal menu se l'utente diventa venditore
-                        controllerBase.logout();
-                        //fixme ad ora fa logout , e richiede il login per accedere al menu venditore
-                    }
+                    if(diventaVenditore())
+                        uscita = true;
+                    // Se l'utente non diventa venditore, non esce dal menu
                     break;
                 case 9:
-                    controllerBase.logout();
+                    ControllerBase.getInstance().logout();
                     uscita = true;
                     break;
                 default:
@@ -141,11 +76,11 @@ public class MenuUtente extends Menu {
                 scanner.nextLine(); // Attende l'input dell'utente
             }
         }
-    }*/
-    private void modificaProfilo() {
+    }
+    protected void modificaProfilo() {
         int scelta;
-        boolean modificaEffettuata = false;
-        System.out.println("Modifica Profilo");
+        boolean modificaEffettuata;
+        System.out.println("MODIFICA PROFILO");
         System.out.println("Cosa vuoi modificare?");
         System.out.println("1. Nome");
         System.out.println("2. Cognome");
@@ -153,6 +88,7 @@ public class MenuUtente extends Menu {
         System.out.println("4. Password");
         System.out.println("5. Telefono");
         System.out.println("6. Annulla");
+        System.out.print("Seleziona un'opzione: ");
 
         // Legge l'input dell'utente
         scelta = inputInt();
@@ -201,7 +137,7 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante la modifica del profilo. Verifica la password e riprova.");
         }
     }
-    private void cerca(){
+    protected void cerca(){
         System.out.println("Cosa stai cercando ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
@@ -228,7 +164,7 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    private void cercaServizi(){
+    protected void cercaServizi(){
         System.out.println("Che servizio cerchi ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
@@ -241,38 +177,43 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    private void cercaVenditori() {
+    protected void cercaVenditori() {
         System.out.println("Quale venditore cerchi ?");
         String query = scanner.nextLine();
         List<Venditore> venditoriTrovati = controllerUtente.cercaVenditori(query);
         if (venditoriTrovati.isEmpty()) {
             System.out.println("Nessun venditore trovato.");
         } else {
-            System.out.println("Venditori trovati:");
+            System.out.println("VENDITORI TROVATI:");
             for (Venditore venditore : venditoriTrovati) {
                 venditore.stampa();
             }
         }
     }
-    private void visualizzaOrdiniEffettuati() {
+    protected void visualizzaProfiloUtenteSpecifico(){
+        System.out.println("Inserisci id dell'utente che vuoi vedere :");
+        int idUtenteDaVisualizzare = inputInt();
+        controllerUtente.visualizzaProfilo(idUtenteDaVisualizzare);
+    }
+    protected void visualizzaOrdiniEffettuati() {
         List<Ordine> ordiniTrovati = controllerUtente.recuperaOrdiniEffettuati();
         if (ordiniTrovati.isEmpty()) {
             System.out.println("Nessun ordine trovato.");
         } else {
-            System.out.println("I tuoi Ordini :");
+            System.out.println("I TUOI ORDINI :");
             for (Ordine ordine : ordiniTrovati) {
                 ordine.stampa();
             }
         }
     }
-    private void effettuaOrdine() {
+    protected void effettuaOrdine() {
         cercaServizi();
         System.out.println("------------------------------------------");
         System.out.println("Inserisci l'ID del servizio da ordinare:");
         int idServizio = inputInt();
         controllerUtente.effettuaOrdine(idServizio);
     }
-    private void effettuaRecensione() {
+    protected void effettuaRecensione() {
         cercaVenditori();
         System.out.println("Inserisci ID del venditore da recensire:");
         int idVenditore = inputInt();
@@ -291,7 +232,10 @@ public class MenuUtente extends Menu {
         System.out.println("Inserisci una descrizione per il tuo profilo venditore:");
         String descrizione = scanner.nextLine();
 
-        if(controllerUtente.diventaVenditore(descrizione)) {
+        System.out.println("Inserisci la tua password per confermare:");
+        String password = scanner.nextLine();
+
+        if(controllerUtente.diventaVenditore(descrizione,password)) {
             System.out.println("Sei diventato un venditore con successo!");
             return true;
         } else {
@@ -299,7 +243,8 @@ public class MenuUtente extends Menu {
             return false;
         }
     }
-    private int inputInt() {
+    // funzione per leggere l'input dell'utente e convertirlo in un intero , restituisce -1 se l'input non è un numero
+    protected int inputInt() {
         String numeroStringa;
         int numero;
         numeroStringa = scanner.nextLine();

@@ -39,7 +39,12 @@ public class Venditore extends Utente{
 
     @Override
     public void stampa() {
-        super.stampa();
+        System.out.println("------------------------------------------");
+        System.out.println("ID: " + id);
+        System.out.println("Nome: " + nome);
+        System.out.println("Cognome: " + cognome);
+        System.out.println("Email: " + email);
+        System.out.println("Telefono: " + telefono);
         System.out.println("Descrizione: " + descrizione);
         System.out.println("Rating: " + rating);
         System.out.println("------------------------------------------");

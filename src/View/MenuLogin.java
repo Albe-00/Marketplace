@@ -14,7 +14,7 @@ public class MenuLogin extends Menu {
 
     @Override
     public void display() {
-        System.out.println("-- Login Utente --");
+        System.out.println("-- LOGIN --");
         System.out.println("Email : ");
         //String email = scanner.nextLine();
         System.out.println("Password : ");
@@ -25,9 +25,9 @@ public class MenuLogin extends Menu {
         // UTENTE SEMPLICE
         String email="paolo.neri@example.com";
         String password="pwd654";
-        // VENDITORE
+        /*// VENDITORE
         //String email="mario.rossi@example.com";
-        //String password="pwd123";
+        //String password="pwd123";*/
 
         if(controller.login(email, password)) {
             System.out.println("🔑 Login effettuato con successo!");

@@ -2,12 +2,12 @@ package Model;
 
 public class Utente {
 
-    private int id;
-    private String nome;
-    private String cognome;
-    private String email;
-    private String password;
-    private String telefono;
+    protected int id;
+    protected String nome;
+    protected String cognome;
+    protected String email;
+    protected String password;
+    protected String telefono;
     private boolean venditore;
 
     public Utente(int id, String nome, String cognome, String email, String password, String telefono, boolean venditore) {
@@ -52,10 +52,12 @@ public class Utente {
         this.email = email;
     }
 
-    public String getPassword() {
+    public boolean isEqualPassword(String password) {
+        return this.password.equals(password);
+    }
+    public String getPassword(){
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -84,7 +86,6 @@ public class Utente {
         System.out.println("Email: " + email);
         System.out.println("Telefono: " + telefono);
         System.out.println("Venditore: " + (venditore ? "Si" : "No"));
-        if (!venditore)
-            System.out.println("------------------------------------------");
+        System.out.println("------------------------------------------");
     }
 }

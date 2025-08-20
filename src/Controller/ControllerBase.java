@@ -83,7 +83,7 @@ public class ControllerBase {
         for (Object obj : utenti) {
             Utente utente = (Utente) obj;
             // Controlla se l'email e la password corrispondono
-            if (utente.getEmail().equals(email) && utente.getPassword().equals(password)) {
+            if (utente.getEmail().equals(email) && utente.isEqualPassword(password)) {
                 // Credenziali valide, imposta l'utente corrente
                 if(utente.isVenditore()) {
                     // Se l'utente è un venditore, recupera i dettagli del venditore e imposta l'utente corrente come Venditore

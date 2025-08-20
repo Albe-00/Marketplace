@@ -20,22 +20,73 @@ public class ControllerUtente {
         return utenteCorrente.getNome();
     }
 
+    // visualizza le informazioni di un utenteSpecifico
+    public void visualizzaProfilo(int id_utente){
+        UtenteDAO utenteDAO = new UtenteDAO();
+        Utente utenteDavisualizzare = (Utente) utenteDAO.select(id_utente);
 
-    // Modifica le informazioni dell'utente corrente
+        // Se utente scelto non esiste
+        if(utenteDavisualizzare == null){
+            System.out.println("Utente indicato non esiste");
+            return;
+        }
+
+        // Stampo i dati dell'utente scelto
+        utenteDavisualizzare.stampa();
+
+        //Se è un venditore
+        if(utenteDavisualizzare.isVenditore()){
+
+            // Stampo i servizi che eroga
+            List<Servizio> serviziVenditore = recuperaServiziVisibiliVenditore(utenteDavisualizzare.getId());
+            if (serviziVenditore.isEmpty()) {
+                System.out.println("NESSUN SERVIZIO DISPONIBILE");
+            } else {
+                System.out.println("SERVIZI :");
+                for (Servizio servizio : serviziVenditore) {
+                    servizio.stampa();
+                }
+            }
+
+            // Stampa le recensioni dell'utente
+            System.out.println("------------------------------------------");
+            List<Recensione> recensioniVenditore = recuperaRecensioniVenditore(utenteDavisualizzare.getId());
+            if (recensioniVenditore.isEmpty()) {
+                System.out.println("NESSUNA RECENSIONE DISPONIBILE");
+            } else {
+                System.out.println("RECENSIONI :");
+                for (Recensione recensione : recensioniVenditore) {
+                    recensione.stampa();
+                }
+            }
+            System.out.println("------------------------------------------");
+        }
+
+    }
+
+    // Metodi per la modifica dellle informazioni dell'utente corrente
     public boolean modificaNome(String nuovoNome , String password) {
-        if( !utenteCorrente.getPassword().equals(password) )
-            return false; // La password non corrisponde
-        utenteCorrente.setNome(nuovoNome);
-        return true; // Nome modificato con successo
+        if(utenteCorrente.isEqualPassword(password) ){
+            utenteCorrente.setNome(nuovoNome);
+            UtenteDAO utenteDAO= new UtenteDAO();
+            utenteDAO.update(utenteCorrente);
+            return true; // Nome modificato con successo
+        }
+
+        return false; // La password non corrisponde
     }
     public boolean modificaCognome(String nuovoCognome , String password) {
-        if( !utenteCorrente.getPassword().equals(password) )
-            return false; // La password non corrisponde
-        utenteCorrente.setCognome(nuovoCognome);
-        return true; // Nome modificato con successo
+        if( utenteCorrente.isEqualPassword(password) ){
+            utenteCorrente.setCognome(nuovoCognome);
+            UtenteDAO utenteDAO= new UtenteDAO();
+            utenteDAO.update(utenteCorrente);
+            return true; // Cognome modificato con successo
+        }
+
+        return false; // La password non corrisponde
     }
     public boolean modificaEmail(String nuovaEmail , String password) {
-        if( !utenteCorrente.getPassword().equals(password) )
+        if( !utenteCorrente.isEqualPassword(password) )
             return false; // La password non corrisponde
 
         // Controlla se l'email è già in uso
@@ -44,10 +95,9 @@ public class ControllerUtente {
 
         for (Object obj : utenti) {
             Utente utente = (Utente) obj;
-            if (utente.getEmail().equals(nuovaEmail) && utente.getId() != utenteCorrente.getId()) {
-                System.out.println("L'email è già in uso da un altro utente.");
+            if (utente.getEmail().equals(nuovaEmail) && utente.getId() != utenteCorrente.getId())
                 return false; // Email già in uso
-            }
+
         }
 
         // Se l'email non è in uso, aggiorna l'utente corrente
@@ -56,32 +106,42 @@ public class ControllerUtente {
         return true; // Email modificata con successo
     }
     public boolean modificaPassword(String vecchiaPassword, String nuovaPassword) {
-        if(utenteCorrente.getPassword().equals(vecchiaPassword)) {
+        if(utenteCorrente.isEqualPassword(vecchiaPassword)) {
             utenteCorrente.setPassword(nuovaPassword);
             UtenteDAO utenteDAO = new UtenteDAO();
-            utenteDAO.update(utenteCorrente);
-            return true; // Password modificata con successo
+            return utenteDAO.updatePassword(utenteCorrente.getId(), nuovaPassword);
         }
         return false; // La vecchia password non corrisponde
     }
     public boolean modificaTelefono(String nuovoTelefono , String password) {
-        if( !utenteCorrente.getPassword().equals(password) )
-            return false; // La password non corrisponde
-        utenteCorrente.setTelefono(nuovoTelefono);
-        return true; // Nome modificato con successo
+        if( !utenteCorrente.isEqualPassword(password) ){
+            utenteCorrente.setTelefono(nuovoTelefono);
+            UtenteDAO utenteDAO= new UtenteDAO();
+            utenteDAO.update(utenteCorrente);
+            return true; // Telefono modificato con successo
+        }
+
+        return false; // La password non corrisponde
     }
 
-    // Funzioni per la ricerca di servizi e venditori
+    // Metodi per la gestione di servizi
     public List<Servizio> cercaServizi(String ricerca) {
         ServizioDAO servizioDAO = new ServizioDAO();
         return servizioDAO.cercaServizi(ricerca);
     }
+    //fixme da valutare
+    private List<Servizio> recuperaServiziVisibiliVenditore(int id_venditore){
+        ServizioDAO servizioDAO = new ServizioDAO();
+        return servizioDAO.selectServiziVisibiliByVenditore(id_venditore);
+    }
+
+    // Metodi per la gestione dei venditori
     public List<Venditore> cercaVenditori(String ricerca) {
         VenditoreDAO venditoreDAO = new VenditoreDAO();
         return venditoreDAO.cercaVenditori(ricerca);
     }
 
-    // Funzioni per la gestione degli ordini e delle recensioni
+    // Metodi per la gestione degli ordini
     public List<Ordine> recuperaOrdiniEffettuati() {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByCliente(utenteCorrente.getId());
@@ -100,6 +160,8 @@ public class ControllerUtente {
         }
         return false; // Servizio non trovato o non visibile
     }
+
+    // Metodi per la gestione delle recensioni
     public boolean effettuaRecensione(int idVenditore, int voto, String testo) {
         // Controllo che il voto sia compreso tra 1 e 5
         if (voto < 1 || voto > 5)
@@ -127,14 +189,17 @@ public class ControllerUtente {
         }
         return false; // Venditore non trovato o errore nell'inserimento della recensione
     }
+    private List<Recensione> recuperaRecensioniVenditore(int id_venditore){
+        RecensioneDAO recensioneDAO = new RecensioneDAO();
+        return recensioneDAO.selectByVenditore(id_venditore);
+    }
 
     // Funzione per diventare venditore
-    public boolean diventaVenditore(String descrizione) {
+    public boolean diventaVenditore(String descrizione, String password) {
         // Controllo se l'utente corrente è già un venditore
-        if (utenteCorrente.isVenditore()) {
-            System.out.println("Sei già un venditore.");
-            return false; // L'utente è già un venditore
-        }
+        if ( utenteCorrente.isVenditore() || !utenteCorrente.isEqualPassword(password))
+            return false; // L'utente è già un venditore o password errata
+
 
         VenditoreDAO venditoreDAO = new VenditoreDAO();
         UtenteDAO utenteDAO = new UtenteDAO();
@@ -146,12 +211,21 @@ public class ControllerUtente {
         int idNuovoVenditore = venditoreDAO.insert(nuovoVenditore);
 
 
-        if (idNuovoVenditore == -1)     // Errore nell'inserimento del venditore
+        if (idNuovoVenditore == -1)     // Errore nell'inserimento del venditore nel database
             return false;
 
 
-        utenteCorrente.setVenditore(true);  // Imposto l'utente come venditore
+        utenteCorrente.setVenditore(true);  // Imposto l'attributo booleano venditore di utenteCorrente a true
         utenteDAO.update(utenteCorrente);   // Aggiorno l'utente nel database
+
+        // recupero la email dell'utente per fare il login
+        String email = utenteCorrente.getEmail();
+
+        ControllerBase controllerBase = ControllerBase.getInstance();
+        //effettua logout e login per modificare utente corrente e farlo risultare venditore
+        // di conseguenza si avvierà il menu venditore
+        controllerBase.logout();
+        controllerBase.login(email,password);
         return true;
     }
 

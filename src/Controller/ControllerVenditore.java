@@ -1,9 +1,9 @@
 package Controller;
 
-import DAO.VenditoreDAO;
 import DAO.ServizioDAO;
 import DAO.OrdineDAO;
 import DAO.RecensioneDAO;
+import Model.Utente;
 import Model.Venditore;
 import Model.Servizio;
 import Model.Ordine;
@@ -23,7 +23,7 @@ public class ControllerVenditore extends ControllerUtente {
     @Override
     public void visualizzaProfilo() {
         venditore.stampa();
-        visualizzaServiziVisibiliVenditore();
+        visualizzaServiziVenditore();
     }
     public void visualizzaServiziVenditore() {
         ServizioDAO servizioDAO = new ServizioDAO();
@@ -172,7 +172,6 @@ public class ControllerVenditore extends ControllerUtente {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByVenditoreAndStato(venditore.getId(), "IN LAVORAZIONE");
     }
-    // fixme valutare una funzione modificaStatoOrdine(int idOrdine, String nuovoStato)
     public boolean iniziaOrdine(int idOrdine){
         OrdineDAO ordineDAO = new OrdineDAO();
         Ordine ordine = (Ordine) ordineDAO.select(idOrdine);
@@ -206,6 +205,7 @@ public class ControllerVenditore extends ControllerUtente {
         return false; // Ordine non trovato o non appartiene al venditore o stato non valido
     }
 
+    // Metodi per la gestione delle recensioni
     public List<Recensione> recuperaRecensioniRicevute(){
         RecensioneDAO recensioneDAO = new RecensioneDAO();
         return recensioneDAO.selectByVenditore(venditore.getId());
