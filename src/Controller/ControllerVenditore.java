@@ -23,12 +23,33 @@ public class ControllerVenditore extends ControllerUtente {
     @Override
     public void visualizzaProfilo() {
         venditore.stampa();
-        visualizzaServiziVenditore();
+        visualizzaServiziVisibiliVenditore();
     }
     public void visualizzaServiziVenditore() {
         ServizioDAO servizioDAO = new ServizioDAO();
         System.out.println("Servizi offerti da " + venditore.getNome() + ":");
-        for (Servizio servizio : servizioDAO.selectByVenditore(venditore.getId())) {
+        List<Servizio> serviziOfferti = servizioDAO.selectByVenditore(venditore.getId());
+
+        if (serviziOfferti.isEmpty()) {
+            System.out.println("Nessun servizio.");
+            return; // Esce se non ci sono servizi
+        }
+
+        for (Servizio servizio : serviziOfferti) {
+            servizio.stampa();
+        }
+    }
+    public void visualizzaServiziVisibiliVenditore() {
+        ServizioDAO servizioDAO = new ServizioDAO();
+        System.out.println("Servizi offerti da " + venditore.getNome() + ":");
+        List<Servizio> serviziOfferti = servizioDAO.selectServiziVisibiliByVenditore(venditore.getId());
+
+        if (serviziOfferti.isEmpty()) {
+            System.out.println("Nessun servizio.");
+            return; // Esce se non ci sono servizi
+        }
+
+        for (Servizio servizio : serviziOfferti) {
             servizio.stampa();
         }
     }
@@ -40,6 +61,13 @@ public class ControllerVenditore extends ControllerUtente {
         }
         venditore.setDescrizione(nuovaDescrizione);
         return true; // Descrizione modificato con successo
+    }
+
+    //controllo servizi
+
+    public int getNumeroServiziVenditore() {
+        ServizioDAO servizioDAO = new ServizioDAO();
+        return servizioDAO.countByVenditore(venditore.getId());
     }
 
     // crea un nuovo servizio
@@ -134,12 +162,13 @@ public class ControllerVenditore extends ControllerUtente {
     // metodi per la gestione degli ordini
     public List<Ordine> recuperaOrdiniRicevuti() {
         OrdineDAO ordineDAO = new OrdineDAO();
-        return ordineDAO.selectByVenditore(utenteCorrente.getId());
+        return ordineDAO.selectByVenditore(venditore.getId());
     }
     public List<Ordine> recuperaOrdiniInAttesa() {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByVenditoreAndStato(venditore.getId(), "IN ATTESA");
-    }public List<Ordine> recuperaOrdiniInLavorazione() {
+    }
+    public List<Ordine> recuperaOrdiniInLavorazione() {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByVenditoreAndStato(venditore.getId(), "IN LAVORAZIONE");
     }

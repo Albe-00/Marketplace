@@ -86,8 +86,7 @@ public class ServizioDAO extends DAO {
         String query = "INSERT INTO servizio (id_venditore, titolo, descrizione, prezzo, categoria, data_pubblicazione, visibile) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             Servizio s = (Servizio) obj;
             stmt.setInt(1, s.getId_venditore());
@@ -100,6 +99,7 @@ public class ServizioDAO extends DAO {
 
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
                 System.out.println("✅ Servizio inserito con successo.");
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
@@ -192,6 +192,56 @@ public class ServizioDAO extends DAO {
             e.printStackTrace();
         }
         return servizi;
+    }
+
+    public List<Servizio> selectServiziVisibiliByVenditore(int idVenditore) {
+        List<Servizio> servizi = new ArrayList<>();
+        String query = "SELECT * FROM servizio WHERE id_venditore = ? and visibile = TRUE";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, idVenditore);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idServizio = rs.getInt("id_servizio");
+                String titolo = rs.getString("titolo");
+                String descrizione = rs.getString("descrizione");
+                float prezzo = rs.getFloat("prezzo");
+                String categoria = rs.getString("categoria");
+                Date dataPubblicazione = rs.getDate("data_pubblicazione");
+                boolean visibile = rs.getBoolean("visibile");
+
+                Servizio servizio = new Servizio(idServizio, idVenditore, titolo, descrizione, prezzo, categoria, dataPubblicazione, visibile);
+                servizi.add(servizio);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            e.printStackTrace();
+        }
+        return servizi;
+    }
+
+    public int countByVenditore(int idVenditore) {
+        List<Servizio> servizi = new ArrayList<>();
+        String query = "SELECT count(*) as numeroServizi FROM servizio WHERE id_venditore = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, idVenditore);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next())
+                return rs.getInt("numeroServizi");
+
+        } catch (SQLException e) {
+            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public List<Servizio> cercaServizi(String ricerca) {

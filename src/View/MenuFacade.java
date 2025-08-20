@@ -1,5 +1,7 @@
 package View;
 import Controller.*;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuFacade extends Menu {

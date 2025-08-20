@@ -79,11 +79,21 @@ public class ControllerBase {
     public boolean login(String email, String password) {
         UtenteDAO utenteDAO = new UtenteDAO();
         List<Object> utenti = utenteDAO.selectAll();
+        // Scorre la lista di utenti per verificare le credenziali
         for (Object obj : utenti) {
             Utente utente = (Utente) obj;
+            // Controlla se l'email e la password corrispondono
             if (utente.getEmail().equals(email) && utente.getPassword().equals(password)) {
-                this.utenteCorrente = utente;
-                return true; // Credenziali valide, imposta l'utente corrente
+                // Credenziali valide, imposta l'utente corrente
+                if(utente.isVenditore()) {
+                    // Se l'utente è un venditore, recupera i dettagli del venditore e imposta l'utente corrente come Venditore
+                    VenditoreDAO venditoreDAO = new VenditoreDAO();
+                    this.utenteCorrente = (Venditore) venditoreDAO.select(utente.getId());
+                } else {
+                    // Altrimenti, imposta l'utente corrente come Utente
+                    this.utenteCorrente = utente;
+                }
+                return true;
             }
         }
         return false; // Credenziali non valide

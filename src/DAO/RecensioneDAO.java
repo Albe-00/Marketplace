@@ -79,8 +79,8 @@ public class RecensioneDAO extends DAO {
         String query = "INSERT INTO recensione (id_autore, id_venditore, voto, testo) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
+             ) {
 
             Recensione r = (Recensione) obj;
             stmt.setInt(1, r.getId_autore());
@@ -90,6 +90,7 @@ public class RecensioneDAO extends DAO {
 
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
+                ResultSet generatedKeys = stmt.getGeneratedKeys();
                 System.out.println("✅ Recensione inserita con successo.");
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
@@ -176,7 +177,7 @@ public class RecensioneDAO extends DAO {
 
     public List<Recensione> selectByVenditore(int id_Venditore) {
         List<Recensione> risultati = new ArrayList<>();
-        String query = "SELECT * FROM re WHERE id_Venditore = ?";
+        String query = "SELECT * FROM recensione WHERE id_Venditore = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);) {

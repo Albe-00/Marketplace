@@ -58,9 +58,9 @@ public class UtenteDAO extends DAO {
 
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int id_utente = rs.getInt("id_utente");
                 String nome = rs.getString("nome");
@@ -136,7 +136,7 @@ public class UtenteDAO extends DAO {
     }
     @Override
     public boolean update(Object obj){
-        String query = "UPDATE Utente SET nome = ?, cognome = ?, email = ?, password = ?, telefono = ? WHERE id_utente = ?;";
+        String query = "UPDATE Utente SET nome = ?, cognome = ?, email = ?, password = ?, telefono = ? , venditore = ?  WHERE id_utente = ?;";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -148,7 +148,8 @@ public class UtenteDAO extends DAO {
             stmt.setString(3, utenteAggiornato.getEmail());
             stmt.setString(4, utenteAggiornato.getPassword());
             stmt.setString(5, utenteAggiornato.getTelefono());
-            stmt.setInt(6, utenteAggiornato.getId()); // WHERE id = ?
+            stmt.setBoolean(6, utenteAggiornato.isVenditore());
+            stmt.setInt(7, utenteAggiornato.getId()); // WHERE id = ?
 
             int righeAggiornate = stmt.executeUpdate();
 

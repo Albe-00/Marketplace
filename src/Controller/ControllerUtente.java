@@ -6,8 +6,7 @@ import DAO.*;
 import java.util.List;
 
 public class ControllerUtente {
-    public static ControllerUtente instance = null;
-    protected Utente utenteCorrente;
+    private Utente utenteCorrente;
     public ControllerUtente(Utente utente) {
         // Inizializza il controller per l'utente
         this.utenteCorrente = utente;
@@ -114,10 +113,12 @@ public class ControllerUtente {
         if (venditore != null) {
             // Creo la recensione
             Recensione nuovaRecensione = new Recensione(utenteCorrente.getId(), idVenditore, voto, testo);
+
+            int numeroRecensioni = recensioneDAO.countByVenditore(idVenditore);
+
             // Salvo la recensione nel database
             if( recensioneDAO.insert(nuovaRecensione) > 0){
                 // Aggiorno il rating del venditore
-                int numeroRecensioni = recensioneDAO.countByVenditore(idVenditore);
                 float ratingAggiornato = (venditore.getRating() * numeroRecensioni + voto) / (numeroRecensioni + 1);
                 venditore.setRating(ratingAggiornato); // Aggiorno il rating
                 venditoreDAO.update(venditore); // Salvo le modifiche al venditore
@@ -129,22 +130,29 @@ public class ControllerUtente {
 
     // Funzione per diventare venditore
     public boolean diventaVenditore(String descrizione) {
-        VenditoreDAO venditoreDAO = new VenditoreDAO();
         // Controllo se l'utente corrente è già un venditore
         if (utenteCorrente.isVenditore()) {
             System.out.println("Sei già un venditore.");
             return false; // L'utente è già un venditore
         }
-        utenteCorrente.setVenditore(true); // Imposto l'utente come venditore
+
+        VenditoreDAO venditoreDAO = new VenditoreDAO();
         UtenteDAO utenteDAO = new UtenteDAO();
-        // Aggiorno il campo booleano nella tabella utente del database
-        utenteDAO.update(utenteCorrente);
 
         // Creo un nuovo oggetto Venditore con i dati dell'utente corrente e la descrizione
         Venditore nuovoVenditore = new Venditore(utenteCorrente, descrizione);
 
-        // Salvo il nuovo venditore nel database
-        return venditoreDAO.insert(nuovoVenditore) != -1; // Se l'inserimento ha successo, restituisce un ID positivo
+        // Inserisco il nuovo venditore nel database
+        int idNuovoVenditore = venditoreDAO.insert(nuovoVenditore);
+
+
+        if (idNuovoVenditore == -1)     // Errore nell'inserimento del venditore
+            return false;
+
+
+        utenteCorrente.setVenditore(true);  // Imposto l'utente come venditore
+        utenteDAO.update(utenteCorrente);   // Aggiorno l'utente nel database
+        return true;
     }
 
 

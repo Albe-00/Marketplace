@@ -187,7 +187,8 @@ public class OrdineDAO extends DAO {
 
     public List<Ordine> selectByVenditore(int id_Venditore) {
         List<Ordine> risultati = new ArrayList<>();
-        String query = "SELECT * FROM ordine WHERE id_Venditore = ?";
+        String query = "SELECT * " +
+                "FROM ordine join Servizio on ordine.id_servizio = servizio.id_servizio WHERE id_venditore = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -216,7 +217,7 @@ public class OrdineDAO extends DAO {
     public List<Ordine> selectByVenditoreAndStato(int id_Venditore, String statoOrdine) {
         List<Ordine> risultati = new ArrayList<>();
         String query = "SELECT * " +
-                "FROM ordine JOIN servizio ON id_servizio WHERE id_Venditore = ? AND stato_ordine = ?";
+                "FROM ordine JOIN servizio ON ordine.id_servizio = servizio.id_servizio WHERE id_venditore = ? AND stato_ordine = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);) {

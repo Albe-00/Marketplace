@@ -5,7 +5,6 @@ import Model.Utente;
 import Model.Venditore;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,7 +38,7 @@ public class VenditoreDAO extends UtenteDAO {
                 String telefono = rs.getString("telefono");
                 String descrizione = rs.getString("descrizione");
                 float rating = rs.getFloat("rating");
-                return new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione);
+                return new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione, rating);
             } else {
                 System.out.println("Venditore con ID " + id + " non trovato.");
                 return null;
@@ -71,7 +70,7 @@ public class VenditoreDAO extends UtenteDAO {
                 String telefono = rs.getString("telefono");
                 String descrizione = rs.getString("descrizione");
                 float rating = rs.getFloat("rating");
-                venditori.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione));
+                venditori.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione,rating));
             }
 
         } catch (SQLException e) {
@@ -108,8 +107,7 @@ public class VenditoreDAO extends UtenteDAO {
         String query = "INSERT INTO Venditore (id_venditore,descrizione, rating) VALUES (?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             Venditore nuovoVenditore = (Venditore) obj;
             stmt.setInt(1, nuovoVenditore.getId());
@@ -121,9 +119,7 @@ public class VenditoreDAO extends UtenteDAO {
             if (righeInserite > 0) {
 
                 System.out.println("✅ Nuovo venditore inserito con successo.");
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Restituisce l'ID generato
-                }
+                return nuovoVenditore.getId(); // Restituisce l'ID del venditore appena inserito
             }
 
         } catch (SQLException e) {
@@ -170,7 +166,7 @@ public class VenditoreDAO extends UtenteDAO {
 
             String searchPattern = "%" + ricerca + "%";
 
-            // Prova a capire se 'ricerca' è un numero
+            // Valuta se 'ricerca' contiene un numero
             int idValue;
             try {
                 idValue = Integer.parseInt(ricerca); // caso numerico
@@ -195,7 +191,7 @@ public class VenditoreDAO extends UtenteDAO {
                 String telefono = rs.getString("telefono");
                 String descrizione = rs.getString("descrizione");
                 float rating = rs.getFloat("rating");
-                risultati.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione));
+                risultati.add(new Venditore(idVenditore, nome, cognome, email, password, telefono, descrizione,rating));
             }
 
         } catch (SQLException e) {

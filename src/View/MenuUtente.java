@@ -20,7 +20,66 @@ public class MenuUtente extends Menu {
         this.controllerUtente = new ControllerUtente( ControllerBase.getInstance().getUtenteCorrente() );
     }
 
-    @Override
+    public void display() {
+        boolean uscita = false;
+        int scelta;
+        while(!uscita) {
+            System.out.println("Ciao " + controllerUtente.getNome() + "!");
+            System.out.println("Cosa vuoi fare?");
+            System.out.println("1. Visualizza profilo");
+            System.out.println("2. Modifica profilo");
+            System.out.println("3. Cerca servizi e venditori");
+            System.out.println("4. Visualizza ordini");
+            System.out.println("5. Effettua ordine");
+            System.out.println("6. Effettua recensione");
+            System.out.println("7. Diventa venditore");
+            System.out.println("8. Logout");
+            System.out.print("Seleziona un'opzione: ");
+
+            // Legge l'input dell'utente
+            scelta = inputInt();
+
+            switch (scelta) {
+                case 1:
+                    controllerUtente.visualizzaProfilo();
+                    break;
+                case 2:
+                    modificaProfilo();
+                    break;
+                case 3:
+                    cerca();
+                    break;
+                case 4:
+                    visualizzaOrdiniEffettuati();
+                    break;
+                case 5:
+                    effettuaOrdine();
+                    break;
+                case 6:
+                    effettuaRecensione();
+                    break;
+                case 7:
+                    if( diventaVenditore() ) {
+                        uscita = true; // Esce dal menu se l'utente diventa venditore
+                        controllerBase.logout();
+                        //fixme ad ora fa logout , e richiede il login per accedere al menu venditore
+                    }
+                    break;
+                case 8:
+                    controllerBase.logout();
+                    uscita = true;
+                    break;
+                default:
+                    System.out.println("Opzione non valida. Riprova.");
+            }
+            if (!uscita) {
+                System.out.println("Premi invio per continuare...");
+                scanner.nextLine(); // Attende l'input dell'utente
+            }
+        }
+    }
+    //versione display con 2 ricerche
+    /*@Override
     public void display() {
         boolean uscita = false;
         int scelta;
@@ -39,7 +98,7 @@ public class MenuUtente extends Menu {
             System.out.print("Seleziona un'opzione: ");
 
             // Legge l'input dell'utente
-            scelta = inputScelta();
+            scelta = inputInt();
 
             switch (scelta) {
                 case 1:
@@ -71,7 +130,6 @@ public class MenuUtente extends Menu {
                     }
                     break;
                 case 9:
-                    scanner.close();
                     controllerBase.logout();
                     uscita = true;
                     break;
@@ -83,7 +141,7 @@ public class MenuUtente extends Menu {
                 scanner.nextLine(); // Attende l'input dell'utente
             }
         }
-    }
+    }*/
     private void modificaProfilo() {
         int scelta;
         boolean modificaEffettuata = false;
@@ -97,7 +155,7 @@ public class MenuUtente extends Menu {
         System.out.println("6. Annulla");
 
         // Legge l'input dell'utente
-        scelta = inputScelta();
+        scelta = inputInt();
 
         System.out.println("Inserisci la tua password per confermare:");
         String password = scanner.nextLine();
@@ -143,6 +201,33 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante la modifica del profilo. Verifica la password e riprova.");
         }
     }
+    private void cerca(){
+        System.out.println("Cosa stai cercando ?");
+        String query = scanner.nextLine();
+        List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
+        List<Venditore> venditoriTrovati = controllerUtente.cercaVenditori(query);
+
+        // Stampa i servizi trovati
+        if (serviziTrovati.isEmpty()) {
+            System.out.println("Nessun servizio trovato.");
+        } else {
+            System.out.println("SERVIZI TROVATI:");
+            for (Servizio servizio : serviziTrovati) {
+                servizio.stampa();
+            }
+        }
+        System.out.println(); // Aggiunge una riga vuota per separare i risultati
+
+        // Stampa i venditori trovati
+        if (venditoriTrovati.isEmpty()) {
+            System.out.println("Nessun venditore trovato.");
+        } else {
+            System.out.println("VENDITORI TROVATI:");
+            for (Venditore venditore : venditoriTrovati) {
+                venditore.stampa();
+            }
+        }
+    }
     private void cercaServizi(){
         System.out.println("Che servizio cerchi ?");
         String query = scanner.nextLine();
@@ -150,7 +235,7 @@ public class MenuUtente extends Menu {
         if (serviziTrovati.isEmpty()) {
             System.out.println("Nessun servizio trovato.");
         } else {
-            System.out.println("Servizi trovati:");
+            System.out.println("SERVIZI TROVATI:");
             for (Servizio servizio : serviziTrovati) {
                 servizio.stampa();
             }
@@ -174,7 +259,7 @@ public class MenuUtente extends Menu {
         if (ordiniTrovati.isEmpty()) {
             System.out.println("Nessun ordine trovato.");
         } else {
-            System.out.println("Ordini trovati:");
+            System.out.println("I tuoi Ordini :");
             for (Ordine ordine : ordiniTrovati) {
                 ordine.stampa();
             }
@@ -184,14 +269,15 @@ public class MenuUtente extends Menu {
         cercaServizi();
         System.out.println("------------------------------------------");
         System.out.println("Inserisci l'ID del servizio da ordinare:");
-        int idServizio = inputScelta();
+        int idServizio = inputInt();
         controllerUtente.effettuaOrdine(idServizio);
     }
     private void effettuaRecensione() {
+        cercaVenditori();
         System.out.println("Inserisci ID del venditore da recensire:");
-        int idVenditore = scanner.nextInt();
+        int idVenditore = inputInt();
         System.out.println("Inserisci il voto (1-5):");
-        int voto = scanner.nextInt();
+        int voto = inputInt();
         System.out.println("Inserisci il testo della recensione:");
         String testo = scanner.nextLine();
 
@@ -213,16 +299,15 @@ public class MenuUtente extends Menu {
             return false;
         }
     }
-    private int inputScelta() {
-        String sceltaStringa;
-        int scelta;
-        sceltaStringa = scanner.nextLine();
+    private int inputInt() {
+        String numeroStringa;
+        int numero;
+        numeroStringa = scanner.nextLine();
         try {
-            scelta = Integer.parseInt(sceltaStringa); // caso numerico
+            numero = Integer.parseInt(numeroStringa); // caso numerico
         } catch (NumberFormatException e) {
-            scelta = -1; // così non corrispondera mai ad un id_venditore
+            numero = -1;
         }
-
-        return scelta;
+        return numero;
     }
 }
