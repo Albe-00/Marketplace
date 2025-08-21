@@ -6,7 +6,7 @@ import DAO.*;
 import java.util.List;
 
 public class ControllerUtente {
-    private Utente utenteCorrente;
+    protected Utente utenteCorrente;
     public ControllerUtente(Utente utente) {
         // Inizializza il controller per l'utente
         this.utenteCorrente = utente;
@@ -31,12 +31,10 @@ public class ControllerUtente {
             return;
         }
 
-        // Stampo i dati dell'utente scelto
-        utenteDavisualizzare.stampa();
-
         //Se è un venditore
         if(utenteDavisualizzare.isVenditore()){
 
+            utenteDavisualizzare.stampa();
             // Stampo i servizi che eroga
             List<Servizio> serviziVenditore = recuperaServiziVisibiliVenditore(utenteDavisualizzare.getId());
             if (serviziVenditore.isEmpty()) {
@@ -60,6 +58,8 @@ public class ControllerUtente {
                 }
             }
             System.out.println("------------------------------------------");
+        }else{
+            System.out.println("L'utente indicato non è un venditore.");
         }
 
     }
@@ -129,7 +129,7 @@ public class ControllerUtente {
         ServizioDAO servizioDAO = new ServizioDAO();
         return servizioDAO.cercaServizi(ricerca);
     }
-    //fixme da valutare
+
     private List<Servizio> recuperaServiziVisibiliVenditore(int id_venditore){
         ServizioDAO servizioDAO = new ServizioDAO();
         return servizioDAO.selectServiziVisibiliByVenditore(id_venditore);

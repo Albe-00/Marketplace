@@ -123,46 +123,54 @@ public class MenuVenditore extends MenuUtente {
         // Legge l'input dell'utente
         scelta = inputInt();
 
-        // Se l'utente sceglie di annullare la modifica
-        if(scelta==7) {
-            System.out.println("Modifica annullata.");
-            return;
-        }
-
-        System.out.println("Inserisci la tua password per confermare:");
-        String password = scanner.nextLine();
+        String password;
 
         switch (scelta) {
             case 1:
                 System.out.println("Inserisci il nuovo nome:");
                 String nuovoNome = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaNome(nuovoNome, password);
                 break;
             case 2:
                 System.out.println("Inserisci il nuovo cognome:");
                 String nuovoCognome = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaCognome(nuovoCognome, password);
                 break;
             case 3:
                 System.out.println("Inserisci la nuova email:");
                 String nuovaEmail = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaEmail(nuovaEmail, password);
                 break;
             case 4:
                 System.out.println("Inserisci la nuova password:");
                 String nuovaPassword = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaPassword(nuovaPassword, password);
                 break;
             case 5:
                 System.out.println("Inserisci il nuovo numero di telefono:");
                 String nuovoTelefono = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaTelefono(nuovoTelefono, password);
                 break;
             case 6:
                 System.out.println("Inserisci il nuovo numero di telefono:");
                 String nuovaDescrizione = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaDescrizione(nuovaDescrizione, password);
                 break;
+            case 7:
+                System.out.println("Modifica annullata.");
+                return;
             default:
                 System.out.println("Opzione non valida. Riprova.");
                 return;
@@ -226,23 +234,21 @@ public class MenuVenditore extends MenuUtente {
 
         // Legge l'input dell'utente
         scelta = inputInt();
-        // Se l'utente sceglie di annullare la modifica
-        if(scelta==6) {
-            System.out.println("Modifica annullata.");
-            return;
-        }
-        System.out.println("Inserisci la tua password per confermare:");
-        String password = scanner.nextLine();
+        String password;
 
         switch (scelta) {
             case 1:
                 System.out.println("Inserisci il nuovo titolo:");
                 String nuovoTitolo = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaNomeServizio(idServizio, nuovoTitolo, password);
                 break;
             case 2:
                 System.out.println("Inserisci la nuova descrizione:");
                 String nuovoDescrizione = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaDescrizioneServizio(idServizio, nuovoDescrizione, password);
                 break;
             case 3:
@@ -255,18 +261,27 @@ public class MenuVenditore extends MenuUtente {
                     System.out.println("Prezzo non valido. Riprova.");
                     return;
                 }
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaPrezzoServizio(idServizio, nuovoPrezzo, password);
                 break;
             case 4:
                 System.out.println("Inserisci la nuova categoria:");
                 String nuovaCategoria = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaCategoriaServizio(idServizio, nuovaCategoria, password);
                 break;
             case 5:
                 System.out.println("Inserisci la nuova visibilità (si/no):");
                 boolean nuovoVisibilita = inputBoolean();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerVenditore.modificaVisibilitaServizio(idServizio, nuovoVisibilita, password);
                 break;
+            case 6:
+                System.out.println("Modifica annullata.");
+                return;
             default:
                 System.out.println("Opzione non valida. Riprova.");
                 return;
@@ -354,7 +369,7 @@ public class MenuVenditore extends MenuUtente {
             }
         }
 
-        System.out.println("Inserisci l'ID del ordine da iniziare:");
+        System.out.println("Inserisci l'ID dell'ordine da rifiutare:");
         int idOrdine = inputInt();
         if (idOrdine < 0) {
             System.out.println("ID non valido. Riprova.");

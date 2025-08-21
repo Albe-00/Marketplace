@@ -29,7 +29,8 @@ public class DatabaseConnection {
     }
 
     public static DatabaseConnection getInstance() {
-        if (instance == null) instance = new DatabaseConnection();
+        if (instance == null)
+            instance = new DatabaseConnection();
         return instance;
     }
 

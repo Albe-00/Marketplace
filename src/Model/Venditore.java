@@ -24,9 +24,6 @@ public class Venditore extends Utente{
     public String getDescrizione() {
         return descrizione;
     }
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
     public float getRating() {
         return rating;
     }

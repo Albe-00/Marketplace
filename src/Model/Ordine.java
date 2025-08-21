@@ -10,8 +10,8 @@ import java.util.Date;
 }*/
 public class Ordine {
     private int id_ordine;
-    int id_cliente;
-    int id_servizio;
+    private int id_cliente;
+    private int id_servizio;
     //fixme aggiungi prezzo dell'ordine
     private Date dataOrdine;
     private Date dataConsegna;
@@ -40,40 +40,20 @@ public class Ordine {
         return id_ordine;
     }
 
-    public void setId_ordine(int id_ordine) {
-        this.id_ordine = id_ordine;
-    }
-
     public int getId_cliente() {
         return id_cliente;
-    }
-
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
     }
 
     public int getId_servizio() {
         return id_servizio;
     }
 
-    public void setId_servizio(int servizio) {
-        this.id_servizio = servizio;
-    }
-
     public Date getDataOrdine() {
         return dataOrdine;
     }
 
-    public void setDataOrdine(Date dataOrdine) {
-        this.dataOrdine = dataOrdine;
-    }
-
     public Date getDataConsegna() {
         return dataConsegna;
-    }
-
-    public void setDataConsegna(Date dataConsegna) {
-        this.dataConsegna = dataConsegna;
     }
 
     public String getStatoOrdine() {

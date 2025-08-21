@@ -26,40 +26,20 @@ public class Recensione {
         return id_recensione;
     }
 
-    public void setId_recensione(int id_recensione) {
-        this.id_recensione = id_recensione;
-    }
-
     public int getId_autore() {
         return id_autore;
-    }
-
-    public void setId_autore(int id_autore) {
-        this.id_autore = id_autore;
     }
 
     public int getId_venditore() {
         return id_venditore;
     }
 
-    public void setId_venditore(int id_venditore) {
-        this.id_venditore = id_venditore;
-    }
-
     public int getVoto() {
         return voto;
     }
 
-    public void setVoto(int voto) {
-        this.voto = voto;
-    }
-
     public String getTesto() {
         return testo;
-    }
-
-    public void setTesto(String testo) {
-        this.testo = testo;
     }
 
     public void stampa() {

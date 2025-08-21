@@ -37,16 +37,8 @@ public class Servizio {
         return id_servizio;
     }
 
-    public void setId_servizio(int id_servizio) {
-        this.id_servizio = id_servizio;
-    }
-
     public int getId_venditore() {
         return id_venditore;
-    }
-
-    public void setId_venditore(int id_venditore) {
-        this.id_venditore = id_venditore;
     }
 
     public String getTitolo() {
@@ -83,10 +75,6 @@ public class Servizio {
 
     public Date getDataPubblicazione() {
         return dataPubblicazione;
-    }
-
-    public void setDataPubblicazione(Date dataPubblicazione) {
-        this.dataPubblicazione = dataPubblicazione;
     }
 
     public boolean isVisibile() {

@@ -7,18 +7,19 @@ import java.util.Scanner;
 public class MenuFacade extends Menu {
     private Menu menuAttuale;
     private ControllerBase controller;
+
     public MenuFacade() {
-        // fixme controllare se nell'esetendere una classe astratta devo usare super() nel costruttore
         super();
         // istanzia lo scanner che verrà passato ai vari menu per evitare conflitti sullo stream di input
         this.scanner = new Scanner(System.in);
         this.controller = ControllerBase.getInstance();
         menuAttuale = this;
     }
+
     public void display() {
         int scelta;
         while (true) {
-            if( controller.getUtenteCorrente() == null ) {
+            if( !controller.isUtenteLoggato() ) {
                 System.out.println("Benvenuto nella nostra applicazione!");
                 System.out.println("1. Login");
                 System.out.println("2. Registrazione");
@@ -38,16 +39,13 @@ public class MenuFacade extends Menu {
                         menuAttuale.display();
                         break;
                     case 3:
-                        scanner.close();
                         System.out.println("Uscita in corso...");
                         System.exit(0);
                         break;
                     default:
                         System.out.println("Scelta non valida. Riprova.");
                 }
-
             } else {
-                //fixme valutare la rimozione dell'accesso all'oggetto utenteCorrente
                 if (controller.isUtenteCorrenteVenditore()){
                     menuAttuale = new MenuVenditore(scanner);
                     menuAttuale.display();
@@ -66,7 +64,7 @@ public class MenuFacade extends Menu {
         try {
             scelta = Integer.parseInt(sceltaStringa); // caso numerico
         } catch (NumberFormatException e) {
-            scelta = -1; // così non corrispondera mai ad un id_venditore
+            scelta = -1;
         }
 
         return scelta;

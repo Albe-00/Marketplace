@@ -13,11 +13,9 @@ import java.util.List;
 
 
 public class ControllerVenditore extends ControllerUtente {
-    private Venditore venditore;        //fixme rimuovere venditore, usare utenteCorrente eredita da ControllerUtente
 
     public ControllerVenditore(Venditore venditore) {
         super(venditore);
-        this.venditore = venditore;
     }
     // metodi per la visualizzazione del profilo del venditore e dei suoi servizi
     @Override
@@ -29,20 +27,6 @@ public class ControllerVenditore extends ControllerUtente {
         ServizioDAO servizioDAO = new ServizioDAO();
         System.out.println("Servizi offerti da " + venditore.getNome() + ":");
         List<Servizio> serviziOfferti = servizioDAO.selectByVenditore(venditore.getId());
-
-        if (serviziOfferti.isEmpty()) {
-            System.out.println("Nessun servizio.");
-            return; // Esce se non ci sono servizi
-        }
-
-        for (Servizio servizio : serviziOfferti) {
-            servizio.stampa();
-        }
-    }
-    public void visualizzaServiziVisibiliVenditore() {
-        ServizioDAO servizioDAO = new ServizioDAO();
-        System.out.println("Servizi offerti da " + venditore.getNome() + ":");
-        List<Servizio> serviziOfferti = servizioDAO.selectServiziVisibiliByVenditore(venditore.getId());
 
         if (serviziOfferti.isEmpty()) {
             System.out.println("Nessun servizio.");
@@ -80,7 +64,7 @@ public class ControllerVenditore extends ControllerUtente {
 
         int idNuovoServizio = servizioDAO.insert(nuovoServizio);
 
-        return idNuovoServizio > 0 ? true : false; // Restituisce true se il servizio è stato creato con successo, altrimenti false
+        return idNuovoServizio > 0; // Restituisce true se il servizio è stato creato con successo, altrimenti false
 
     }
 

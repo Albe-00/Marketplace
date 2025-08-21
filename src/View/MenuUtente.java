@@ -26,7 +26,7 @@ public class MenuUtente extends Menu {
             System.out.println("1. Visualizza profilo");
             System.out.println("2. Modifica profilo");
             System.out.println("3. Cerca servizi e venditori");
-            System.out.println("4. Visualizza il profilo di un altro utente"); //fixme da aggiustare
+            System.out.println("4. Visualizza il profilo di un altro utente");
             System.out.println("5. Visualizza i tuoi ordini");
             System.out.println("6. Effettua ordine");
             System.out.println("7. Effettua recensione");
@@ -93,33 +93,42 @@ public class MenuUtente extends Menu {
         // Legge l'input dell'utente
         scelta = inputInt();
 
-        System.out.println("Inserisci la tua password per confermare:");
-        String password = scanner.nextLine();
+        String password;
 
         switch (scelta) {
             case 1:
                 System.out.println("Inserisci il nuovo nome:");
                 String nuovoNome = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerUtente.modificaNome(nuovoNome, password);
                 break;
             case 2:
                 System.out.println("Inserisci il nuovo cognome:");
                 String nuovoCognome = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerUtente.modificaCognome(nuovoCognome, password);
                 break;
             case 3:
                 System.out.println("Inserisci la nuova email:");
                 String nuovaEmail = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerUtente.modificaEmail(nuovaEmail, password);
                 break;
             case 4:
                 System.out.println("Inserisci la nuova password:");
                 String nuovaPassword = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerUtente.modificaPassword(nuovaPassword, password);
                 break;
             case 5:
                 System.out.println("Inserisci il nuovo numero di telefono:");
                 String nuovoTelefono = scanner.nextLine();
+                System.out.println("Inserisci la tua password per confermare:");
+                password = scanner.nextLine();
                 modificaEffettuata = controllerUtente.modificaTelefono(nuovoTelefono, password);
                 break;
             case 6:

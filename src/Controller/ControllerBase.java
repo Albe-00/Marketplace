@@ -27,6 +27,8 @@ public class ControllerBase {
     public Utente getUtenteCorrente() {
         return utenteCorrente;
     }
+    public boolean isUtenteLoggato(){return utenteCorrente != null;}
+
     public boolean isUtenteCorrenteVenditore(){
         return utenteCorrente.isVenditore();
     }
