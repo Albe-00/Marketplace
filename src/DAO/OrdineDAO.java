@@ -33,11 +33,12 @@ public class OrdineDAO extends DAO {
                 int idOrdine = rs.getInt("id_ordine");
                 int idCliente = rs.getInt("id_cliente");
                 int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
                 Date dataOrdine = rs.getDate("data_ordine");
                 Date dataConsegna = rs.getDate("data_consegna");
                 String statoOrdine = rs.getString("stato_ordine");
 
-                return new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine);
+                return new Ordine(idOrdine, idCliente, idServizio, prezzo, dataOrdine, dataConsegna, statoOrdine);
             } else {
                 System.out.println("Ordine con ID " + id + " non trovato.");
                 return null;
@@ -63,11 +64,12 @@ public class OrdineDAO extends DAO {
                 int idOrdine = rs.getInt("id_ordine");
                 int idCliente = rs.getInt("id_cliente");
                 int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
                 Date dataOrdine = rs.getDate("data_ordine");
                 Date dataConsegna = rs.getDate("data_consegna");
                 String statoOrdine = rs.getString("stato_ordine");
 
-                ordini.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+                ordini.add(new Ordine(idOrdine, idCliente, idServizio, prezzo, dataOrdine, dataConsegna, statoOrdine));
             }
 
         } catch (SQLException e) {
@@ -79,7 +81,7 @@ public class OrdineDAO extends DAO {
 
     @Override
     public int insert(Object obj) {
-        String query = "INSERT INTO ordine (id_cliente, id_servizio, data_ordine, data_consegna, stato_ordine) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ordine (id_cliente, id_servizio, prezzo, data_ordine, data_consegna, stato_ordine) VALUES (?, ? , ? , ? , ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -87,9 +89,10 @@ public class OrdineDAO extends DAO {
             Ordine ordine = (Ordine) obj;
             stmt.setInt(1, ordine.getId_cliente());
             stmt.setInt(2, ordine.getId_servizio());
-            stmt.setDate(3, new java.sql.Date(ordine.getDataOrdine().getTime()));
-            stmt.setDate(4, ordine.getDataConsegna() != null ? new java.sql.Date(ordine.getDataConsegna().getTime()) : null);
-            stmt.setString(5, ordine.getStatoOrdine());
+            stmt.setFloat(3, ordine.getPrezzo());
+            stmt.setDate(4, new java.sql.Date(ordine.getDataOrdine().getTime()));
+            stmt.setDate(5, ordine.getDataConsegna() != null ? new java.sql.Date(ordine.getDataConsegna().getTime()) : null);
+            stmt.setString(6, ordine.getStatoOrdine());
 
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
@@ -109,7 +112,7 @@ public class OrdineDAO extends DAO {
 
     @Override
     public boolean update(Object obj) {
-        String query = "UPDATE ordine SET id_cliente = ?, id_servizio = ?, data_ordine = ?, data_consegna = ?, stato_ordine = ? WHERE id_ordine = ?";
+        String query = "UPDATE ordine SET id_cliente = ?, id_servizio = ?, prezzo = ? , data_ordine = ?, data_consegna = ?, stato_ordine = ? WHERE id_ordine = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -118,9 +121,10 @@ public class OrdineDAO extends DAO {
             stmt.setInt(1, ordine.getId_cliente());
             stmt.setInt(2, ordine.getId_servizio());
             stmt.setDate(3, new java.sql.Date(ordine.getDataOrdine().getTime()));
-            stmt.setDate(4, ordine.getDataConsegna() != null ? new java.sql.Date(ordine.getDataConsegna().getTime()) : null);
-            stmt.setString(5, ordine.getStatoOrdine());
-            stmt.setInt(6, ordine.getId_ordine());
+            stmt.setFloat(4,ordine.getPrezzo());
+            stmt.setDate(5, ordine.getDataConsegna() != null ? new java.sql.Date(ordine.getDataConsegna().getTime()) : null);
+            stmt.setString(6, ordine.getStatoOrdine());
+            stmt.setInt(7, ordine.getId_ordine());
 
             int righeAggiornate = stmt.executeUpdate();
             if (righeAggiornate > 0) {
@@ -171,11 +175,12 @@ public class OrdineDAO extends DAO {
                 int idOrdine = rs.getInt("id_ordine");
                 int idCliente = rs.getInt("id_cliente");
                 int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
                 Date dataOrdine = rs.getDate("data_ordine");
                 Date dataConsegna = rs.getDate("data_consegna");
                 String statoOrdine = rs.getString("stato_ordine");
 
-                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, prezzo, dataOrdine, dataConsegna, statoOrdine));
             }
 
         } catch (SQLException e) {
@@ -200,11 +205,12 @@ public class OrdineDAO extends DAO {
                 int idOrdine = rs.getInt("id_ordine");
                 int idCliente = rs.getInt("id_cliente");
                 int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
                 Date dataOrdine = rs.getDate("data_ordine");
                 Date dataConsegna = rs.getDate("data_consegna");
                 String statoOrdine = rs.getString("stato_ordine");
 
-                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, prezzo, dataOrdine, dataConsegna, statoOrdine));
             }
 
         } catch (SQLException e) {
@@ -230,10 +236,11 @@ public class OrdineDAO extends DAO {
                 int idOrdine = rs.getInt("id_ordine");
                 int idCliente = rs.getInt("id_cliente");
                 int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
                 Date dataOrdine = rs.getDate("data_ordine");
                 Date dataConsegna = rs.getDate("data_consegna");
 
-                risultati.add(new Ordine(idOrdine, idCliente, idServizio, dataOrdine, dataConsegna, statoOrdine));
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio,prezzo, dataOrdine, dataConsegna, statoOrdine));
             }
 
         } catch (SQLException e) {

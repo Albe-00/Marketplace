@@ -12,24 +12,26 @@ public class Ordine {
     private int id_ordine;
     private int id_cliente;
     private int id_servizio;
-    //fixme aggiungi prezzo dell'ordine
+    private float prezzo;
     private Date dataOrdine;
     private Date dataConsegna;
     private String statoOrdine;
 
-    public Ordine(int id_ordine, int id_cliente, int id_servizio, Date dataOrdine,Date dataConsegna, String statoOrdine) {
+    public Ordine(int id_ordine, int id_cliente, int id_servizio, float prezzo, Date dataOrdine,Date dataConsegna, String statoOrdine) {
         this.id_ordine = id_ordine;
         this.id_cliente = id_cliente;
         this.id_servizio= id_servizio;
+        this.prezzo = prezzo;
         this.dataOrdine = dataOrdine;
         this.dataConsegna = dataConsegna;
         this.statoOrdine = statoOrdine;
 
     }
-    public Ordine(int id_cliente, int id_servizio, Date dataOrdine) {
+    public Ordine(int id_cliente, int id_servizio, float prezzo, Date dataOrdine) {
         this.id_ordine = 0;
         this.id_cliente = id_cliente;
         this.id_servizio= id_servizio;
+        this.prezzo = prezzo;
         this.dataOrdine = dataOrdine;
         this.dataConsegna = null;
         this.statoOrdine = "IN ATTESA";
@@ -46,6 +48,14 @@ public class Ordine {
 
     public int getId_servizio() {
         return id_servizio;
+    }
+
+    public float getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(float prezzo) {
+        this.prezzo = prezzo;
     }
 
     public Date getDataOrdine() {
@@ -92,7 +102,7 @@ public class Ordine {
         System.out.println("ID: " + id_ordine);
         System.out.println("ID Cliente: " + id_cliente);
         System.out.println("ID Servizio: " + id_servizio);
-
+        System.out.println("Prezzo: " + prezzo);
         System.out.println("Data Ordine : " + dataOrdine);
         System.out.println("Data Consegna : " + dataConsegna);
         System.out.println("Stato: " + statoOrdine);

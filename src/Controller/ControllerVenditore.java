@@ -7,7 +7,6 @@ import Model.Venditore;
 import Model.Servizio;
 import Model.Ordine;
 import Model.Recensione;
-
 import java.util.List;
 
 

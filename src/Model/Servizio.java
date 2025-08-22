@@ -57,7 +57,7 @@ public class Servizio {
         this.descrizione = descrizione;
     }
 
-    public double getPrezzo() {
+    public float getPrezzo() {
         return prezzo;
     }
 

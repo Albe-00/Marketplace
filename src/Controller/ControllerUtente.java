@@ -155,7 +155,7 @@ public class ControllerUtente {
         Servizio servizio = (Servizio) servizioDAO.select(idServizio);
         if (servizio != null && servizio.isVisibile()) {
             // Creo un nuovo ordine
-            Ordine nuovoOrdine = new Ordine(utenteCorrente.getId(), idServizio, new java.util.Date());
+            Ordine nuovoOrdine = new Ordine(utenteCorrente.getId(), idServizio,servizio.getPrezzo(), new java.util.Date());
             // Salvo l'ordine nel database
             return ordineDAO.insert(nuovoOrdine) != -1; // Ordine effettuato con successo il metodo insert restituisce un ID positivo
         }
