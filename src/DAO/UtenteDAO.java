@@ -24,7 +24,7 @@ public class UtenteDAO extends DAO {
 
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
             // Imposta il parametro nella query (1 indica la prima '?' nella query)
             stmt.setInt(1,id);
 
@@ -83,7 +83,7 @@ public class UtenteDAO extends DAO {
         String query = "DELETE FROM Utente WHERE id_utente=?;";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1,id);
 

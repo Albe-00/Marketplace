@@ -166,7 +166,7 @@ public class OrdineDAO extends DAO {
         String query = "SELECT * FROM ordine WHERE id_cliente = ?";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id_cliente);
             ResultSet rs = stmt.executeQuery();
@@ -196,7 +196,7 @@ public class OrdineDAO extends DAO {
                 "FROM ordine join Servizio on ordine.id_servizio = servizio.id_servizio WHERE id_venditore = ?";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id_Venditore);
             ResultSet rs = stmt.executeQuery();
@@ -226,7 +226,7 @@ public class OrdineDAO extends DAO {
                 "FROM ordine JOIN servizio ON ordine.id_servizio = servizio.id_servizio WHERE id_venditore = ? AND stato_ordine = ?";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id_Venditore);
             stmt.setString(2, statoOrdine);

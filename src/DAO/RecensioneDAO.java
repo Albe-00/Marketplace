@@ -1,6 +1,5 @@
 package DAO;
 
-import Model.Ordine;
 import Model.Recensione;
 
 import java.sql.Connection;
@@ -180,7 +179,7 @@ public class RecensioneDAO extends DAO {
         String query = "SELECT * FROM recensione WHERE id_Venditore = ?";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id_Venditore);
             ResultSet rs = stmt.executeQuery();

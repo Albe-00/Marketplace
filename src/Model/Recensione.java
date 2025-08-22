@@ -1,11 +1,11 @@
 package Model;
 
 public class Recensione {
-    private int id_recensione;
-    private int id_autore;
-    private int id_venditore;
-    private int voto;
-    private String testo;
+    private final int id_recensione;
+    private final int id_autore;
+    private final int id_venditore;
+    private final int voto;
+    private final String testo;
 
     public Recensione(int id_recensione,int id_autore, int id_venditore,int voto, String testo ) {
         this.id_recensione = id_recensione;

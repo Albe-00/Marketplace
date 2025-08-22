@@ -9,12 +9,12 @@ import java.util.Date;
     COMPLETATO
 }*/
 public class Ordine {
-    private int id_ordine;
-    private int id_cliente;
-    private int id_servizio;
-    private float prezzo;
-    private Date dataOrdine;
-    private Date dataConsegna;
+    private final int id_ordine;
+    private final int id_cliente;
+    private final int id_servizio;
+    private final float prezzo;
+    private final Date dataOrdine;
+    private final Date dataConsegna;
     private String statoOrdine;
 
     public Ordine(int id_ordine, int id_cliente, int id_servizio, float prezzo, Date dataOrdine,Date dataConsegna, String statoOrdine) {
@@ -52,10 +52,6 @@ public class Ordine {
 
     public float getPrezzo() {
         return prezzo;
-    }
-
-    public void setPrezzo(float prezzo) {
-        this.prezzo = prezzo;
     }
 
     public Date getDataOrdine() {

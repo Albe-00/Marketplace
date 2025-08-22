@@ -1,7 +1,5 @@
 package DAO;
 
-import Model.Servizio;
-import Model.Utente;
 import Model.Venditore;
 
 import java.sql.Connection;
