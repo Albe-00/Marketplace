@@ -4,6 +4,8 @@ import DAO.*;
 import Model.Utente;
 import Model.Venditore;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 // SINGLETON
@@ -15,6 +17,8 @@ public class ControllerBase {
     private ControllerBase() {
         // Inizializza la connessione al database
         utenteCorrente = null;
+        if(!isConnectionValid())
+            System.exit(1);     //Status 1 = Connessione col server non valida
     }
     public static ControllerBase getInstance() {
         if (instance == null) {
@@ -22,13 +26,24 @@ public class ControllerBase {
         }
         return instance;
     }
+    public boolean isConnectionValid(){
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        if(connection != null){
+            try{
+                connection.close();
+            }catch (SQLException e){
+                System.out.println("Errore durante la chiusura della connessione");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
 
-    //fixme vorrei togliere getterUtenteCorrente
-    public Utente getUtenteCorrente() {
-        return utenteCorrente;
+    public int getIdUtenteCorrente(){
+        return utenteCorrente.getId();
     }
     public boolean isUtenteLoggato(){return utenteCorrente != null;}
-
     public boolean isUtenteCorrenteVenditore(){
         return utenteCorrente.isVenditore();
     }
@@ -36,6 +51,7 @@ public class ControllerBase {
         // Controlla se l'email è già in uso
         UtenteDAO utenteDAO = new UtenteDAO();
         List<Object> utenti = utenteDAO.selectAll();
+        //Controllo se email è già utilizzata
         for (Object obj : utenti) {
             Utente userIterator = (Utente) obj;
             if (userIterator.getEmail().equals(nuovoUtente.getEmail())) {
@@ -54,27 +70,14 @@ public class ControllerBase {
         }
     }
     public boolean registerVenditore(Venditore nuovoVenditore) {
-        Utente utenteDaRegistrare = new Utente(
-                nuovoVenditore.getId(),
-                nuovoVenditore.getNome(),
-                nuovoVenditore.getCognome(),
-                nuovoVenditore.getEmail(),
-                nuovoVenditore.getPassword(),
-                nuovoVenditore.getTelefono(),
-                true // Imposta come venditore
-        );
         // Prima registra il nuovo utente nella tebella Utente
-        if( registerUtente(utenteDaRegistrare) ) {
-            nuovoVenditore.setId(utenteCorrente.getId()); // Imposta l'ID del venditore con quello dell'utente appena registrato
+        if( registerUtente(nuovoVenditore) ) {
+            nuovoVenditore.setId(utenteCorrente.getId()); // Imposta l'ID del venditore con quello dell'utente appena registrato nel database
 
             // Poi lo registra anche nella tabella Venditore e imposta il nuovo utenteCorrente con un oggetto Venditore
             VenditoreDAO venditoreDAO = new VenditoreDAO();
 
-            if(venditoreDAO.insert(nuovoVenditore)!= -1) {
-                this.utenteCorrente = nuovoVenditore;
-                return true;
-            }
-
+            return venditoreDAO.insert(nuovoVenditore)!= -1;    //Return true se nuovo venditore aggiunto nella tabella Venditore del database , false altrimenti
         }
         return false; // Registrazione fallita
     }

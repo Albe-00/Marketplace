@@ -5,16 +5,15 @@ import Controller.ControllerBase;
 import java.util.List;
 import java.util.Scanner;
 import Controller.ControllerUtente;
-import DAO.RecensioneDAO;
 import Model.*;
 
 public class MenuUtente extends Menu {
+    //FIXME mettere controller protected e utilizzarlo in MenuVenditore
     private ControllerUtente controllerUtente;
 
     public MenuUtente(Scanner scanner) {
-        super();
         this.scanner = scanner;
-        this.controllerUtente = new ControllerUtente( ControllerBase.getInstance().getUtenteCorrente() );
+        this.controllerUtente = new ControllerUtente();
     }
 
     public void display() {

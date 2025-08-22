@@ -11,8 +11,7 @@ public class MenuVenditore extends MenuUtente {
     private ControllerVenditore controllerVenditore;
     public MenuVenditore(Scanner scanner) {
         super(scanner);
-        Venditore venditore = (Venditore) ControllerBase.getInstance().getUtenteCorrente();
-        controllerVenditore = new ControllerVenditore(venditore);
+        controllerVenditore = new ControllerVenditore();
     }
 
     @Override

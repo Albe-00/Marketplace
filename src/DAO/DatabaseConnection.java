@@ -25,7 +25,7 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
         // Crea la connessione al database
-        connection = getConnection();
+        //connection = getConnection();
     }
 
     public static DatabaseConnection getInstance() {
@@ -39,11 +39,14 @@ public class DatabaseConnection {
             if (connection == null || connection.isClosed()) {
                 // Riconnetti in caso di chiusura
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                //System.out.println("✅ Connessione avvenuta con successo!");
             }
+        } catch (com.mysql.cj.jdbc.exceptions.CommunicationsException e) {
+            System.out.println("❌ Errore di comunicazione con il database (server offline o porta errata)");
+            return null;
         } catch (SQLException e) {
             System.out.println("❌ Errore di connessione al database!");
             e.printStackTrace();
+            return null;
         }
         return connection;
     }

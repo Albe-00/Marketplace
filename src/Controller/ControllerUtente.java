@@ -7,9 +7,11 @@ import java.util.List;
 
 public class ControllerUtente {
     protected Utente utenteCorrente;
-    public ControllerUtente(Utente utente) {
+    public ControllerUtente() {
         // Inizializza il controller per l'utente
-        this.utenteCorrente = utente;
+        int idUtenteCorrente = ControllerBase.getInstance().getIdUtenteCorrente();
+        UtenteDAO utenteDAO= new UtenteDAO();
+        this.utenteCorrente = (Utente) utenteDAO.select(idUtenteCorrente);
     }
 
     // visualizza le informazioni dell'utente corrente
