@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuVenditore extends MenuUtente {
-    private ControllerVenditore controllerVenditore;
+    private final ControllerVenditore controllerVenditore;
     public MenuVenditore(Scanner scanner) {
         super(scanner);
         controllerVenditore = new ControllerVenditore();
@@ -197,7 +197,7 @@ public class MenuVenditore extends MenuUtente {
         System.out.println("Vuoi che il nuovo servizio sia visibile ? (si/no)");
         boolean visibilita = inputBoolean();
 
-        boolean nuovoServizioCreato = false;
+        boolean nuovoServizioCreato;
         nuovoServizioCreato = controllerVenditore.creaServizio(titolo, descrizione, prezzo, categoria, visibilita);
 
         if (nuovoServizioCreato) {

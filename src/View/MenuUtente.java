@@ -9,7 +9,7 @@ import Model.*;
 
 public class MenuUtente extends Menu {
     //FIXME mettere controller protected e utilizzarlo in MenuVenditore
-    private ControllerUtente controllerUtente;
+    private final ControllerUtente controllerUtente;
 
     public MenuUtente(Scanner scanner) {
         this.scanner = scanner;
