@@ -131,7 +131,6 @@ public class ControllerUtente {
         ServizioDAO servizioDAO = new ServizioDAO();
         return servizioDAO.cercaServizi(ricerca);
     }
-
     private List<Servizio> recuperaServiziVisibiliVenditore(int id_venditore){
         ServizioDAO servizioDAO = new ServizioDAO();
         return servizioDAO.selectServiziVisibiliByVenditore(id_venditore);
@@ -191,7 +190,7 @@ public class ControllerUtente {
         }
         return false; // Venditore non trovato o errore nell'inserimento della recensione
     }
-    private List<Recensione> recuperaRecensioniVenditore(int id_venditore){
+    protected List<Recensione> recuperaRecensioniVenditore(int id_venditore){
         RecensioneDAO recensioneDAO = new RecensioneDAO();
         return recensioneDAO.selectByVenditore(id_venditore);
     }

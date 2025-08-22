@@ -22,8 +22,8 @@ public class MenuUtente extends Menu {
         while(!uscita) {
             System.out.println("Ciao " + controllerUtente.getNome() + "!");
             System.out.println("Cosa vuoi fare?");
-            System.out.println("1. Visualizza profilo");
-            System.out.println("2. Modifica profilo");
+            System.out.println("1. Visualizza il tuo profilo");
+            System.out.println("2. Modifica il tuo profilo");
             System.out.println("3. Cerca servizi e venditori");
             System.out.println("4. Visualizza il profilo di un altro utente");
             System.out.println("5. Visualizza i tuoi ordini");

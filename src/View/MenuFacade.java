@@ -27,7 +27,7 @@ public class MenuFacade extends Menu {
                 System.out.println("Inserisci la tua scelta: ");
 
                 // Legge l'input dell'utente
-                scelta = inputScelta();
+                scelta = inputInt();
 
                 switch (scelta) {
                     case 1:
@@ -57,16 +57,15 @@ public class MenuFacade extends Menu {
         }
     }
 
-    private int inputScelta() {
-        String sceltaStringa;
-        int scelta;
-        sceltaStringa = scanner.nextLine();
+    private int inputInt() {
+        String numeroStringa;
+        int numero;
+        numeroStringa = scanner.nextLine();
         try {
-            scelta = Integer.parseInt(sceltaStringa); // caso numerico
+            numero = Integer.parseInt(numeroStringa); // caso numerico
         } catch (NumberFormatException e) {
-            scelta = -1;
+            numero = -1;
         }
-
-        return scelta;
+        return numero;
     }
 }

@@ -3,7 +3,6 @@ package Controller;
 import DAO.VenditoreDAO;
 import DAO.ServizioDAO;
 import DAO.OrdineDAO;
-import DAO.RecensioneDAO;
 import Model.Venditore;
 import Model.Servizio;
 import Model.Ordine;
@@ -28,20 +27,37 @@ public class ControllerVenditore extends ControllerUtente {
     // metodi per la visualizzazione del profilo del venditore e dei suoi servizi
     @Override
     public void visualizzaProfilo() {
+        utenteCorrente.stampa();
+
+        // Stampo i servizi dell'utente che eroga
+
         visualizzaServiziVenditore();
+
+        // Stampa le recensioni dell'utenteCorrente
+
+        System.out.println("------------------------------------------");
+        List<Recensione> recensioniRicevute = recuperaRecensioniRicevute();
+        if (recensioniRicevute.isEmpty()) {
+            System.out.println("NESSUNA RECENSIONE DISPONIBILE");
+        } else {
+            System.out.println("RECENSIONI :");
+            for (Recensione recensione : recensioniRicevute) {
+                recensione.stampa();
+            }
+        }
+        System.out.println("------------------------------------------");
     }
     public void visualizzaServiziVenditore() {
         ServizioDAO servizioDAO = new ServizioDAO();
-        System.out.println("Servizi offerti da " + utenteCorrente.getNome() + ":");
         List<Servizio> serviziOfferti = servizioDAO.selectByVenditore(utenteCorrente.getId());
 
         if (serviziOfferti.isEmpty()) {
-            System.out.println("Nessun servizio.");
-            return; // Esce se non ci sono servizi
-        }
-
-        for (Servizio servizio : serviziOfferti) {
-            servizio.stampa();
+            System.out.println("NESSUN SERVIZIO DISPONIBILE");
+        } else {
+            System.out.println("SERVIZI :");
+            for (Servizio servizio : serviziOfferti) {
+                servizio.stampa();
+            }
         }
     }
 
@@ -198,8 +214,7 @@ public class ControllerVenditore extends ControllerUtente {
 
     // Metodi per la gestione delle recensioni
     public List<Recensione> recuperaRecensioniRicevute(){
-        RecensioneDAO recensioneDAO = new RecensioneDAO();
-        return recensioneDAO.selectByVenditore(utenteCorrente.getId());
+        return recuperaRecensioniVenditore(utenteCorrente.getId());
     }
 
 }
