@@ -67,7 +67,7 @@ public class ServizioDAOTest {
     }
 
     @AfterClass
-    public static void tearDownClass() throws SQLException {
+    public static void tearDownClass(){
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate("DROP TABLE IF EXISTS Servizio");
             teardown();
