@@ -4,21 +4,27 @@ public class Recensione {
     private final int id_recensione;
     private final int id_autore;
     private final int id_venditore;
-    private final int voto;
+    private final float voto;
     private final String testo;
 
-    public Recensione(int id_recensione,int id_autore, int id_venditore,int voto, String testo ) {
+    public Recensione(int id_recensione,int id_autore, int id_venditore, float voto, String testo ) {
         this.id_recensione = id_recensione;
         this.id_autore = id_autore;
         this.id_venditore = id_venditore;
-        this.voto = voto;
+        if(voto <= 10 && voto >= 0)
+            this.voto = voto;
+        else
+            this.voto = 8;
         this.testo = testo;
     }
-    public Recensione(int id_autore, int id_venditore,int voto, String testo ) {
+    public Recensione(int id_autore, int id_venditore, float voto, String testo ) {
         this.id_recensione = 0;
         this.id_autore = id_autore;
         this.id_venditore = id_venditore;
-        this.voto = voto;
+        if(voto <= 10 && voto >= 0)
+            this.voto = voto;
+        else
+            this.voto = 8;
         this.testo = testo;
     }
 
@@ -34,7 +40,7 @@ public class Recensione {
         return id_venditore;
     }
 
-    public int getVoto() {
+    public float getVoto() {
         return voto;
     }
 

@@ -289,7 +289,4 @@ public class ServizioDAO extends DAO {
 
         return risultati;
     }
-
-
-
 }

@@ -163,7 +163,7 @@ public class ControllerUtente {
     }
 
     // Metodi per la gestione delle recensioni
-    public boolean effettuaRecensione(int idVenditore, int voto, String testo) {
+    public boolean effettuaRecensione(int idVenditore, float voto, String testo) {
         // Controllo che il voto sia compreso tra 1 e 5
         if (voto < 1 || voto > 5)
             return false;

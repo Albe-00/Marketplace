@@ -17,7 +17,7 @@ public class Ordine {
     private final Date dataConsegna;
     private String statoOrdine;
 
-    public Ordine(int id_ordine, int id_cliente, int id_servizio, float prezzo, Date dataOrdine,Date dataConsegna, String statoOrdine) {
+    public Ordine(int id_ordine, int id_cliente, int id_servizio, float prezzo, Date dataOrdine, Date dataConsegna, String statoOrdine) {
         this.id_ordine = id_ordine;
         this.id_cliente = id_cliente;
         this.id_servizio= id_servizio;
@@ -68,14 +68,14 @@ public class Ordine {
 
     public void setStatoOrdine(String nuovostatoOrdine) {
         // Controlla se il nuovo stato è nullo o vuoto
-        if(statoOrdine == null || statoOrdine.isEmpty()) {
+        if(nuovostatoOrdine == null || nuovostatoOrdine.isEmpty()) {
             return; // Non accetta stati nulli o vuoti
         }
         // Controlla se il nuovo stato è uno dei valori validi
-        if(!statoOrdine.equals("IN ATTESA") &&
-           !statoOrdine.equals("IN LAVORAZIONE") &&
-           !statoOrdine.equals("RIFIUTATO") &&
-           !statoOrdine.equals("COMPLETATO")) {
+        if(!nuovostatoOrdine.equals("IN ATTESA") &&
+           !nuovostatoOrdine.equals("IN LAVORAZIONE") &&
+           !nuovostatoOrdine.equals("RIFIUTATO") &&
+           !nuovostatoOrdine.equals("COMPLETATO")) {
             return;
         }
         // Non può essere modificato se già completato
@@ -83,7 +83,7 @@ public class Ordine {
             return; // Lo stato dell'ordine NON può essere modificato se già completato o rifiutato
         }
         // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN LAVORAZIONE" o "RIFIUTATO"
-        if(statoOrdine.equals("IN ATTESA") && !nuovostatoOrdine.equals("IN LAVORAZIONE") && !nuovostatoOrdine.equals("RIFIUTATO")) {
+        if(statoOrdine.equals("IN ATTESA") && !(nuovostatoOrdine.equals("IN LAVORAZIONE") || nuovostatoOrdine.equals("RIFIUTATO"))) {
             return;
         }
         // Se lo stato è "IN LAVORAZIONE", può essere cambiato solo in "COMPLETATO"

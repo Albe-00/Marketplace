@@ -1,5 +1,5 @@
 package Model;
-import java.sql.Date;
+import java.util.Date;
 
 public class Servizio {
 
@@ -17,7 +17,10 @@ public class Servizio {
         this.id_venditore = id_venditore;
         this.titolo = titolo;
         this.descrizione = descrizione;
-        this.prezzo = prezzo;
+        if(prezzo > 0)
+            this.prezzo = prezzo;
+        else
+            this.prezzo = 0;
         this.categoria = categoria;
         this.dataPubblicazione = dataPubblicazione;
         this.visibile = visibile;
@@ -27,7 +30,10 @@ public class Servizio {
         this.id_venditore = id_venditore;
         this.titolo = titolo;
         this.descrizione = descrizione;
-        this.prezzo = prezzo;
+        if(prezzo > 0)
+            this.prezzo = prezzo;
+        else
+            this.prezzo = 0;
         this.categoria = categoria;
         this.dataPubblicazione = new Date(System.currentTimeMillis());
         this.visibile = visibile;

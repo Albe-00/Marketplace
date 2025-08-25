@@ -31,7 +31,7 @@ public class RecensioneDAO extends DAO {
                 int idRecensione = rs.getInt("id_recensione");
                 int idAutore = rs.getInt("id_autore");
                 int idVenditore = rs.getInt("id_venditore");
-                int voto = rs.getInt("voto");
+                float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
 
                 return new Recensione(idRecensione, idAutore, idVenditore, voto, testo);
@@ -60,7 +60,7 @@ public class RecensioneDAO extends DAO {
                 int idRecensione = rs.getInt("id_recensione");
                 int idAutore = rs.getInt("id_autore");
                 int idVenditore = rs.getInt("id_venditore");
-                int voto = rs.getInt("voto");
+                float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
 
                 recensioni.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo));
@@ -84,7 +84,7 @@ public class RecensioneDAO extends DAO {
             Recensione r = (Recensione) obj;
             stmt.setInt(1, r.getId_autore());
             stmt.setInt(2, r.getId_venditore());
-            stmt.setInt(3, r.getVoto());
+            stmt.setFloat(3, r.getVoto());
             stmt.setString(4, r.getTesto());
 
             int righeInserite = stmt.executeUpdate();
@@ -113,7 +113,7 @@ public class RecensioneDAO extends DAO {
             Recensione r = (Recensione) obj;
             stmt.setInt(1, r.getId_autore());
             stmt.setInt(2, r.getId_venditore());
-            stmt.setInt(3, r.getVoto());
+            stmt.setFloat(3, r.getVoto());
             stmt.setString(4, r.getTesto());
             stmt.setInt(5, r.getId_recensione());
 
@@ -188,7 +188,7 @@ public class RecensioneDAO extends DAO {
                 int idRecensione = rs.getInt("id_recensione");
                 int idAutore = rs.getInt("id_autore");
                 int idVenditore = rs.getInt("id_venditore");
-                int voto = rs.getInt("voto");
+                float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
 
                 risultati.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo));
@@ -200,5 +200,4 @@ public class RecensioneDAO extends DAO {
         }
         return risultati;
     }
-
 }

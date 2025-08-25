@@ -120,8 +120,8 @@ public class OrdineDAO extends DAO {
             Ordine ordine = (Ordine) obj;
             stmt.setInt(1, ordine.getId_cliente());
             stmt.setInt(2, ordine.getId_servizio());
-            stmt.setDate(3, new java.sql.Date(ordine.getDataOrdine().getTime()));
-            stmt.setFloat(4,ordine.getPrezzo());
+            stmt.setFloat(3,ordine.getPrezzo());
+            stmt.setDate(4, new java.sql.Date(ordine.getDataOrdine().getTime()));
             stmt.setDate(5, ordine.getDataConsegna() != null ? new java.sql.Date(ordine.getDataConsegna().getTime()) : null);
             stmt.setString(6, ordine.getStatoOrdine());
             stmt.setInt(7, ordine.getId_ordine());
