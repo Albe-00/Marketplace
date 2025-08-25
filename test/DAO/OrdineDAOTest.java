@@ -76,6 +76,22 @@ public class OrdineDAOTest {
         ordineDAO = new OrdineDAO();
     }
 
+    @AfterClass
+    public static void tearDownClass() throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate("DROP TABLE IF EXISTS Servizio");
+            teardown();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void teardown() throws Exception {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+        }
+    }
+
     private static void setPrivateField(Object target, String fieldName, Object value) throws Exception {
         Field field = DatabaseConnection.class.getDeclaredField(fieldName);
         field.setAccessible(true);
@@ -214,13 +230,6 @@ public class OrdineDAOTest {
     public void testSelectByVenditoreAndStato(){
         assertFalse(ordineDAO.selectByVenditoreAndStato(15, "IN_CORSO").isEmpty());
         assertTrue(ordineDAO.selectByVenditoreAndStato(1, "IN_CORSO").isEmpty());
-    }
-
-    @AfterClass
-    public static void teardown() throws Exception {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
     }
 }
 
