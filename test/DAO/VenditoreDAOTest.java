@@ -40,7 +40,7 @@ public class VenditoreDAOTest {
                     "id_utente INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nome VARCHAR(50), " +
                     "cognome VARCHAR(50), " +
-                    "email VARCHAR(100) UNIQUE, " +
+                    "email VARCHAR(100), " +
                     "telefono VARCHAR(10), " +
                     "password VARCHAR(100), " +
                     "venditore boolean)");

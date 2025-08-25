@@ -38,7 +38,7 @@ public class UtenteDAOTest {
                     "id_utente INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nome VARCHAR(50), " +
                     "cognome VARCHAR(50), " +
-                    "email VARCHAR(100) UNIQUE, " +
+                    "email VARCHAR(100), " +
                     "telefono VARCHAR(10), " +
                     "password VARCHAR(100), " +
                     "venditore boolean)");
@@ -53,7 +53,7 @@ public class UtenteDAOTest {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("TRUNCATE TABLE Utente");
             stmt.execute("INSERT INTO Utente VALUES (1, 'Mario', 'Rossi', 'mariorossi@example.com', '0123456789', 'pwd', false)");
-            stmt.execute("INSERT INTO Utente VALUES (2, 'Luigi', 'Verdi', 'luigiverdi@example.com', '9876543210', 'pwd2', true)");
+            stmt.execute("INSERT INTO Utente  VALUES (2, 'Luigi', 'Verdi', 'luigiverdi@example.com', '9876543210', 'pwd2', true)");
         }
     }
 
@@ -81,7 +81,7 @@ public class UtenteDAOTest {
         assertEquals("pwd", utente.getPassword());
         assertFalse(utente.isVenditore());
 
-        utente = (Utente) utenteDAO.select(2);
+        utente = (Utente) utenteDAO.select(3);
 
         assertNull(utente);
     }
