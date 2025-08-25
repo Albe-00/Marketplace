@@ -11,11 +11,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNull;
 
 public class UtenteDAOTest {
     private static Connection connection;
