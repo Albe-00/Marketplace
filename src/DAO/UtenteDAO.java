@@ -106,8 +106,7 @@ public class UtenteDAO extends DAO {
         String query = "INSERT INTO Utente (nome, cognome, email, password, telefono) VALUES (?, ?, ?, ?, ?);";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-             ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             // Cast dell'oggetto a Cliente
             Utente nuovoUtente = (Utente) obj;
             // Imposta i parametri nella query
@@ -123,8 +122,10 @@ public class UtenteDAO extends DAO {
             if( righeInserite > 0){
                 System.out.println("✅ nuovo utente inserito con successo.");
                 // Recupera l'ID generato automaticamente
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Restituisce l'ID generato
+                try(ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1); // Restituisce l'ID generato
+                    }
                 }
             }
 

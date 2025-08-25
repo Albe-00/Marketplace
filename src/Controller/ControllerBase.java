@@ -7,6 +7,7 @@ import Model.Venditore;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 // SINGLETON
 public class ControllerBase {
@@ -20,12 +21,14 @@ public class ControllerBase {
         if(!isConnectionValid())
             System.exit(1);     //Status 1 = Connessione col server non valida
     }
+
     public static ControllerBase getInstance() {
         if (instance == null) {
             instance = new ControllerBase();
         }
         return instance;
     }
+
     public boolean isConnectionValid(){
         Connection connection = DatabaseConnection.getInstance().getConnection();
         if(connection != null){
@@ -48,13 +51,13 @@ public class ControllerBase {
         return utenteCorrente.isVenditore();
     }
     public boolean registerUtente(Utente nuovoUtente) {
-        // Controlla se l'email è già in uso
+
         UtenteDAO utenteDAO = new UtenteDAO();
         List<Object> utenti = utenteDAO.selectAll();
         //Controllo se email è già utilizzata
         for (Object obj : utenti) {
             Utente userIterator = (Utente) obj;
-            if (userIterator.getEmail().equals(nuovoUtente.getEmail())) {
+            if (Objects.equals(userIterator.getEmail(), nuovoUtente.getEmail())) {
                 return false;
             }
         }
