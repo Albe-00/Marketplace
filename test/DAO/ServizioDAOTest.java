@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import Model.Ordine;
 import Model.Servizio;
 
 import org.junit.*;
@@ -44,7 +43,7 @@ public class ServizioDAOTest {
                     "visibile BOOLEAN)");
 
             stmt.execute("INSERT INTO Servizio VALUES " +
-                    "(1, 4, '', '', 45.2, '', '2023-01-01', true)");
+                    "(1, 4, '', '', 45.2, '', '2023-01-01', false)");
             stmt.execute("INSERT INTO Servizio VALUES " +
                     "(2, 2, '', '', 12, '', '2023-05-01', true)");
             stmt.execute("INSERT INTO Servizio VALUES " +
@@ -56,7 +55,7 @@ public class ServizioDAOTest {
     public void resetTable() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("TRUNCATE TABLE Servizio");
-            stmt.execute("INSERT INTO Servizio VALUES (1, 4, '', '', 45.2, '', '2023-01-01', true)");
+            stmt.execute("INSERT INTO Servizio VALUES (1, 4, '', '', 45.2, '', '2023-01-01', false)");
             stmt.execute("INSERT INTO Servizio VALUES (2, 2, '', '', 12, '', '2023-05-01', true)");
             stmt.execute("INSERT INTO Servizio VALUES (3, 2, '', '', 10, '', '2023-06-01', true)");
         }
@@ -204,5 +203,118 @@ public class ServizioDAOTest {
         assertEquals("", servizioDB.getCategoria());
         assertEquals("2023-01-01", new SimpleDateFormat("yyyy-MM-dd").format(servizioDB.getDataPubblicazione()));
         assertTrue(servizioDB.isVisibile());
+    }
+
+    @Test
+    public void testDeleteSomething(){
+        assertNotNull(servizioDAO.select(1));
+        servizioDAO.delete(1);
+
+        assertNull(servizioDAO.select(1));
+    }
+
+    @Test
+    public void testDeleteNothing(){
+        assertNull(servizioDAO.select(4));
+        servizioDAO.delete(4);
+
+        assertNull(servizioDAO.select(4));
+    }
+
+    @Test
+    public void testSelectByVenditore(){
+        assertFalse(servizioDAO.selectByVenditore(2).isEmpty());
+        assertTrue(servizioDAO.selectByVenditore(1).isEmpty());
+    }
+
+    @Test
+    public void testSelectServiziVsibiliByVenditore(){
+        List<Servizio> servizi = servizioDAO.selectServiziVisibiliByVenditore(2);
+
+        assertNotNull(servizi);
+        assertEquals(2, servizi.size());
+
+        assertEquals(2, servizi.getFirst().getId_servizio());
+        assertEquals(2, servizi.getFirst().getId_venditore());
+        assertEquals("", servizi.getFirst().getTitolo());
+        assertEquals("", servizi.getFirst().getDescrizione());
+        assertEquals(12, servizi.getFirst().getPrezzo(), 0.01);
+        assertEquals("", servizi.getFirst().getCategoria());
+        assertEquals("2023-05-01", new SimpleDateFormat("yyyy-MM-dd").format(servizi.getFirst().getDataPubblicazione()));
+        assertTrue(servizi.getFirst().isVisibile());
+
+        assertEquals(3, servizi.getLast().getId_servizio());
+        assertEquals(2, servizi.getLast().getId_venditore());
+        assertEquals("", servizi.getLast().getTitolo());
+        assertEquals("", servizi.getLast().getDescrizione());
+        assertEquals(10, servizi.getLast().getPrezzo(), 0.01);
+        assertEquals("", servizi.getLast().getCategoria());
+        assertEquals("2023-06-01", new SimpleDateFormat("yyyy-MM-dd").format(servizi.getLast().getDataPubblicazione()));
+        assertTrue(servizi.getLast().isVisibile());
+
+        servizi = servizioDAO.selectServiziVisibiliByVenditore(4);
+
+        assertNotNull(servizi);
+        assertTrue(servizi.isEmpty());
+
+        servizi = servizioDAO.selectServiziVisibiliByVenditore(1);
+
+        assertNotNull(servizi);
+        assertTrue(servizi.isEmpty());
+    }
+
+    @Test
+    public void testCountByVenditore(){
+        assertEquals(2, servizioDAO.countByVenditore(2));
+
+        assertEquals(1, servizioDAO.countByVenditore(4));
+
+        assertEquals(0, servizioDAO.countByVenditore(1));
+    }
+
+    @Test
+    public void testCercaServizi(){
+        List<Servizio> servizi = servizioDAO.cercaServizi("2");
+
+        assertNotNull(servizi);
+        assertEquals(1, servizi.size());
+
+        assertEquals(2, servizi.getFirst().getId_servizio());
+        assertEquals(2, servizi.getFirst().getId_venditore());
+        assertEquals("", servizi.getFirst().getTitolo());
+        assertEquals("", servizi.getFirst().getDescrizione());
+        assertEquals(12, servizi.getFirst().getPrezzo(), 0.01);
+        assertEquals("", servizi.getFirst().getCategoria());
+        assertEquals("2023-05-01", new SimpleDateFormat("yyyy-MM-dd").format(servizi.getFirst().getDataPubblicazione()));
+        assertTrue(servizi.getFirst().isVisibile());
+
+        servizi = servizioDAO.cercaServizi("3");
+
+        assertNotNull(servizi);
+        assertEquals(1, servizi.size());
+
+        assertEquals(3, servizi.getLast().getId_servizio());
+        assertEquals(2, servizi.getLast().getId_venditore());
+        assertEquals("", servizi.getLast().getTitolo());
+        assertEquals("", servizi.getLast().getDescrizione());
+        assertEquals(10, servizi.getLast().getPrezzo(), 0.01);
+        assertEquals("", servizi.getLast().getCategoria());
+        assertEquals("2023-06-01", new SimpleDateFormat("yyyy-MM-dd").format(servizi.getLast().getDataPubblicazione()));
+        assertTrue(servizi.getLast().isVisibile());
+
+        servizi = servizioDAO.cercaServizi("1");
+
+        assertNotNull(servizi);
+        assertTrue(servizi.isEmpty());
+
+        servizi = servizioDAO.cercaServizi("4");
+
+        assertNotNull(servizi);
+        assertTrue(servizi.isEmpty());
+
+        servizi = servizioDAO.cercaServizi("");
+
+        assertNotNull(servizi);
+        assertEquals(2, servizi.size());
     }
 }

@@ -225,7 +225,7 @@ public class ServizioDAO extends DAO {
     }
 
     public int countByVenditore(int idVenditore) {
-        List<Servizio> servizi = new ArrayList<>();
+
         String query = "SELECT count(*) as numeroServizi FROM servizio WHERE id_venditore = ?";
 
         try (Connection conn = dbConnection.getConnection();
