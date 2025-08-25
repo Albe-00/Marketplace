@@ -39,7 +39,7 @@ public class ControllerBaseTest {
         setPrivateField(db, "PASSWORD", "");
 
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute("CREATE TABLE Utente (" +
+            stmt.execute("CREATE TABLE IF NOT EXISTS Utente (" +
                     "id_utente INT AUTO_INCREMENT PRIMARY KEY, " +
                     "nome VARCHAR(50), " +
                     "cognome VARCHAR(50), " +
@@ -55,8 +55,8 @@ public class ControllerBaseTest {
     @Before
     public void resetTable() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute("TRUNCATE TABLE utente");
-            stmt.execute("INSERT INTO utente (nome, cognome, email, telefono, password, venditore) VALUES ('Mario', 'Rossi', 'mariorossi@example.com', '0123456789', 'pwd', false)");
+            stmt.execute("TRUNCATE TABLE Utente");
+            stmt.execute("INSERT INTO Utente (nome, cognome, email, telefono, password, venditore) VALUES ('Mario', 'Rossi', 'mariorossi@example.com', '0123456789', 'pwd', false)");
         }
     }
 
