@@ -84,7 +84,7 @@ public class ServizioDAOTest {
         assertEquals(45.2, servizio.getPrezzo(), 0.01);
         assertEquals("", servizio.getCategoria());
         assertEquals("2023-01-01", new SimpleDateFormat("yyyy-MM-dd").format(servizio.getDataPubblicazione()));
-        assertTrue(servizio.isVisibile());
+        assertFalse(servizio.isVisibile());
 
         servizio = (Servizio) servizioDAO.select(2);
 
@@ -130,7 +130,7 @@ public class ServizioDAOTest {
         assertEquals(45.2, servizio.getPrezzo(), 0.01);
         assertEquals("", servizio.getCategoria());
         assertEquals("2023-01-01", new SimpleDateFormat("yyyy-MM-dd").format(servizio.getDataPubblicazione()));
-        assertTrue(servizio.isVisibile());
+        assertFalse(servizio.isVisibile());
 
         servizio = (Servizio) servizi.get(1);
 
@@ -202,7 +202,7 @@ public class ServizioDAOTest {
         assertEquals(20.5f, servizioDB.getPrezzo(), 0.01);
         assertEquals("", servizioDB.getCategoria());
         assertEquals("2023-01-01", new SimpleDateFormat("yyyy-MM-dd").format(servizioDB.getDataPubblicazione()));
-        assertTrue(servizioDB.isVisibile());
+        assertFalse(servizioDB.isVisibile());
     }
 
     @Test

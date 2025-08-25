@@ -7,12 +7,12 @@ public class RecensioneTest {
     @Test
     public void testRecensioneConstructor() {
         Recensione recensione = new Recensione(1, 1, 1, 12, "");
-        assertEquals(8, recensione.getVoto());
+        assertEquals(8, recensione.getVoto(), 0.01);
     }
 
     @Test
     public void testRecensioneOtherConstructor() {
         Recensione recensione = new Recensione(1, 1, 12.f, "");
-        assertEquals(8, recensione.getVoto());
+        assertEquals(8, recensione.getVoto(), 0.01);
     }
 }
