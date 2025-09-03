@@ -1,12 +1,11 @@
 package View;
-import Controller.*;
+import Controller.ControllerBase;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuFacade extends Menu {
     private Menu menuAttuale;
-    private ControllerBase controller;
+    private final ControllerBase controller;
 
     public MenuFacade() {
         super();

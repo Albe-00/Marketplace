@@ -1,6 +1,5 @@
 package View;
-import Controller.*;
-    import java.util.Scanner;
+import java.util.Scanner;
 
 public abstract class Menu {
     protected Scanner scanner;

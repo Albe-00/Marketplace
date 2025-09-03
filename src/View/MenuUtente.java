@@ -219,7 +219,11 @@ public class MenuUtente extends Menu {
         System.out.println("------------------------------------------");
         System.out.println("Inserisci l'ID del servizio da ordinare:");
         int idServizio = inputInt();
-        controllerUtente.effettuaOrdine(idServizio);
+        if (controllerUtente.effettuaOrdine(idServizio)) {
+            System.out.println("Ordine effettuato con successo.");
+        } else {
+            System.out.println("Errore durante l'effettuazione dell'ordine.");
+        }
     }
     protected void effettuaRecensione() {
         cercaVenditori();

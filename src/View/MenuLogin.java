@@ -1,11 +1,10 @@
 package View;
 import Controller.ControllerBase;
-import Model.Utente;
 
 import java.util.Scanner;
 
 public class MenuLogin extends Menu {
-    private ControllerBase controller;
+    private final ControllerBase controller;
     public MenuLogin(Scanner scanner) {
         super();
         this.scanner = scanner;

@@ -3,10 +3,11 @@ package View;
 import java.util.Scanner;
 
 import Controller.ControllerBase;
-import Model.*;
+import Model.Utente;
+import Model.Venditore;
 
 public class MenuRegistrazione extends Menu {
-    private ControllerBase controller;
+    private final ControllerBase controller;
     public MenuRegistrazione(Scanner scanner) {
         super();
         this.scanner = scanner;
