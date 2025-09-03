@@ -12,7 +12,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import Model.Venditore;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -81,7 +80,7 @@ public class ControllerBaseTest {
 
         assertEquals(2, utenteDAO.selectAll().size());
 
-        nuovo = new Utente(3,"Luigi", "Verdi", "mariorossi@example.com", "9876543211", "pwd3", false);
+        nuovo = new Utente(3,"Mario", "Rossi", "mariorossi@example.com", "9876543211", "pwd3", false);
 
         result = controller.registerUtente(nuovo);
         assertFalse(result);
