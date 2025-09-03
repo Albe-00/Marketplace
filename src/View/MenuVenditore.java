@@ -27,18 +27,19 @@ public class MenuVenditore extends MenuUtente {
             System.out.println("4. Visualizza il profilo di un altro utente");
             System.out.println("5. Visualizza i tuoi ordini");
             System.out.println("6. Effettua ordine");
-            System.out.println("7. Effettua recensione");
+            System.out.println("7. Annulla ordine");
+            System.out.println("8. Effettua recensione");
 
             // Opzioni specifiche per il venditore
-            System.out.println("8. Crea un nuovo servizio");
-            System.out.println("9. Modifica un servizio esistente");
-            System.out.println("10. Elimina un servizio");
-            System.out.println("11. Visualizza gli ordini ricevuti");
-            System.out.println("12. Inizia un ordine");
-            System.out.println("13. Rifiuta un ordine");
-            System.out.println("14. Concludi un ordine");
-            System.out.println("15. Visualizza le recensioni ricevute");
-            System.out.println("16. Logout");
+            System.out.println("9. Crea un nuovo servizio");
+            System.out.println("10. Modifica un servizio esistente");
+            System.out.println("11. Elimina un servizio");
+            System.out.println("12. Visualizza gli ordini ricevuti");
+            System.out.println("13. Inizia un ordine");
+            System.out.println("14. Rifiuta un ordine");
+            System.out.println("15. Concludi un ordine");
+            System.out.println("16. Visualizza le recensioni ricevute");
+            System.out.println("17. Logout");
             System.out.print("Seleziona un'opzione: ");
 
             // Legge l'input dell'utente
@@ -64,33 +65,36 @@ public class MenuVenditore extends MenuUtente {
                     effettuaOrdine();
                     break;
                 case 7:
-                    effettuaRecensione();
+                    annullaOrdine();
                     break;
                 case 8:
-                    creaServizio();
+                    effettuaRecensione();
                     break;
                 case 9:
-                    modificaServizio();
+                    creaServizio();
                     break;
                 case 10:
-                    eliminaServizio();
+                    modificaServizio();
                     break;
                 case 11:
-                    visualizzaOrdiniRicevuti();
+                    eliminaServizio();
                     break;
                 case 12:
-                    iniziaOrdine();
+                    visualizzaOrdiniRicevuti();
                     break;
                 case 13:
-                    rifiutaOrdine();
+                    iniziaOrdine();
                     break;
                 case 14:
-                    completaOrdine();
+                    rifiutaOrdine();
                     break;
                 case 15:
-                    visualizzaRecensioniRicevute();
+                    completaOrdine();
                     break;
                 case 16:
+                    visualizzaRecensioniRicevute();
+                    break;
+                case 17:
                     ControllerBase controller = ControllerBase.getInstance();
                     controller.logout();
                     uscita = true;

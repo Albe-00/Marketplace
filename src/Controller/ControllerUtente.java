@@ -147,6 +147,10 @@ public class ControllerUtente {
         OrdineDAO ordineDAO = new OrdineDAO();
         return ordineDAO.selectByCliente(utenteCorrente.getId());
     }
+    public List<Ordine> recuperaOrdiniInAttesa() {
+        OrdineDAO ordineDAO = new OrdineDAO();
+        return ordineDAO.selectOrdiniInAttesaByCliente(utenteCorrente.getId());
+    }
     public boolean effettuaOrdine(int idServizio) {
         ServizioDAO servizioDAO = new ServizioDAO();
         OrdineDAO ordineDAO = new OrdineDAO();
@@ -160,6 +164,20 @@ public class ControllerUtente {
             return ordineDAO.insert(nuovoOrdine) != -1; // Ordine effettuato con successo il metodo insert restituisce un ID positivo
         }
         return false; // Servizio non trovato o non visibile
+    }
+
+    public boolean annullaOrdine(int idOrdine) {
+        OrdineDAO ordineDAO = new OrdineDAO();
+
+        // Controllo la presenza dell'ordine
+        Ordine ordine = (Ordine) ordineDAO.select(idOrdine);
+        if (ordine != null && ordine.getId_cliente() == utenteCorrente.getId() && ordine.getStatoOrdine().equals("IN ATTESA")) {
+            // Contrassegno l'ordine come annullato
+            ordine.setStatoOrdine("ANNULLATO");
+            // Aggiorno l'ordine nel database
+            return ordineDAO.update(ordine); // Ordine annullato con successo
+        }
+        return false; // Ordine non trovato, non appartiene all'utente corrente o non è in stato "IN ATTESA"
     }
 
     // Metodi per la gestione delle recensioni

@@ -91,12 +91,12 @@ public class UtenteDAO extends DAO {
             int righeCancellate = stmt.executeUpdate();
 
             if( righeCancellate > 0){
-                System.out.println("✅ Utente con ID " + id + " eliminato con successo.");
+                System.out.println("Utente con ID " + id + " eliminato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli utenti!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli utenti!");
             e.printStackTrace();
         }
         return false;
@@ -120,7 +120,7 @@ public class UtenteDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
 
             if( righeInserite > 0){
-                System.out.println("✅ nuovo utente inserito con successo.");
+                System.out.println("Nuovo utente inserito con successo.");
                 // Recupera l'ID generato automaticamente
                 try(ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
@@ -130,7 +130,7 @@ public class UtenteDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei utenti!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei utenti!");
             e.printStackTrace();
         }
         return -1; // Nessun ID generato , restituisce -1 in caso di errore
@@ -155,12 +155,12 @@ public class UtenteDAO extends DAO {
             int righeAggiornate = stmt.executeUpdate();
 
             if (righeAggiornate > 0) {
-                System.out.println("✅ Utente aggiornato con successo.");
+                System.out.println("Utente aggiornato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento del utente!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento del utente!");
             e.printStackTrace();
             return false;
         }
@@ -179,12 +179,12 @@ public class UtenteDAO extends DAO {
             int righeAggiornate = stmt.executeUpdate();
 
             if (righeAggiornate > 0) {
-                System.out.println("✅ Utente aggiornato con successo.");
+                System.out.println("Utente aggiornato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento del utente!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento del utente!");
             e.printStackTrace();
             return false;
         }

@@ -46,7 +46,7 @@ public class ServizioDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero del servizio!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero del servizio!");
             e.printStackTrace();
         }
         return null;
@@ -75,7 +75,7 @@ public class ServizioDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei servizi!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei servizi!");
             e.printStackTrace();
         }
         return servizi;
@@ -100,14 +100,14 @@ public class ServizioDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
-                System.out.println("✅ Servizio inserito con successo.");
+                System.out.println("Servizio inserito con successo.");
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'inserimento del servizio!");
+            System.out.println("!! ERRORE !! - Errore durante l'inserimento del servizio!");
             e.printStackTrace();
         }
         return -1;
@@ -132,12 +132,12 @@ public class ServizioDAO extends DAO {
 
             int righeAggiornate = stmt.executeUpdate();
             if (righeAggiornate > 0) {
-                System.out.println("✅ Servizio aggiornato con successo.");
+                System.out.println("Servizio aggiornato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento del servizio!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento del servizio!");
             e.printStackTrace();
         }
         return false;
@@ -153,12 +153,12 @@ public class ServizioDAO extends DAO {
             stmt.setInt(1, id);
             int righeCancellate = stmt.executeUpdate();
             if (righeCancellate > 0) {
-                System.out.println("✅ Servizio eliminato con successo.");
+                System.out.println("Servizio eliminato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'eliminazione del servizio!");
+            System.out.println("!! ERRORE !! - Errore durante l'eliminazione del servizio!");
             e.printStackTrace();
         }
         return false;
@@ -188,7 +188,7 @@ public class ServizioDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei servizi del venditore!");
             e.printStackTrace();
         }
         return servizi;
@@ -218,7 +218,7 @@ public class ServizioDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei servizi del venditore!");
             e.printStackTrace();
         }
         return servizi;
@@ -238,7 +238,7 @@ public class ServizioDAO extends DAO {
                 return rs.getInt("numeroServizi");
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei servizi del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei servizi del venditore!");
             e.printStackTrace();
         }
         return -1;

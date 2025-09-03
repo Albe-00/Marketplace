@@ -35,7 +35,7 @@ public class ControllerBase {
             try{
                 connection.close();
             }catch (SQLException e){
-                System.out.println("Errore durante la chiusura della connessione");
+                System.out.println("!! ERRORE !! - Errore durante la chiusura della connessione");
                 return false;
             }
             return true;

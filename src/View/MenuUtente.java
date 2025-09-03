@@ -28,9 +28,10 @@ public class MenuUtente extends Menu {
             System.out.println("4. Visualizza il profilo di un altro utente");
             System.out.println("5. Visualizza i tuoi ordini");
             System.out.println("6. Effettua ordine");
-            System.out.println("7. Effettua recensione");
-            System.out.println("8. Diventa venditore");
-            System.out.println("9. Logout");
+            System.out.println("7. Annulla ordine");
+            System.out.println("8. Effettua recensione");
+            System.out.println("9. Diventa venditore");
+            System.out.println("10. Logout");
             System.out.print("Seleziona un'opzione: ");
 
             // Legge l'input dell'utente
@@ -56,14 +57,17 @@ public class MenuUtente extends Menu {
                     effettuaOrdine();
                     break;
                 case 7:
-                    effettuaRecensione();
+                    annullaOrdine();
                     break;
                 case 8:
+                    effettuaRecensione();
+                    break;
+                case 9:
                     if(diventaVenditore())
                         uscita = true;
                     // Se l'utente non diventa venditore, non esce dal menu
                     break;
-                case 9:
+                case 10:
                     ControllerBase.getInstance().logout();
                     uscita = true;
                     break;
@@ -223,6 +227,25 @@ public class MenuUtente extends Menu {
             System.out.println("Ordine effettuato con successo.");
         } else {
             System.out.println("Errore durante l'effettuazione dell'ordine.");
+        }
+    }
+    protected void annullaOrdine() {
+        System.out.println("------------------------------------------");
+        List<Ordine> ordiniInAttesa = controllerUtente.recuperaOrdiniInAttesa();
+        if (ordiniInAttesa.isEmpty()) {
+            System.out.println("Nessun ordine in attesa trovato.");
+            return;
+        }
+        System.out.println("I TUOI ORDINI IN ATTESA :");
+        for (Ordine ordine : ordiniInAttesa) {
+            ordine.stampa();
+        }
+        System.out.println("Inserisci l'ID dell'ordine da annullare:");
+        int idOrdine = inputInt();
+        if (controllerUtente.annullaOrdine(idOrdine)) {
+            System.out.println("Ordine annullato con successo.");
+        } else {
+            System.out.println("Errore durante l'annullamento dell'ordine.");
         }
     }
     protected void effettuaRecensione() {

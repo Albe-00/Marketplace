@@ -17,7 +17,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.out.println("❌ Driver JDBC non trovato!");
+            System.out.println("!! ERRORE !! - Driver JDBC non trovato!");
             e.printStackTrace();
         }
         // Crea la connessione al database
@@ -43,10 +43,10 @@ public class DatabaseConnection {
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             }
         } catch (com.mysql.cj.jdbc.exceptions.CommunicationsException e) {
-            System.out.println("❌ Errore di comunicazione con il database (server offline o porta errata)");
+            System.out.println("!! ERRORE !! - Errore di comunicazione con il database (server offline o porta errata)");
             return null;
         } catch (SQLException e) {
-            System.out.println("❌ Errore di connessione al database!");
+            System.out.println("!! ERRORE !! - Errore di connessione al database!");
             e.printStackTrace();
             return null;
         }

@@ -44,7 +44,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dell'ordine!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dell'ordine!");
             e.printStackTrace();
         }
         return null;
@@ -72,7 +72,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli ordini!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli ordini!");
             e.printStackTrace();
         }
         return ordini;
@@ -95,7 +95,7 @@ public class OrdineDAO extends DAO {
 
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
-                System.out.println("✅ Ordine inserito con successo.");
+                System.out.println("Ordine inserito con successo.");
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
@@ -103,7 +103,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'inserimento dell'ordine!");
+            System.out.println("!! ERRORE !! - Errore durante l'inserimento dell'ordine!");
             e.printStackTrace();
         }
         return -1;
@@ -127,12 +127,12 @@ public class OrdineDAO extends DAO {
 
             int righeAggiornate = stmt.executeUpdate();
             if (righeAggiornate > 0) {
-                System.out.println("✅ Ordine aggiornato con successo.");
+                System.out.println("Ordine aggiornato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento dell'ordine!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento dell'ordine!");
             e.printStackTrace();
         }
         return false;
@@ -148,12 +148,12 @@ public class OrdineDAO extends DAO {
             stmt.setInt(1, id);
             int righeCancellate = stmt.executeUpdate();
             if (righeCancellate > 0) {
-                System.out.println("✅ Ordine eliminato con successo.");
+                System.out.println("Ordine eliminato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'eliminazione dell'ordine!");
+            System.out.println("!! ERRORE !! - Errore durante l'eliminazione dell'ordine!");
             e.printStackTrace();
         }
         return false;
@@ -183,7 +183,36 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli ordini!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli ordini!");
+            e.printStackTrace();
+        }
+        return risultati;
+    }
+
+    public List<Ordine> selectOrdiniInAttesaByCliente(int id_cliente) {
+        List<Ordine> risultati = new ArrayList<>();
+        String query = "SELECT * FROM ordine WHERE id_cliente = ? and stato_ordine = 'IN ATTESA'";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id_cliente);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int idOrdine = rs.getInt("id_ordine");
+                int idCliente = rs.getInt("id_cliente");
+                int idServizio = rs.getInt("id_servizio");
+                float prezzo = rs.getFloat("prezzo");
+                Date dataOrdine = rs.getDate("data_ordine");
+                Date dataConsegna = rs.getDate("data_consegna");
+                String statoOrdine = rs.getString("stato_ordine");
+
+                risultati.add(new Ordine(idOrdine, idCliente, idServizio, prezzo, dataOrdine, dataConsegna, statoOrdine));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli ordini!");
             e.printStackTrace();
         }
         return risultati;
@@ -213,7 +242,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli ordini!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli ordini!");
             e.printStackTrace();
         }
         return risultati;
@@ -243,7 +272,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero degli ordini!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero degli ordini!");
             e.printStackTrace();
         }
         return risultati;
@@ -268,7 +297,7 @@ public class OrdineDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dell'ID venditore dell'ordine!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dell'ID venditore dell'ordine!");
             e.printStackTrace();
         }
         return -1; // Errore durante l'esecuzione della query

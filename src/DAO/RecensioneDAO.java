@@ -41,7 +41,7 @@ public class RecensioneDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero della recensione!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero della recensione!");
             e.printStackTrace();
         }
         return null;
@@ -67,7 +67,7 @@ public class RecensioneDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero delle recensioni!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero delle recensioni!");
             e.printStackTrace();
         }
         return recensioni;
@@ -90,14 +90,14 @@ public class RecensioneDAO extends DAO {
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
-                System.out.println("✅ Recensione inserita con successo.");
+                System.out.println("Recensione inserita con successo.");
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Restituisce l'ID generato
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'inserimento della recensione!");
+            System.out.println("!! ERRORE !! - Errore durante l'inserimento della recensione!");
             e.printStackTrace();
         }
         return -1;
@@ -119,12 +119,12 @@ public class RecensioneDAO extends DAO {
 
             int righeAggiornate = stmt.executeUpdate();
             if (righeAggiornate > 0) {
-                System.out.println("✅ Recensione aggiornata con successo.");
+                System.out.println("Recensione aggiornata con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento della recensione!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento della recensione!");
             e.printStackTrace();
         }
         return false;
@@ -140,12 +140,12 @@ public class RecensioneDAO extends DAO {
             stmt.setInt(1, id);
             int righeCancellate = stmt.executeUpdate();
             if (righeCancellate > 0) {
-                System.out.println("✅ Recensione eliminata con successo.");
+                System.out.println("Recensione eliminata con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'eliminazione della recensione!");
+            System.out.println("!! ERRORE !! -Errore durante l'eliminazione della recensione!");
             e.printStackTrace();
         }
         return false;
@@ -167,7 +167,7 @@ public class RecensioneDAO extends DAO {
                 return 0; // se non trova nulla ritorna 0
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il conteggio delle recensioni!");
+            System.out.println("!! ERRORE !! - Errore durante il conteggio delle recensioni!");
             e.printStackTrace();
         }
 
@@ -195,7 +195,7 @@ public class RecensioneDAO extends DAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero delle recensioni!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero delle recensioni!");
             e.printStackTrace();
         }
         return risultati;

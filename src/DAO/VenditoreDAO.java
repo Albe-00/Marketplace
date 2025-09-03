@@ -43,7 +43,7 @@ public class VenditoreDAO extends UtenteDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero del venditore!");
             e.printStackTrace();
         }
         return null;
@@ -72,7 +72,7 @@ public class VenditoreDAO extends UtenteDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante il recupero dei venditori!");
+            System.out.println("!! ERRORE !! - Errore durante il recupero dei venditori!");
             e.printStackTrace();
         }
         return venditori;
@@ -89,12 +89,12 @@ public class VenditoreDAO extends UtenteDAO {
             int righeCancellate = stmt.executeUpdate();
 
             if (righeCancellate > 0) {
-                System.out.println("✅ Venditore con ID " + id + " eliminato con successo.");
+                System.out.println("Venditore con ID " + id + " eliminato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'eliminazione del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante l'eliminazione del venditore!");
             e.printStackTrace();
         }
         return false;
@@ -116,12 +116,12 @@ public class VenditoreDAO extends UtenteDAO {
 
             if (righeInserite > 0) {
 
-                System.out.println("✅ Nuovo venditore inserito con successo.");
+                System.out.println("Nuovo venditore inserito con successo.");
                 return nuovoVenditore.getId(); // Restituisce l'ID del venditore appena inserito
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'inserimento del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante l'inserimento del venditore!");
             e.printStackTrace();
         }
         return -1;
@@ -142,12 +142,12 @@ public class VenditoreDAO extends UtenteDAO {
             int righeAggiornate = stmt.executeUpdate();
 
             if (righeAggiornate > 0) {
-                System.out.println("✅ Venditore aggiornato con successo.");
+                System.out.println("Venditore aggiornato con successo.");
                 return true;
             }
 
         } catch (SQLException e) {
-            System.out.println("❌ Errore durante l'aggiornamento del venditore!");
+            System.out.println("!! ERRORE !! - Errore durante l'aggiornamento del venditore!");
             e.printStackTrace();
         }
         return false;

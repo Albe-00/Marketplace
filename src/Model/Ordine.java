@@ -4,6 +4,7 @@ import java.util.Date;
 
 /* StatoOrdine può essere uno dei seguenti:{
     IN ATTESA,
+    ANNULLATO,
     IN LAVORAZIONE,
     RIFIUTATO,
     COMPLETATO
@@ -66,31 +67,33 @@ public class Ordine {
         return statoOrdine;
     }
 
-    public void setStatoOrdine(String nuovostatoOrdine) {
+    public boolean setStatoOrdine(String nuovostatoOrdine) {
         // Controlla se il nuovo stato è nullo o vuoto
         if(nuovostatoOrdine == null || nuovostatoOrdine.isEmpty()) {
-            return; // Non accetta stati nulli o vuoti
+            return false; // Non accetta stati nulli o vuoti
         }
         // Controlla se il nuovo stato è uno dei valori validi
         if(!nuovostatoOrdine.equals("IN ATTESA") &&
+           !nuovostatoOrdine.equals("ANNULLATO") &&
            !nuovostatoOrdine.equals("IN LAVORAZIONE") &&
            !nuovostatoOrdine.equals("RIFIUTATO") &&
            !nuovostatoOrdine.equals("COMPLETATO")) {
-            return;
+            return false; // Stato non valido
         }
         // Non può essere modificato se già completato
-        if(statoOrdine.equals("COMPLETATO") || statoOrdine.equals("RIFIUTATO")) {
-            return; // Lo stato dell'ordine NON può essere modificato se già completato o rifiutato
+        if(statoOrdine.equals("COMPLETATO") || statoOrdine.equals("RIFIUTATO") || statoOrdine.equals("ANNULLATO")) {
+            return false; // Lo stato dell'ordine NON può essere modificato se già completato, rifiutato o annullato
         }
-        // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN LAVORAZIONE" o "RIFIUTATO"
-        if(statoOrdine.equals("IN ATTESA") && !(nuovostatoOrdine.equals("IN LAVORAZIONE") || nuovostatoOrdine.equals("RIFIUTATO"))) {
-            return;
+        // Se lo stato è "IN ATTESA", può essere cambiato solo in "IN LAVORAZIONE" , "RIFIUTATO" o "ANNULLATO"
+        if(statoOrdine.equals("IN ATTESA") && !(nuovostatoOrdine.equals("IN LAVORAZIONE") || nuovostatoOrdine.equals("RIFIUTATO") || nuovostatoOrdine.equals("ANNULLATO") )) {
+            return false;
         }
         // Se lo stato è "IN LAVORAZIONE", può essere cambiato solo in "COMPLETATO"
         if(statoOrdine.equals("IN LAVORAZIONE") && !nuovostatoOrdine.equals("COMPLETATO")) {
-            return;
+            return false;
         }
         this.statoOrdine = nuovostatoOrdine;
+        return true;
     }
 
     public void stampa() {
