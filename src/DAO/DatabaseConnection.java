@@ -10,6 +10,10 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
+    // Parametri di connessione al database
+    private static String URL = "jdbc:mysql://localhost:3306/marketplace"; // Nome database
+    private static String USER = "root"; // Utente di default di XAMPP
+    private static String PASSWORD = ""; // Password vuota in XAMPP
 
     private DatabaseConnection() {
 
@@ -31,12 +35,6 @@ public class DatabaseConnection {
     }
 
     public Connection getConnection() {
-
-        // Parametri di connessione al database
-        String URL = "jdbc:mysql://localhost:3306/marketplace_dev"; // Nome database
-        String USER = "root"; // Utente di default di XAMPP
-        String PASSWORD = ""; // Password vuota in XAMPP
-
         try {
             if (connection == null || connection.isClosed()) {
                 // Riconnetti in caso di chiusura

@@ -17,25 +17,17 @@ public class Servizio {
         this.id_venditore = id_venditore;
         this.titolo = titolo;
         this.descrizione = descrizione;
-        if(prezzo > 0)
-            this.prezzo = prezzo;
-        else
-            this.prezzo = 0;
+        this.prezzo = prezzo;
         this.categoria = categoria;
         this.dataPubblicazione = dataPubblicazione;
         this.visibile = visibile;
     }
-    public Servizio(int id_servizio, int id_venditore, String titolo, String descrizione, float prezzo, String categoria, boolean visibile) {
-        this.id_servizio = id_servizio;
+    public Servizio(int id_venditore, String titolo, String descrizione, float prezzo, String categoria, boolean visibile) {
         this.id_venditore = id_venditore;
         this.titolo = titolo;
         this.descrizione = descrizione;
-        if(prezzo > 0)
-            this.prezzo = prezzo;
-        else
-            this.prezzo = 0;
+        this.prezzo = prezzo;
         this.categoria = categoria;
-        this.dataPubblicazione = new Date(System.currentTimeMillis());
         this.visibile = visibile;
     }
 

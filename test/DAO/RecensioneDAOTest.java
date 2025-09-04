@@ -5,6 +5,8 @@ import Model.Recensione;
 import org.junit.*;
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -29,18 +31,21 @@ public class RecensioneDAOTest {
 
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("CREATE TABLE Recensione (" +
-                    "id_recensione INT PRIMARY KEY AUTO_INCREMENT ," +
+                    "id_recensione INT PRIMARY KEY AUTO_INCREMENT," +
                     "id_autore INT," +
                     "id_venditore INT," +
                     "voto FLOAT," +
-                    "testo VARCHAR(50))");
+                    "testo VARCHAR(50)," +
+                    "data DATE DEFAULT CURRENT_DATE" +
+                    ")");
 
-            stmt.execute("INSERT INTO Recensione VALUES " +
-                    "(1, 5, 3, 8.5, '')");
-            stmt.execute("INSERT INTO Recensione VALUES " +
-                    "(2, 1, 7, 6, '')");
-            stmt.execute("INSERT INTO Recensione VALUES " +
-                    "(3, 8, 3, 4, '')");
+
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) " +
+                    "VALUES (1, 5, 3, 3.5, '')");
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) " +
+                    "VALUES (2, 1, 7, 2.1, '')");
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) " +
+                    "VALUES (3, 8, 3, 4, '')");
         }
     }
 
@@ -48,9 +53,9 @@ public class RecensioneDAOTest {
     public void resetTable() throws SQLException {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("TRUNCATE TABLE Recensione");
-            stmt.execute("INSERT INTO Recensione VALUES (1, 5, 3, 8.5, '')");
-            stmt.execute("INSERT INTO Recensione VALUES (2, 1, 7, 6, '')");
-            stmt.execute("INSERT INTO Recensione VALUES (3, 8, 3, 4, '')");
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) VALUES (1, 5, 3, 3.5, '')");
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) VALUES (2, 1, 7, 2.1, '')");
+            stmt.execute("INSERT INTO Recensione (id_recensione, id_autore, id_venditore, voto, testo) VALUES (3, 8, 3, 4, '')");
         }
     }
 
@@ -73,7 +78,7 @@ public class RecensioneDAOTest {
         assertEquals(1, recensione. getId_recensione());
         assertEquals(5, recensione.getId_autore());
         assertEquals(3, recensione.getId_venditore());
-        assertEquals(8.5, recensione.getVoto(), 0.01);
+        assertEquals(3.5, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
 
         recensione = (Recensione) recensioneDAO.select(2);
@@ -82,7 +87,7 @@ public class RecensioneDAOTest {
         assertEquals(2, recensione. getId_recensione());
         assertEquals(1, recensione.getId_autore());
         assertEquals(7, recensione.getId_venditore());
-        assertEquals(6, recensione.getVoto(), 0.01);
+        assertEquals(2.1, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
 
         assertNull(recensioneDAO.select(4));
@@ -99,14 +104,14 @@ public class RecensioneDAOTest {
         assertEquals(1, recensione.getId_recensione());
         assertEquals(5, recensione.getId_autore());
         assertEquals(3, recensione.getId_venditore());
-        assertEquals(8.5, recensione.getVoto(), 0.01);
+        assertEquals(3.5, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
 
         recensione = (Recensione) recensioni.get(1);
         assertEquals(2, recensione.getId_recensione());
         assertEquals(1, recensione.getId_autore());
         assertEquals(7, recensione.getId_venditore());
-        assertEquals(6, recensione.getVoto(), 0.01);
+        assertEquals(2.1, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
 
         try (Statement stmt = connection.createStatement()) {
@@ -119,24 +124,26 @@ public class RecensioneDAOTest {
 
     @Test
     public void testInsert(){
-        int id = recensioneDAO.insert(new Recensione(4, 10, 4, 5.3f, ""));
+        int id = recensioneDAO.insert(new Recensione(4, 10, 1.3f, ""));
         Recensione recensione = (Recensione) recensioneDAO.select(id);
 
         assertNotNull(recensione);
         assertEquals(4, recensione.getId_recensione());
-        assertEquals(10, recensione.getId_autore());
-        assertEquals(4, recensione.getId_venditore());
-        assertEquals(5.3f, recensione.getVoto(), 0.01);
+        assertEquals(10, recensione.getId_venditore());
+        assertEquals(1.3f, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() throws Exception {
         Recensione recensioneDB = (Recensione) recensioneDAO.select(1);
 
         assertNotNull(recensioneDB);
 
-        boolean ok = recensioneDAO.update(new Recensione(recensioneDB.getId_recensione(), recensioneDB.getId_autore(), recensioneDB.getId_venditore(), 7.6f, ""));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dataRecensione = sdf.parse("2023-02-01");
+
+        boolean ok = recensioneDAO.update(new Recensione(1, recensioneDB.getId_autore(), recensioneDB.getId_venditore(), 4.2f, "", dataRecensione));
 
         assertTrue(ok);
 
@@ -145,7 +152,7 @@ public class RecensioneDAOTest {
         assertEquals(1, recensioneDB.getId_recensione());
         assertEquals(5, recensioneDB.getId_autore());
         assertEquals(3, recensioneDB.getId_venditore());
-        assertEquals(7.6f, recensioneDB.getVoto(), 0.001);
+        assertEquals(4.2f, recensioneDB.getVoto(), 0.001);
         assertEquals("", recensioneDB.getTesto());
     }
 
@@ -182,7 +189,7 @@ public class RecensioneDAOTest {
         assertEquals(1, recensioni.getFirst().getId_recensione());
         assertEquals(5, recensioni.getFirst().getId_autore());
         assertEquals(3, recensioni.getFirst().getId_venditore());
-        assertEquals(8.5, recensioni.getFirst().getVoto(), 0.01);
+        assertEquals(3.5, recensioni.getFirst().getVoto(), 0.01);
         assertEquals("", recensioni.getFirst().getTesto());
 
         assertEquals(3, recensioni.getLast().getId_recensione());
@@ -199,7 +206,7 @@ public class RecensioneDAOTest {
         assertEquals(2, recensioni.getFirst().getId_recensione());
         assertEquals(1, recensioni.getFirst().getId_autore());
         assertEquals(7, recensioni.getFirst().getId_venditore());
-        assertEquals(6, recensioni.getFirst().getVoto(), 0.01);
+        assertEquals(2.1, recensioni.getFirst().getVoto(), 0.01);
         assertEquals("", recensioni.getFirst().getTesto());
     }
 }
