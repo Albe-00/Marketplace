@@ -203,6 +203,7 @@ public class MenuUtente extends Menu {
         }
     }
     protected void visualizzaProfiloUtenteSpecifico(){
+        cerca();
         System.out.println("Inserisci id dell'utente che vuoi vedere :");
         int idUtenteDaVisualizzare = inputInt();
         controllerUtente.visualizzaProfilo(idUtenteDaVisualizzare);

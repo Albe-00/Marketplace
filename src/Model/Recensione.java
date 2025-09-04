@@ -1,4 +1,5 @@
 package Model;
+import java.util.Date;
 
 public class Recensione {
     private final int id_recensione;
@@ -6,26 +7,23 @@ public class Recensione {
     private final int id_venditore;
     private final float voto;
     private final String testo;
+    private final Date dataRecensione;
 
-    public Recensione(int id_recensione,int id_autore, int id_venditore, float voto, String testo ) {
+    public Recensione(int id_recensione,int id_autore, int id_venditore, float voto, String testo, Date dataRecensione) {
         this.id_recensione = id_recensione;
         this.id_autore = id_autore;
         this.id_venditore = id_venditore;
-        if(voto <= 10 && voto >= 0)
-            this.voto = voto;
-        else
-            this.voto = 8;
+        this.voto = voto;
         this.testo = testo;
+        this.dataRecensione = dataRecensione;
     }
-    public Recensione(int id_autore, int id_venditore, float voto, String testo ) {
+    public Recensione(int id_autore, int id_venditore, float voto, String testo) {
         this.id_recensione = 0;
         this.id_autore = id_autore;
         this.id_venditore = id_venditore;
-        if(voto <= 10 && voto >= 0)
-            this.voto = voto;
-        else
-            this.voto = 8;
+        this.voto = voto;
         this.testo = testo;
+        this.dataRecensione = null;
     }
 
     public int getId_recensione() {
@@ -55,5 +53,6 @@ public class Recensione {
         System.out.println("Venditore: " + id_venditore);
         System.out.println("Voto: " + voto);
         System.out.println("Testo: " + testo);
+        System.out.println("Data Recensione: " + dataRecensione);
     }
 }

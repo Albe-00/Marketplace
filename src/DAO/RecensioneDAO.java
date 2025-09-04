@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecensioneDAO extends DAO {
@@ -33,8 +34,9 @@ public class RecensioneDAO extends DAO {
                 int idVenditore = rs.getInt("id_venditore");
                 float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
+                Date dataRecensione = rs.getDate("data");
 
-                return new Recensione(idRecensione, idAutore, idVenditore, voto, testo);
+                return new Recensione(idRecensione, idAutore, idVenditore, voto, testo, dataRecensione);
             } else {
                 System.out.println("Recensione con ID " + id + " non trovata.");
                 return null;
@@ -62,8 +64,9 @@ public class RecensioneDAO extends DAO {
                 int idVenditore = rs.getInt("id_venditore");
                 float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
+                Date dataRecensione = rs.getDate("data");
 
-                recensioni.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo));
+                recensioni.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo, dataRecensione));
             }
 
         } catch (SQLException e) {
@@ -190,8 +193,9 @@ public class RecensioneDAO extends DAO {
                 int idVenditore = rs.getInt("id_venditore");
                 float voto = rs.getFloat("voto");
                 String testo = rs.getString("testo");
+                Date dataRecensione = rs.getDate("data");
 
-                risultati.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo));
+                risultati.add(new Recensione(idRecensione, idAutore, idVenditore, voto, testo, dataRecensione));
             }
 
         } catch (SQLException e) {
