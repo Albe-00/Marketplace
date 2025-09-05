@@ -165,7 +165,6 @@ public class ControllerUtente {
         }
         return false; // Servizio non trovato o non visibile
     }
-
     public boolean annullaOrdine(int idOrdine) {
         OrdineDAO ordineDAO = new OrdineDAO();
 

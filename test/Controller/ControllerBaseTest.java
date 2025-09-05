@@ -1,20 +1,24 @@
 package Controller;
 
-import DAO.DatabaseConnection;
-
 import static org.junit.Assert.*;
 
+import DAO.DatabaseConnection;
 import DAO.UtenteDAO;
 import DAO.VenditoreDAO;
+
 import Model.Utente;
+import Model.Venditore;
+
 import java.lang.reflect.Field;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.List;
 
-import Model.Venditore;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -50,8 +54,6 @@ public class ControllerBaseTest {
                     "telefono VARCHAR(10), " +
                     "password VARCHAR(100), " +
                     "venditore boolean)");
-
-            stmt.execute("INSERT INTO Utente (nome, cognome, email, telefono, password, venditore) VALUES ('Mario', 'Rossi', 'mariorossi@example.com', '0123456789', 'pwd', false)");
 
             stmt.execute("CREATE TABLE Venditore (" +
                     "id_venditore INT PRIMARY KEY , " +
