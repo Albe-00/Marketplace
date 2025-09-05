@@ -215,7 +215,6 @@ public class ControllerVenditore extends ControllerUtente {
     public List<Recensione> recuperaRecensioniRicevute(){
         return recuperaRecensioniVenditore(utenteCorrente.getId());
     }
-
 }
 
 

@@ -50,7 +50,7 @@ public class ControllerUtenteTest {
                     "descrizione VARCHAR(50)," +
                     "prezzo FLOAT," +
                     "categoria VARCHAR(50)," +
-                    "data_pubblicazione DATE," +
+                    "data_pubblicazione DATE DEFAULT CURRENT_DATE," +
                     "visibile BOOLEAN)");
 
             stmt.execute("CREATE TABLE Ordine (" +
@@ -93,7 +93,7 @@ public class ControllerUtenteTest {
 
             stmt.execute("INSERT INTO Recensione (id_autore, id_venditore, voto, testo) VALUES (1, 2, 3.4, '')");
 
-            stmt.execute("INSERT INTO Ordine (id_cliente, id_servizio, prezzo, data_ordine, data_consegna, stato_ordine) VALUES (1, 1, 50.5, '2023-01-01', '2023-01-10', 'IN_CORSO')");
+            stmt.execute("INSERT INTO Ordine (id_cliente, id_servizio, prezzo, data_ordine, data_consegna, stato_ordine) VALUES (1, 1, 50.5, '2023-01-01', '2023-01-10', 'IN_LAVORAZIONE')");
 
             stmt.execute("INSERT INTO Servizio (id_venditore, titolo, descrizione, prezzo, categoria, data_pubblicazione, visibile) VALUES (2, '', '', 50.5, '', '2023-01-01', true)");
         }

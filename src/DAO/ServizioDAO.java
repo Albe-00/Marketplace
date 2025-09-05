@@ -83,7 +83,7 @@ public class ServizioDAO extends DAO {
 
     @Override
     public int insert(Object obj) {
-        String query = "INSERT INTO servizio (id_venditore, titolo, descrizione, prezzo, categoria, data_pubblicazione, visibile) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO servizio (id_venditore, titolo, descrizione, prezzo, categoria, visibile) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -94,8 +94,7 @@ public class ServizioDAO extends DAO {
             stmt.setString(3, s.getDescrizione());
             stmt.setDouble(4, s.getPrezzo());
             stmt.setString(5, s.getCategoria());
-            stmt.setDate(6, new java.sql.Date(s.getDataPubblicazione().getTime()));
-            stmt.setBoolean(7, s.isVisibile());
+            stmt.setBoolean(6, s.isVisibile());
 
             int righeInserite = stmt.executeUpdate();
             if (righeInserite > 0) {

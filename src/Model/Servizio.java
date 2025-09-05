@@ -22,6 +22,7 @@ public class Servizio {
         this.dataPubblicazione = dataPubblicazione;
         this.visibile = visibile;
     }
+
     public Servizio(int id_venditore, String titolo, String descrizione, float prezzo, String categoria, boolean visibile) {
         this.id_venditore = id_venditore;
         this.titolo = titolo;
