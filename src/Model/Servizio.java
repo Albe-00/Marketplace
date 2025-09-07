@@ -3,14 +3,14 @@ import java.util.Date;
 
 public class Servizio {
 
-    int id_servizio;
-    int id_venditore;
-    String titolo;
-    String descrizione;
-    float prezzo;
-    String categoria;
-    Date dataPubblicazione;
-    boolean visibile;
+    private int id_servizio;
+    private int id_venditore;
+    private String titolo;
+    private String descrizione;
+    private float prezzo;
+    private String categoria;
+    private Date dataPubblicazione;
+    private boolean visibile;
 
     public Servizio(int id_servizio, int id_venditore, String titolo, String descrizione, float prezzo, String categoria, Date dataPubblicazione, boolean visibile) {
         this.id_servizio = id_servizio;

@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import DAO.DatabaseConnection;
 import DAO.ServizioDAO;
-import DAO.UtenteDAO;
-import DAO.VenditoreDAO;
 
 import Model.*;
 
