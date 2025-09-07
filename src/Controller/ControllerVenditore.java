@@ -81,7 +81,7 @@ public class ControllerVenditore extends ControllerUtente {
         if (titolo.isEmpty() || descrizione.isEmpty() || prezzo <= 0 || categoria.isEmpty()) {
             return false; // Dati non validi
         }
-        Servizio nuovoServizio = new Servizio(0, utenteCorrente.getId(), titolo, descrizione, prezzo, categoria,visibile);
+        Servizio nuovoServizio = new Servizio(utenteCorrente.getId(), titolo, descrizione, prezzo, categoria,visibile);
         ServizioDAO servizioDAO = new ServizioDAO();
 
         int idNuovoServizio = servizioDAO.insert(nuovoServizio);
@@ -215,7 +215,6 @@ public class ControllerVenditore extends ControllerUtente {
     public List<Recensione> recuperaRecensioniRicevute(){
         return recuperaRecensioniVenditore(utenteCorrente.getId());
     }
-
 }
 
 

@@ -280,9 +280,9 @@ public class OrdineDAO extends DAO {
 
     //recupera l'id del venditore associato all'ordine tramite un join con la tabella servizio
     public int getIdVenditore (int idOrdine) {
-        String query = "SELECT id_venditore " +
-                "FROM ordine JOIN servizio on id_servizio" +
-                "WHERE id_ordine = ?";
+        String query = "SELECT s.id_venditore " +
+                "FROM ordine o JOIN servizio s on o.id_servizio = s.id_servizio " +
+                "WHERE o.id_ordine = ?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
@@ -302,7 +302,4 @@ public class OrdineDAO extends DAO {
         }
         return -1; // Errore durante l'esecuzione della query
     }
-
-
-
 }

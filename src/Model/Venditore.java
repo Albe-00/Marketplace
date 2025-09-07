@@ -1,8 +1,8 @@
 package Model;
 
 public class Venditore extends Utente{
-    String descrizione;
-    float rating;
+    private String descrizione;
+    private float rating;
 
     public Venditore(int id, String nome, String cognome, String email, String password,
                      String telefono,String descrizione,float rating) {

@@ -2,12 +2,12 @@ package Model;
 
 public class Utente {
 
-    protected int id;
-    protected String nome;
-    protected String cognome;
-    protected String email;
-    protected String password;
-    protected String telefono;
+    int id;
+    String nome;
+    String cognome;
+    String email;
+    String password;
+    String telefono;
     private boolean venditore;
 
     public Utente(int id, String nome, String cognome, String email, String password, String telefono, boolean venditore) {

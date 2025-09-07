@@ -165,7 +165,6 @@ public class ControllerUtente {
         }
         return false; // Servizio non trovato o non visibile
     }
-
     public boolean annullaOrdine(int idOrdine) {
         OrdineDAO ordineDAO = new OrdineDAO();
 
@@ -181,7 +180,7 @@ public class ControllerUtente {
     }
 
     // Metodi per la gestione delle recensioni
-    public boolean effettuaRecensione(int idVenditore, float voto, String testo) {
+    public boolean effettuaRecensione(int id_venditore, float voto, String testo) {
         // Controllo che il voto sia compreso tra 1 e 5
         if (voto < 1 || voto > 5)
             return false;
@@ -190,12 +189,12 @@ public class ControllerUtente {
         VenditoreDAO venditoreDAO = new VenditoreDAO();
 
         //Controllo la presenza del venditore
-        Venditore venditore = (Venditore) venditoreDAO.select(idVenditore);
+        Venditore venditore = (Venditore) venditoreDAO.select(id_venditore);
         if (venditore != null) {
             // Creo la recensione
-            Recensione nuovaRecensione = new Recensione(utenteCorrente.getId(), idVenditore, voto, testo);
+            Recensione nuovaRecensione = new Recensione(utenteCorrente.getId(), id_venditore, voto, testo);
 
-            int numeroRecensioni = recensioneDAO.countByVenditore(idVenditore);
+            int numeroRecensioni = recensioneDAO.countByVenditore(id_venditore);
 
             // Salvo la recensione nel database
             if( recensioneDAO.insert(nuovaRecensione) > 0){
