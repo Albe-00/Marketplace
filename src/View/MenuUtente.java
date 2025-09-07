@@ -176,7 +176,7 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    protected void cercaServizi(){
+    private int cercaServizi(){
         System.out.println("Che servizio cerchi ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
@@ -188,8 +188,9 @@ public class MenuUtente extends Menu {
                 servizio.stampa();
             }
         }
+        return serviziTrovati.size();
     }
-    protected void cercaVenditori() {
+    private int cercaVenditori() {
         System.out.println("Quale venditore cerchi ?");
         String query = scanner.nextLine();
         List<Venditore> venditoriTrovati = controllerUtente.cercaVenditori(query);
@@ -201,6 +202,7 @@ public class MenuUtente extends Menu {
                 venditore.stampa();
             }
         }
+        return venditoriTrovati.size();
     }
     protected void visualizzaProfiloUtenteSpecifico(){
         cerca();
@@ -220,8 +222,12 @@ public class MenuUtente extends Menu {
         }
     }
     protected void effettuaOrdine() {
-        cercaServizi();
         System.out.println("------------------------------------------");
+        int serviziTrovati =  cercaServizi();
+        if (serviziTrovati == 0) {
+            System.out.println("Impossibile effettuare un ordine.");
+            return;
+        }
         System.out.println("Inserisci l'ID del servizio da ordinare:");
         int idServizio = inputInt();
         if (controllerUtente.effettuaOrdine(idServizio)) {
@@ -250,10 +256,15 @@ public class MenuUtente extends Menu {
         }
     }
     protected void effettuaRecensione() {
-        cercaVenditori();
+        System.out.println("------------------------------------------");
+        int venditoriTrovati = cercaVenditori();
+        if (venditoriTrovati == 0) {
+            System.out.println("Impossibile effettuare una recensione.");
+            return;
+        }
         System.out.println("Inserisci ID del venditore da recensire:");
         int idVenditore = inputInt();
-        System.out.println("Inserisci il voto (1-5):");
+        System.out.println("Inserisci il voto (1-5) :");
         int voto = inputInt();
         System.out.println("Inserisci il testo della recensione:");
         String testo = scanner.nextLine();
