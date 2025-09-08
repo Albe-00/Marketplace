@@ -11,9 +11,9 @@ public class DatabaseConnection {
     private Connection connection;
 
     // Parametri di connessione al database
-    private static final String URL = "jdbc:mysql://localhost:3306/marketplace_dev"; // Nome database
-    private static final String USER = "root"; // Utente di default di XAMPP
-    private static final String PASSWORD = ""; // Password vuota in XAMPP
+    private final String URL = "jdbc:mysql://localhost:3306/marketplace_dev"; // Nome database
+    private final String USER = "root"; // Utente di default di XAMPP
+    private final String PASSWORD = ""; // Password vuota in XAMPP
 
     private DatabaseConnection() {
 
