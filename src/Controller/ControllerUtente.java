@@ -6,7 +6,7 @@ import DAO.*;
 import java.util.List;
 
 public class ControllerUtente {
-    protected Utente utenteCorrente;
+    Utente utenteCorrente;
     public ControllerUtente() {
         // Inizializza il controller per l'utente
         int idUtenteCorrente = ControllerBase.getInstance().getIdUtenteCorrente();
@@ -207,7 +207,7 @@ public class ControllerUtente {
         }
         return false; // Venditore non trovato o errore nell'inserimento della recensione
     }
-    protected List<Recensione> recuperaRecensioniVenditore(int id_venditore){
+    List<Recensione> recuperaRecensioniVenditore(int id_venditore){
         RecensioneDAO recensioneDAO = new RecensioneDAO();
         return recensioneDAO.selectByVenditore(id_venditore);
     }

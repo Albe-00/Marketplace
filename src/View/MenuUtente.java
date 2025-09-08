@@ -8,7 +8,6 @@ import Controller.ControllerUtente;
 import Model.*;
 
 public class MenuUtente extends Menu {
-    //FIXME mettere controller protected e utilizzarlo in MenuVenditore
     private final ControllerUtente controllerUtente;
 
     public MenuUtente(Scanner scanner) {
@@ -16,6 +15,7 @@ public class MenuUtente extends Menu {
         this.controllerUtente = new ControllerUtente();
     }
 
+    @Override
     public void display() {
         boolean uscita = false;
         int scelta;
@@ -80,7 +80,7 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    protected void modificaProfilo() {
+    void modificaProfilo() {
         int scelta;
         boolean modificaEffettuata;
         System.out.println("MODIFICA PROFILO");
@@ -149,7 +149,7 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante la modifica del profilo. Verifica la password e riprova.");
         }
     }
-    protected void cerca(){
+    void cerca(){
         System.out.println("Cosa stai cercando ?");
         String query = scanner.nextLine();
         List<Servizio> serviziTrovati = controllerUtente.cercaServizi(query);
@@ -204,13 +204,13 @@ public class MenuUtente extends Menu {
         }
         return venditoriTrovati.size();
     }
-    protected void visualizzaProfiloUtenteSpecifico(){
+    void visualizzaProfiloUtenteSpecifico(){
         cerca();
         System.out.println("Inserisci id dell'utente che vuoi vedere :");
         int idUtenteDaVisualizzare = inputInt();
         controllerUtente.visualizzaProfilo(idUtenteDaVisualizzare);
     }
-    protected void visualizzaOrdiniEffettuati() {
+    void visualizzaOrdiniEffettuati() {
         List<Ordine> ordiniTrovati = controllerUtente.recuperaOrdiniEffettuati();
         if (ordiniTrovati.isEmpty()) {
             System.out.println("Nessun ordine trovato.");
@@ -221,7 +221,7 @@ public class MenuUtente extends Menu {
             }
         }
     }
-    protected void effettuaOrdine() {
+    void effettuaOrdine() {
         System.out.println("------------------------------------------");
         int serviziTrovati =  cercaServizi();
         if (serviziTrovati == 0) {
@@ -236,7 +236,7 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante l'effettuazione dell'ordine.");
         }
     }
-    protected void annullaOrdine() {
+    void annullaOrdine() {
         System.out.println("------------------------------------------");
         List<Ordine> ordiniInAttesa = controllerUtente.recuperaOrdiniInAttesa();
         if (ordiniInAttesa.isEmpty()) {
@@ -255,7 +255,7 @@ public class MenuUtente extends Menu {
             System.out.println("Errore durante l'annullamento dell'ordine.");
         }
     }
-    protected void effettuaRecensione() {
+    void effettuaRecensione() {
         System.out.println("------------------------------------------");
         int venditoriTrovati = cercaVenditori();
         if (venditoriTrovati == 0) {
@@ -291,7 +291,7 @@ public class MenuUtente extends Menu {
         }
     }
     // funzione per leggere l'input dell'utente e convertirlo in un intero , restituisce -1 se l'input non è un numero
-    protected int inputInt() {
+    int inputInt() {
         String numeroStringa;
         int numero;
         numeroStringa = scanner.nextLine();

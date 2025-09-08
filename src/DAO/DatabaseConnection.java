@@ -11,9 +11,9 @@ public class DatabaseConnection {
     private Connection connection;
 
     // Parametri di connessione al database
-    private static String URL = "jdbc:mysql://localhost:3306/marketplace"; // Nome database
-    private static String USER = "root"; // Utente di default di XAMPP
-    private static String PASSWORD = ""; // Password vuota in XAMPP
+    private static final String URL = "jdbc:mysql://localhost:3306/marketplace_dev"; // Nome database
+    private static final String USER = "root"; // Utente di default di XAMPP
+    private static final String PASSWORD = ""; // Password vuota in XAMPP
 
     private DatabaseConnection() {
 
@@ -24,8 +24,6 @@ public class DatabaseConnection {
             System.out.println("!! ERRORE !! - Driver JDBC non trovato!");
             e.printStackTrace();
         }
-        // Crea la connessione al database
-        //connection = getConnection();
     }
 
     public static DatabaseConnection getInstance() {

@@ -109,7 +109,7 @@ public class MenuVenditore extends MenuUtente {
         }
     }
     @Override
-    protected void modificaProfilo() {
+    void modificaProfilo() {
         int scelta;
         boolean modificaEffettuata;
         System.out.println("MODIFICA PROFILO");
