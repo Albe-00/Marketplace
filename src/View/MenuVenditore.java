@@ -31,15 +31,11 @@ public class MenuVenditore extends MenuUtente {
             System.out.println("8. Effettua recensione");
 
             // Opzioni specifiche per il venditore
-            System.out.println("9. Crea un nuovo servizio");
-            System.out.println("10. Modifica un servizio esistente");
-            System.out.println("11. Elimina un servizio");
-            System.out.println("12. Visualizza gli ordini ricevuti");
-            System.out.println("13. Inizia un ordine");
-            System.out.println("14. Rifiuta un ordine");
-            System.out.println("15. Concludi un ordine");
-            System.out.println("16. Visualizza le recensioni ricevute");
-            System.out.println("17. Logout");
+            System.out.println("9. Gestici i tuoi servizi");
+            System.out.println("10. Visualizza gli ordini ricevuti");
+            System.out.println("11. Gestisci ordini ricevuti");
+            System.out.println("12. Visualizza le recensioni ricevute");
+            System.out.println("13. Logout");
             System.out.print("Seleziona un'opzione: ");
 
             // Legge l'input dell'utente
@@ -71,30 +67,18 @@ public class MenuVenditore extends MenuUtente {
                     effettuaRecensione();
                     break;
                 case 9:
-                    creaServizio();
+                    gestisciServizi();
                     break;
                 case 10:
-                    modificaServizio();
-                    break;
-                case 11:
-                    eliminaServizio();
-                    break;
-                case 12:
                     visualizzaOrdiniRicevuti();
                     break;
-                case 13:
-                    iniziaOrdine();
+                case 11:
+                    gestisciOrdiniRicevuti();
                     break;
-                case 14:
-                    rifiutaOrdine();
-                    break;
-                case 15:
-                    completaOrdine();
-                    break;
-                case 16:
+                case 12:
                     visualizzaRecensioniRicevute();
                     break;
-                case 17:
+                case 13:
                     ControllerBase controller = ControllerBase.getInstance();
                     controller.logout();
                     uscita = true;
@@ -188,6 +172,38 @@ public class MenuVenditore extends MenuUtente {
     }
 
     // gestione dei servizi del venditore
+    private void gestisciServizi(){
+        boolean uscita = false;
+        int scelta;
+        while(!uscita) {
+            System.out.println("COSA VUOI FARE?");
+            System.out.println("1. Crea un nuovo servizio");
+            System.out.println("2. Modifica un servizio esistente");
+            System.out.println("3. Elimina un servizio");
+            System.out.println("4. Torna al menu venditore");
+            System.out.print("Seleziona un'opzione: ");
+
+            // Legge l'input dell'utente
+            scelta= inputInt();
+
+            switch (scelta) {
+                case 1:
+                    creaServizio();
+                    break;
+                case 2:
+                    modificaServizio();
+                    break;
+                case 3:
+                    eliminaServizio();
+                    break;
+                case 4:
+                    uscita = true;
+                    break;
+                default:
+                    System.out.println("Opzione non valida. Riprova.");
+            }
+        }
+    }
     private void creaServizio() {
         System.out.println("Inserisci il titolo del servizio:");
         String titolo = scanner.nextLine();
@@ -324,6 +340,62 @@ public class MenuVenditore extends MenuUtente {
     }
 
     // Gestione Ordini del venditore
+    private void gestisciOrdiniRicevuti(){
+        List<Ordine> ordiniRicevuti = controllerVenditore.recuperaOrdiniRicevuti();
+        if (ordiniRicevuti.isEmpty()) {
+            System.out.println("Nessun ordine ricevuto");
+        } else {
+            System.out.println("Ordini Ricevuti:");
+            for (Ordine ordine : ordiniRicevuti) {
+                ordine.stampa();
+                switch(ordine.getStatoOrdine().toLowerCase()){
+                    case "in attesa":
+                        System.out.println("AZIONI POSSIBILI: ACCETTA O RIFIUTA");
+                        break;
+                    case "in lavorazione":
+                        System.out.println("AZIONI POSSIBILI: COMPLETA");
+                        break;
+                    default:
+                        System.out.println("NESSUNA AZIONE POSSIBILE");
+                }
+
+            }
+            System.out.print("Inserisci l'ID dell'ordine su cui vuoi agire (o -1 per tornare indietro): ");
+            int idOrdine = inputInt();
+            if (idOrdine == -1)
+                return;
+
+            System.out.println("Quale azione vuoi eseguire?");
+            System.out.println("1. Inizia un ordine");
+            System.out.println("2. Rifiuta un ordine");
+            System.out.println("3. Concludi un ordine");
+            int scelta = inputInt();
+            switch (scelta) {
+                case 1:
+                    if (controllerVenditore.iniziaOrdine(idOrdine))
+                        System.out.println("Ordine iniziato con successo.");
+                    else
+                        System.out.println("Errore durante l'inizio dell'ordine.");
+                    break;
+                case 2:
+                    if (controllerVenditore.rifiutaOrdine(idOrdine))
+                        System.out.println("Ordine rifiutato con successo.");
+                    else
+                        System.out.println("Errore durante il rifiuto dell'ordine.");
+                    break;
+                case 3:
+                    if (controllerVenditore.completaOrdine(idOrdine)) {
+                        System.out.println("Ordine completato con successo.");
+                    } else {
+                        System.out.println("Errore durante il completamento dell'ordine.");
+                    }
+                    break;
+                default:
+                    System.out.println("Opzione non valida. Riprova.");
+            }
+
+        }
+    }
     private void visualizzaOrdiniRicevuti() {
         List<Ordine> ordiniTrovati = controllerVenditore.recuperaOrdiniRicevuti();
         if (ordiniTrovati.isEmpty()) {
@@ -334,84 +406,6 @@ public class MenuVenditore extends MenuUtente {
                 ordine.stampa();
             }
         }
-    }
-    private void iniziaOrdine() {
-        System.out.println("INIZIA ORDINE");
-        List<Ordine> ordiniInAttesa = controllerVenditore.recuperaOrdiniInAttesa();
-        if (ordiniInAttesa.isEmpty()) {
-            System.out.println("Nessun ordine in attesa.");
-            return;
-        } else {
-            System.out.println("Ordini  in attesa:");
-            for (Ordine ordine : ordiniInAttesa) {
-                ordine.stampa();
-            }
-        }
-        System.out.println("Inserisci l'ID del ordine da iniziare:");
-        int idOrdine = inputInt();
-        if (idOrdine < 0) {
-            System.out.println("ID non valido. Riprova.");
-        }else{
-            if (controllerVenditore.iniziaOrdine(idOrdine)) {
-                System.out.println("Ordine iniziato con successo.");
-            } else {
-                System.out.println("Errore durante l'inizio dell'ordine. Verifica la password e riprova.");
-            }
-        }
-    }
-    private void rifiutaOrdine() {
-        System.out.println("RIFIUTA ORDINE");
-        List<Ordine> ordiniInAttesa = controllerVenditore.recuperaOrdiniInAttesa();
-        if (ordiniInAttesa.isEmpty()) {
-            System.out.println("Nessun ordine in attesa.");
-            return;
-        } else {
-            System.out.println("Ordini in attesa:");
-            for (Ordine ordine : ordiniInAttesa) {
-                ordine.stampa();
-            }
-        }
-
-        System.out.println("Inserisci l'ID dell'ordine da rifiutare:");
-        int idOrdine = inputInt();
-        if (idOrdine < 0) {
-            System.out.println("ID non valido. Riprova.");
-        }else{
-            if (controllerVenditore.rifiutaOrdine(idOrdine)) {
-                System.out.println("Ordine rifiutato con successo.");
-            } else {
-                System.out.println("Errore durante il rifiuto dell'ordine. Verifica la password e riprova.");
-            }
-        }
-
-
-    }
-    private void completaOrdine() {
-        System.out.println("COMPLETA ORDINE");
-        List<Ordine> ordiniInLavorazione = controllerVenditore.recuperaOrdiniInLavorazione();
-        if (ordiniInLavorazione.isEmpty()) {
-            System.out.println("Nessun ordine in lavorazione.");
-            return;
-        } else {
-            System.out.println("Ordini in lavorazione:");
-            for (Ordine ordine : ordiniInLavorazione) {
-                ordine.stampa();
-            }
-        }
-
-        System.out.println("Inserisci l'ID del ordine da iniziare:");
-        int idOrdine = inputInt();
-        if (idOrdine < 0) {
-            System.out.println("ID non valido. Riprova.");
-        }else{
-            if (controllerVenditore.completaOrdine(idOrdine)) {
-                System.out.println("Ordine iniziato con successo.");
-            } else {
-                System.out.println("Errore durante l'inizio dell'ordine. Verifica la password e riprova.");
-            }
-        }
-
-
     }
 
     // // Visualizza le recensioni ricevute dal venditore
