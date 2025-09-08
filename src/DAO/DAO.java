@@ -3,7 +3,7 @@ package DAO;
 import java.util.List;
 
 public abstract class DAO {
-    protected DatabaseConnection dbConnection;
+    DatabaseConnection dbConnection;
 
     public abstract Object select(int id);
     public abstract List<Object> selectAll();

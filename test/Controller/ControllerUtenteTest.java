@@ -8,22 +8,19 @@ import DAO.VenditoreDAO;
 
 import Model.*;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 public class ControllerUtenteTest {
 
-    private static Connection connection;
-    private ControllerBase controllerBase;
+    static DatabaseConnection db;
     private ControllerUtente controllerUtente;
     private UtenteDAO utenteDAO;
     private VenditoreDAO venditoreDAO;
@@ -32,17 +29,11 @@ public class ControllerUtenteTest {
     public static void setupDatabase() throws Exception {
 
         Class.forName("org.h2.Driver");
-        // Ottieni la connection H2
-        connection = DriverManager.getConnection("jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1", "sa", "");
-
-        //Modifica i campi privati di DatabaseConnection
-        DatabaseConnection db = DatabaseConnection.getInstance();
-
+        db = DatabaseConnection.getInstance();
         setPrivateField(db, "URL", "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
-        setPrivateField(db, "USER", "sa");
-        setPrivateField(db, "PASSWORD", "");
 
-        try (Statement stmt = connection.createStatement()) {
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement()) {
             stmt.execute("CREATE TABLE Servizio (" +
                     "id_servizio INT PRIMARY KEY AUTO_INCREMENT ," +
                     "id_venditore INT," +
@@ -75,7 +66,9 @@ public class ControllerUtenteTest {
 
     @Before
     public void resetTable() throws SQLException {
-        try (Statement stmt = connection.createStatement()) {
+        DatabaseConnection db = DatabaseConnection.getInstance();
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement()) {
             stmt.execute("TRUNCATE TABLE Utente");
             stmt.execute("ALTER TABLE Utente ALTER COLUMN id_utente RESTART WITH 1");
             stmt.execute("TRUNCATE TABLE Venditore");
@@ -101,7 +94,7 @@ public class ControllerUtenteTest {
 
     @Before
     public void init() {
-        controllerBase = ControllerBase.getInstance();
+        ControllerBase controllerBase = ControllerBase.getInstance();
         controllerBase.login("mariorossi@example.com", "pwd");
         controllerUtente = new ControllerUtente();
         utenteDAO = new UtenteDAO();
@@ -216,12 +209,5 @@ public class ControllerUtenteTest {
 
         List<Recensione> recensioni = controllerUtente.recuperaRecensioniVenditore(2);
         assertEquals(2, recensioni.size());
-    }
-
-    @AfterClass
-    public static void teardown() throws Exception {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
     }
 }

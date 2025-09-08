@@ -7,22 +7,19 @@ import DAO.ServizioDAO;
 
 import Model.*;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 public class ControllerVenditoreTest {
 
-    private static Connection connection;
-    private ControllerBase controllerBase;
+    static DatabaseConnection db;
     private ControllerVenditore controllerVenditore;
     private ServizioDAO servizioDAO;
 
@@ -30,20 +27,14 @@ public class ControllerVenditoreTest {
     public static void setupDatabase() throws Exception {
 
         Class.forName("org.h2.Driver");
-        // Ottieni la connection H2
-        connection = DriverManager.getConnection("jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1", "sa", "");
-
-        //Modifica i campi privati di DatabaseConnection
-        DatabaseConnection db = DatabaseConnection.getInstance();
-
+        db = DatabaseConnection.getInstance();
         setPrivateField(db, "URL", "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1");
-        setPrivateField(db, "USER", "sa");
-        setPrivateField(db, "PASSWORD", "");
     }
 
     @Before
     public void resetTable() throws SQLException {
-        try (Statement stmt = connection.createStatement()) {
+        db = DatabaseConnection.getInstance();
+        try (Connection conn = db.getConnection(); Statement stmt = conn.createStatement()) {
             stmt.execute("TRUNCATE TABLE Utente");
             stmt.execute("ALTER TABLE Utente ALTER COLUMN id_utente RESTART WITH 1");
             stmt.execute("TRUNCATE TABLE Venditore");
@@ -71,7 +62,7 @@ public class ControllerVenditoreTest {
 
     @Before
     public void init() {
-        controllerBase = ControllerBase.getInstance();
+        ControllerBase controllerBase = ControllerBase.getInstance();
         controllerBase.login("paolobianchi@example.com", "pwd2");
         controllerVenditore = new ControllerVenditore();
         servizioDAO = new ServizioDAO();
@@ -154,12 +145,5 @@ public class ControllerVenditoreTest {
         assertEquals(2, recensione.getId_venditore());
         assertEquals(3.4, recensione.getVoto(), 0.01);
         assertEquals("", recensione.getTesto());
-    }
-
-    @AfterClass
-    public static void teardown() throws Exception {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
-        }
     }
 }
