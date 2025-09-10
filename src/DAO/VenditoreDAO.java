@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VenditoreDAO extends UtenteDAO {
+public class VenditoreDAO extends DAO {
     public VenditoreDAO() {
         dbConnection = DatabaseConnection.getInstance();
     }

@@ -66,6 +66,8 @@ public class ControllerVenditore extends ControllerUtente {
             return false; // La password non corrisponde
         }
         ((Venditore) utenteCorrente).setDescrizione(nuovaDescrizione);
+        VenditoreDAO venditoreDAO = new VenditoreDAO();
+        venditoreDAO.update(utenteCorrente);
         return true; // Descrizione modificato con successo
     }
 
